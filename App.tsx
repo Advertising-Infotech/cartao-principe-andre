@@ -19,7 +19,7 @@ const App: React.FC = () => {
 VERSION:3.0
 FN:Príncipe André Luís
 N:Luís;André;Príncipe;;
-TITLE:Criador; Decisor; Orquestrador
+TITLE:Criador > Decisor > Orquestrador
 TEL;TYPE=CELL:+5562991599031
 EMAIL:advertisingpropaganda@gmail.com
 URL:https://advertisingpropaganda@gmai.com

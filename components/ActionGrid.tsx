@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, MapPin, Mail, Globe } from 'lucide-react';
+import { Phone, Linkedin, Mail, Globe } from 'lucide-react';
 
 const ButtonItem: React.FC<{ icon: React.ReactNode; label: string; onClick?: () => void }> = ({ icon, label, onClick }) => (
   <button 
@@ -16,10 +16,10 @@ const ButtonItem: React.FC<{ icon: React.ReactNode; label: string; onClick?: () 
 );
 
 export const ActionGrid: React.FC = () => {
-  const handleWhatsapp = () => window.open('https://wa.me/', '_blank');
-  const handleMaps = () => window.open('https://maps.google.com', '_blank');
-  const handleEmail = () => window.location.href = 'mailto:contact@luxestate.com';
-  const handleSite = () => window.open('https://example.com', '_blank');
+  const handleWhatsapp = () => window.open('https://wa.me/5562991599031', '_blank');
+  const handleLinkedin = () => window.open('https://www.linkedin.com/in/advertising-propaganda-162220185/', '_blank');
+  const handleEmail = () => window.location.href = 'mailto:advertisingpropaganda@gmail.com';
+  const handleSite = () => window.open('https://advertisingpropaganda@gmai.com', '_blank');
 
   return (
     <div className="grid grid-cols-2 gap-4 w-full mb-6">
@@ -29,9 +29,9 @@ export const ActionGrid: React.FC = () => {
         onClick={handleWhatsapp} 
       />
       <ButtonItem 
-        icon={<MapPin size={24} />} 
-        label="Localização" 
-        onClick={handleMaps} 
+        icon={<Linkedin size={24} />} 
+        label="LinkedIn" 
+        onClick={handleLinkedin} 
       />
       <ButtonItem 
         icon={<Mail size={24} />} 

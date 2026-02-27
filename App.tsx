@@ -17,19 +17,19 @@ const App: React.FC = () => {
     // Simulating vCard download
     const vCardData = `BEGIN:VCARD
 VERSION:3.0
-FN:Arthur Morgan
-N:Morgan;Arthur;;;
-TITLE:Luxury Real Estate Agent
-TEL;TYPE=CELL:+5511999999999
-EMAIL:contact@luxestate.com
-URL:https://luxestate.com
+FN:Príncipe André Luís
+N:Luís;André;Príncipe;;
+TITLE:Criador; Decisor; Orquestrador
+TEL;TYPE=CELL:+5562991599031
+EMAIL:advertisingpropaganda@gmail.com
+URL:https://advertisingpropaganda@gmai.com
 END:VCARD`;
 
     const blob = new Blob([vCardData], { type: 'text/vcard' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'Arthur_Morgan_LuxEstate.vcf';
+    a.download = 'Principe_Andre_Luis.vcf';
     a.click();
     window.URL.revokeObjectURL(url);
   };
@@ -41,7 +41,7 @@ END:VCARD`;
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-black/60 z-10 backdrop-blur-[2px]"></div>
         <img 
-          src="https://images.unsplash.com/photo-1600596542815-3ad19fb812a7?auto=format&fit=crop&q=80&w=1920&h=1080" 
+          src="https://www.facebook.com/photo.php?fbid=9901341889934383&set=pb.100001760114261.-2207520000&type=3" 
           alt="Luxury Architecture Background" 
           className="w-full h-full object-cover animate-pulse-slow"
         />

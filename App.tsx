@@ -14,17 +14,18 @@ const App: React.FC = () => {
   }, []);
 
   const handleSaveContact = () => {
-    // vCard generation with more complete information
+    // vCard generation with correct encoding and information
     const vCardData = [
       'BEGIN:VCARD',
       'VERSION:3.0',
-      'FN:Príncipe André Luís',
-      'N:Luís;André;Príncipe;;',
-      'TITLE:Criador > Decisor > Orquestrador',
+      'FN;CHARSET=UTF-8:Príncipe André Luís',
+      'N;CHARSET=UTF-8:Luís;André;Príncipe;;',
+      'ORG;CHARSET=UTF-8:Advertising Infotech',
+      'TITLE;CHARSET=UTF-8:Criador > Decisor > Orquestrador',
       'TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031',
       'EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com',
-      'URL:https://www.youtube.com/@Desnecessaurospodcast',
-      'NOTE:Criando novos mundos reciclando sentimentos.',
+      'URL:https://advertisinginfotech.com.br',
+      'NOTE;CHARSET=UTF-8:Criando novos mundos reciclando sentimentos.',
       'END:VCARD'
     ].join('\n');
 

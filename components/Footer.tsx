@@ -1,5 +1,5 @@
 import React from 'react';
-import { Instagram, Twitter, Facebook } from 'lucide-react';
+import { Instagram, Twitter, Facebook, Send } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -13,6 +13,9 @@ export const Footer: React.FC = () => {
         </a>
         <a href="https://www.facebook.com/t.rex.hacker" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#D4AF37] transition-colors duration-300 hover:scale-110 transform">
             <Facebook size={20} />
+        </a>
+        <a href="https://t.me/+5562991599031" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#D4AF37] transition-colors duration-300 hover:scale-110 transform">
+            <Send size={20} />
         </a>
       </div>
       <p className="text-gray-500 text-[10px] tracking-widest uppercase">

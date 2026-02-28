@@ -80,7 +80,7 @@ export const ProfileHeader: React.FC = () => {
       <div className="relative mb-4 group">
         <div className="absolute inset-0 rounded-3xl bg-[#D4AF37] blur opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
         <img 
-          src="/foto_oficial.jpg" 
+          src="/carrossel/foto_oficial.jpg" 
           alt="Agent Profile" 
           className="relative w-40 h-40 rounded-3xl object-cover border-4 border-[#D4AF37] shadow-2xl"
         />

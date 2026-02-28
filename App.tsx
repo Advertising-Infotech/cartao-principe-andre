@@ -33,13 +33,13 @@ const App: React.FC = () => {
 
     const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `${t('name').replace(/\s+/g, '_')}.vcf`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+    
+    // To "open" instead of "save", we navigate to the URL without the download attribute.
+    // This triggers the native contact app on most mobile devices.
+    window.location.href = url;
+    
+    // Clean up the URL object after a short delay to ensure the browser has handled it
+    setTimeout(() => window.URL.revokeObjectURL(url), 1000);
   };
 
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Instagram, Twitter, Facebook, Send } from 'lucide-react';
+import { Instagram, Twitter, Facebook, Send, Youtube } from 'lucide-react';
 
 const RedditIcon = ({ size = 20 }: { size?: number }) => (
   <svg 
@@ -48,6 +48,9 @@ export const ProfileHeader: React.FC = () => {
       </p>
 
       <div className="flex gap-6 mb-2">
+        <a href="https://www.youtube.com/@Desnecessaurospodcast" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#D4AF37] transition-colors duration-300 hover:scale-110 transform">
+            <Youtube size={20} />
+        </a>
         <a href="https://www.instagram.com/tiranossaurusrex/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#D4AF37] transition-colors duration-300 hover:scale-110 transform">
             <Instagram size={20} />
         </a>

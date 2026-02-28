@@ -59,7 +59,7 @@ export const ProfileHeader: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center text-center mb-2">
-      <div className="flex gap-3 mb-4">
+      <div className="flex gap-3 mb-4" dir="ltr">
         {flags.map((flag) => (
           <button
             key={flag.code}

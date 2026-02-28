@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, Linkedin, Mail, Globe } from 'lucide-react';
+import { MessageCircle, Linkedin, Mail, Globe } from 'lucide-react';
 
 const ButtonItem: React.FC<{ icon: React.ReactNode; label: string; onClick?: () => void }> = ({ icon, label, onClick }) => (
   <button 
@@ -24,7 +24,7 @@ export const ActionGrid: React.FC = () => {
   return (
     <div className="grid grid-cols-2 gap-4 w-full mb-6">
       <ButtonItem 
-        icon={<Phone size={24} />} 
+        icon={<MessageCircle size={24} />} 
         label="WhatsApp" 
         onClick={handleWhatsapp} 
       />

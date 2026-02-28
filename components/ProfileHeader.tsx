@@ -1,4 +1,5 @@
 import React from 'react';
+import { Instagram, Twitter, Facebook, Send } from 'lucide-react';
 
 export const ProfileHeader: React.FC = () => {
   return (
@@ -20,9 +21,24 @@ export const ProfileHeader: React.FC = () => {
         Criador &gt; Decisor &gt; Orquestrador
       </h2>
       
-      <p className="text-white text-sm font-light w-full max-w-xs leading-relaxed whitespace-nowrap overflow-hidden text-ellipsis">
+      <p className="text-white text-[15px] font-light w-full max-w-xs leading-relaxed whitespace-nowrap overflow-hidden text-ellipsis mb-4">
         Criando novos mundos reciclando sentimentos.
       </p>
+
+      <div className="flex gap-6 mb-2">
+        <a href="https://www.instagram.com/tiranossaurusrex/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#D4AF37] transition-colors duration-300 hover:scale-110 transform">
+            <Instagram size={20} />
+        </a>
+        <a href="https://x.com/Tiranossaurus" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#D4AF37] transition-colors duration-300 hover:scale-110 transform">
+            <Twitter size={20} />
+        </a>
+        <a href="https://www.facebook.com/t.rex.hacker" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#D4AF37] transition-colors duration-300 hover:scale-110 transform">
+            <Facebook size={20} />
+        </a>
+        <a href="https://t.me/+5562991599031" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#D4AF37] transition-colors duration-300 hover:scale-110 transform">
+            <Send size={20} />
+        </a>
+      </div>
     </div>
   );
 };

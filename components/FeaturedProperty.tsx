@@ -5,10 +5,10 @@ export const FeaturedProperty: React.FC = () => {
   return (
     <div className="w-full mt-6 mb-8">
       <div className="flex items-center justify-between mb-3 px-1">
-        <h3 className="text-white text-sm font-semibold uppercase tracking-wider">
-          Oportunidade do Mês
+        <h3 className="text-white text-[11px] font-semibold uppercase tracking-wider">
+          Títulos, homenagens, certificações e honrarias
         </h3>
-        <span className="text-[#D4AF37] text-xs">Ver todas</span>
+        <span className="text-[#D4AF37] text-xs shrink-0 ml-2">Ver todas</span>
       </div>
       
       <div className="relative group overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md transition-transform hover:scale-[1.02] duration-300">

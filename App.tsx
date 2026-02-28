@@ -37,15 +37,8 @@ END:VCARD`;
   return (
     <div className="min-h-screen w-full relative flex items-center justify-center overflow-x-hidden bg-black font-sans">
       
-      {/* Background Image with Overlay */}
-      <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-black/60 z-10 backdrop-blur-[2px]"></div>
-        <img 
-          src="https://www.facebook.com/photo.php?fbid=9901341889934383&set=pb.100001760114261.-2207520000&type=3" 
-          alt="Luxury Architecture Background" 
-          className="w-full h-full object-cover animate-pulse-slow"
-        />
-      </div>
+      {/* Total Black Background */}
+      <div className="fixed inset-0 z-0 bg-black"></div>
 
       {/* Main Glassmorphism Container */}
       <main 

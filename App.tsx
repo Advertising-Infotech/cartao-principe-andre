@@ -14,23 +14,28 @@ const App: React.FC = () => {
   }, []);
 
   const handleSaveContact = () => {
-    // Simulating vCard download
-    const vCardData = `BEGIN:VCARD
-VERSION:3.0
-FN:Príncipe André Luís
-N:Luís;André;Príncipe;;
-TITLE:Criador > Decisor > Orquestrador
-TEL;TYPE=CELL:+5562991599031
-EMAIL:advertisingpropaganda@gmail.com
-URL:https://advertisingpropaganda@gmai.com
-END:VCARD`;
+    // vCard generation with more complete information
+    const vCardData = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      'FN:Príncipe André Luís',
+      'N:Luís;André;Príncipe;;',
+      'TITLE:Criador > Decisor > Orquestrador',
+      'TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031',
+      'EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com',
+      'URL:https://www.youtube.com/@Desnecessaurospodcast',
+      'NOTE:Criando novos mundos reciclando sentimentos.',
+      'END:VCARD'
+    ].join('\n');
 
-    const blob = new Blob([vCardData], { type: 'text/vcard' });
+    const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'Principe_Andre_Luis.vcf';
-    a.click();
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'Principe_Andre_Luis.vcf');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
   };
 

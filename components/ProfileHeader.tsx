@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Instagram, Twitter, Facebook, Send, Youtube } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const RedditIcon = ({ size = 20 }: { size?: number }) => (
   <svg 
@@ -35,8 +36,47 @@ const TikTokIcon = ({ size = 20 }: { size?: number }) => (
 );
 
 export const ProfileHeader: React.FC = () => {
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
+
+  useEffect(() => {
+    const isRtl = i18n.language === 'he' || i18n.language === 'ar';
+    document.body.dir = isRtl ? 'rtl' : 'ltr';
+  }, [i18n.language]);
+
+  const flags = [
+    { code: 'pt', flag: 'br', name: 'Brasil' },
+    { code: 'he', flag: 'il', name: 'Israel' },
+    { code: 'en', flag: 'gb', name: 'Grã-Bretanha' },
+    { code: 'ru', flag: 'ru', name: 'Russia' },
+    { code: 'ar', flag: 'sa', name: 'Arábia Saudita' },
+    { code: 'zh', flag: 'cn', name: 'China' },
+    { code: 'es', flag: 'es', name: 'Espanha' },
+  ];
+
   return (
-    <div className="flex flex-col items-center text-center mb-8">
+    <div className="flex flex-col items-center text-center mb-2">
+      <div className="flex gap-3 mb-4">
+        {flags.map((flag) => (
+          <button
+            key={flag.code}
+            onClick={() => changeLanguage(flag.code)}
+            className={`w-8 h-6 overflow-hidden rounded-sm transition-all duration-300 hover:scale-125 ${i18n.language === flag.code ? 'scale-125 ring-2 ring-[#D4AF37] ring-offset-2 ring-offset-black drop-shadow-[0_0_8px_rgba(212,175,55,0.8)]' : 'opacity-60 grayscale-[0.5]'}`}
+            title={flag.name}
+          >
+            <img 
+              src={`https://flagcdn.com/w40/${flag.flag}.png`} 
+              alt={flag.name}
+              className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
+            />
+          </button>
+        ))}
+      </div>
+
       <div className="relative mb-4 group">
         <div className="absolute inset-0 rounded-3xl bg-[#D4AF37] blur opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
         <img 
@@ -47,15 +87,15 @@ export const ProfileHeader: React.FC = () => {
       </div>
       
       <h1 className="text-[2.1rem] font-bold text-white tracking-tight mb-1 drop-shadow-lg leading-none">
-        <span className="italic">Príncipe</span> André Luís
+        <span className="italic">{t('name').split(' ')[0]}</span> {t('name').split(' ').slice(1).join(' ')}
       </h1>
       
       <h2 className="text-[#D4AF37] text-sm font-semibold uppercase tracking-widest mb-3 w-full">
-        Criador &gt; Decisor &gt; Orquestrador
+        {t('role')}
       </h2>
       
       <p className="text-white text-[1.05rem] font-light w-full leading-relaxed mb-4 tracking-tighter">
-        Criando novos mundos reciclando sentimentos.
+        {t('bio')}
       </p>
 
       <div className="flex gap-6 mb-2">

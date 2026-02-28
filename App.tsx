@@ -4,8 +4,10 @@ import { ActionGrid } from './components/ActionGrid';
 import { FeaturedProperty } from './components/FeaturedProperty';
 import { Footer } from './components/Footer';
 import { UserPlus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const App: React.FC = () => {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -18,14 +20,14 @@ const App: React.FC = () => {
     const vCardData = [
       'BEGIN:VCARD',
       'VERSION:3.0',
-      'FN;CHARSET=UTF-8:Príncipe André Luís',
-      'N;CHARSET=UTF-8:Luís;André;Príncipe;;',
+      `FN;CHARSET=UTF-8:${t('name')}`,
+      `N;CHARSET=UTF-8:${t('name').split(' ').reverse().join(';')};;;`,
       'ORG;CHARSET=UTF-8:Advertising Infotech',
-      'TITLE;CHARSET=UTF-8:Criador > Decisor > Orquestrador',
+      `TITLE;CHARSET=UTF-8:${t('role')}`,
       'TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031',
       'EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com',
       'URL:https://advertisinginfotech.com.br',
-      'NOTE;CHARSET=UTF-8:Criando novos mundos reciclando sentimentos.',
+      `NOTE;CHARSET=UTF-8:${t('bio')}`,
       'END:VCARD'
     ].join('\n');
 
@@ -33,7 +35,7 @@ const App: React.FC = () => {
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'Principe_Andre_Luis.vcf');
+    link.setAttribute('download', `${t('name').replace(/\s+/g, '_')}.vcf`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -72,7 +74,7 @@ const App: React.FC = () => {
           className="w-full bg-[#D4AF37] text-black font-bold py-4 rounded-xl shadow-lg hover:shadow-[#D4AF37]/50 hover:bg-[#b5952f] transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-3 uppercase tracking-wider text-sm mb-6"
         >
           <UserPlus size={20} />
-          Salvar na Agenda
+          {t('saveContact')}
         </button>
         
         <Footer />

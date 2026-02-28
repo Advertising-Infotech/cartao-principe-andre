@@ -19,7 +19,7 @@ export const ActionGrid: React.FC = () => {
   const handleSite = () => window.open('mailto:advertisingpropaganda@gmail.com', '_blank');
 
   return (
-    <div className="grid grid-cols-4 gap-3 w-full mb-6">
+    <div className="grid grid-cols-4 gap-3 w-full mb-2">
       <ButtonItem 
         icon={<MessageCircle size={20} />} 
         onClick={handleWhatsapp} 

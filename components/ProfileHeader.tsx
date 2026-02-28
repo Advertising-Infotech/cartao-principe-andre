@@ -46,15 +46,15 @@ export const ProfileHeader: React.FC = () => {
         />
       </div>
       
-      <h1 className="text-3xl font-bold text-white tracking-wide mb-1 drop-shadow-lg">
+      <h1 className="text-[2.1rem] font-bold text-white tracking-tight mb-1 drop-shadow-lg leading-none">
         <span className="italic">Príncipe</span> André Luís
       </h1>
       
-      <h2 className="text-[#D4AF37] text-sm font-semibold uppercase tracking-widest mb-3">
+      <h2 className="text-[#D4AF37] text-sm font-semibold uppercase tracking-widest mb-3 w-full">
         Criador &gt; Decisor &gt; Orquestrador
       </h2>
       
-      <p className="text-white text-[15px] font-light w-full max-w-xs leading-relaxed whitespace-nowrap overflow-hidden text-ellipsis mb-4">
+      <p className="text-white text-[1.05rem] font-light w-full leading-relaxed mb-4 tracking-tighter">
         Criando novos mundos reciclando sentimentos.
       </p>
 

@@ -64,16 +64,16 @@ const App: React.FC = () => {
         
         <ActionGrid />
 
+        <FeaturedProperty />
+
         {/* Save Contact Button (Main CTA) */}
         <button 
           onClick={handleSaveContact}
-          className="w-full bg-[#D4AF37] text-black font-bold py-4 rounded-xl shadow-lg hover:shadow-[#D4AF37]/50 hover:bg-[#b5952f] transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-3 uppercase tracking-wider text-sm mb-2"
+          className="w-full bg-[#D4AF37] text-black font-bold py-4 rounded-xl shadow-lg hover:shadow-[#D4AF37]/50 hover:bg-[#b5952f] transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-3 uppercase tracking-wider text-sm mb-6"
         >
           <UserPlus size={20} />
           Salvar na Agenda
         </button>
-
-        <FeaturedProperty />
         
         <Footer />
       </main>

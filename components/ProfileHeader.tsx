@@ -59,6 +59,23 @@ export const ProfileHeader: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center text-center mb-2">
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes blink-name {
+          0%, 100% { color: #D4AF37; }
+          33% { color: #ffff00; }
+          66% { color: #ffffff; }
+        }
+        .animate-blink-name {
+          animation: blink-name 1.5s infinite linear;
+        }
+        @keyframes blink-yellow {
+          0%, 100% { color: #D4AF37; }
+          50% { color: #ffff00; }
+        }
+        .animate-blink-yellow {
+          animation: blink-yellow 1s infinite;
+        }
+      `}} />
       <div className="flex gap-3 mb-4" dir="ltr">
         {flags.map((flag) => (
           <button
@@ -86,11 +103,11 @@ export const ProfileHeader: React.FC = () => {
         />
       </div>
       
-      <h1 className="text-[2.1rem] font-bold text-white tracking-tight mb-1 drop-shadow-lg leading-none">
+      <h1 className="text-[2.1rem] font-bold tracking-tight mb-3 drop-shadow-lg leading-none animate-blink-name">
         <span className="italic">{t('name').split(' ')[0]}</span> {t('name').split(' ').slice(1).join(' ')}
       </h1>
       
-      <h2 className="text-[#D4AF37] text-sm font-semibold uppercase tracking-widest mb-3 w-full">
+      <h2 className="text-[#D4AF37] text-sm font-semibold uppercase tracking-widest mb-1 w-full">
         {t('role')}
       </h2>
       

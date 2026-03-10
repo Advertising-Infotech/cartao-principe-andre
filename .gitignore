@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Backup files
+*.zip
+2/
+Semana Passada/

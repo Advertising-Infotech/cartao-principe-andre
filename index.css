@@ -1,0 +1,53 @@
+/* ===========================
+   Príncipe André — Digital Card
+   Global Styles
+   =========================== */
+
+/* Base */
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+::-webkit-scrollbar-thumb {
+  background: #D4AF37;
+  border-radius: 3px;
+}
+
+/* ===========================
+   Animations
+   =========================== */
+
+/* Slow Pulse for Background */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.02); }
+}
+.animate-pulse-slow {
+  animation: pulse-slow 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Blink Name (gold → yellow → white) */
+@keyframes blink-name {
+  0%, 100% { color: #D4AF37; }
+  33% { color: #ffff00; }
+  66% { color: #ffffff; }
+}
+.animate-blink-name {
+  animation: blink-name 1.5s infinite linear;
+}
+
+/* Blink Yellow (gold → yellow) */
+@keyframes blink-yellow {
+  0%, 100% { color: #D4AF37; }
+  50% { color: #ffff00; }
+}
+.animate-blink-yellow {
+  animation: blink-yellow 1s infinite;
+}

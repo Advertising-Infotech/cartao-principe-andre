@@ -21,7 +21,7 @@ const App: React.FC = () => {
       'BEGIN:VCARD',
       'VERSION:3.0',
       `FN;CHARSET=UTF-8:${t('name')}`,
-      `N;CHARSET=UTF-8:${t('name').split(' ').reverse().join(';')};;;`,
+      `N;CHARSET=UTF-8:Luís;André;;Príncipe;`,
       'ORG;CHARSET=UTF-8:Advertising Infotech',
       `TITLE;CHARSET=UTF-8:${t('role')}`,
       'TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031',

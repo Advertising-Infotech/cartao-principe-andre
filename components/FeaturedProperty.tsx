@@ -115,14 +115,6 @@ export const FeaturedProperty: React.FC = () => {
 
   const currentItem = carouselItems[currentIndex];
 
-  // Helper to determine font size based on text length
-  const getDynamicFontSize = (text: string, baseSize: string) => {
-    if (text.length > 40) return 'text-[10px]';
-    if (text.length > 30) return 'text-xs';
-    if (text.length > 20) return 'text-sm';
-    return baseSize;
-  };
-
   return (
     <div className="w-full mt-2 mb-4">
       <div className="flex items-end justify-between mb-4 px-1">

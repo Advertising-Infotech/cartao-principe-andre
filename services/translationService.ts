@@ -1,39 +1,43 @@
-import { GoogleGenAI } from "@google/genai";
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+const API_URL = '/api/translate';
 
 export async function translateText(text: string, targetLanguage: string): Promise<string> {
   if (!text || !targetLanguage || targetLanguage === 'pt') return text;
 
-  const languageNames: { [key: string]: string } = {
-    en: 'English',
-    he: 'Hebrew',
-    ru: 'Russian',
-    ar: 'Arabic',
-    zh: 'Chinese',
-    es: 'Spanish'
-  };
-
-  const targetLangName = languageNames[targetLanguage] || targetLanguage;
-
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: `Translate the following text from Portuguese to ${targetLangName}. Keep the same tone and style. If the text has line breaks (\n), keep them. Only return the translated text, nothing else.\n\nText: ${text}`,
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, targetLanguage }),
     });
 
-    return response.text.trim();
+    if (!response.ok) {
+      console.error('Translation API error:', response.status);
+      return text;
+    }
+
+    const data = await response.json();
+    return data.translatedText || text;
   } catch (error) {
-    console.error("Translation error:", error);
+    console.error('Translation error:', error);
     return text; // Fallback to original text
   }
 }
 
-export async function translateCarouselItem(item: any, targetLanguage: string): Promise<any> {
+interface CarouselItem {
+  file: string;
+  socialProof: string;
+  line1: string;
+  line2: string;
+  line3: string;
+  type: 'video' | 'image';
+}
+
+export async function translateCarouselItem(item: CarouselItem, targetLanguage: string): Promise<CarouselItem> {
   if (targetLanguage === 'pt') return item;
 
-  const fieldsToTranslate = ['socialProof', 'line1', 'line2', 'line3'];
   const translatedItem = { ...item };
+
+  const fieldsToTranslate = ['socialProof', 'line1', 'line2', 'line3'] as const;
 
   const translationPromises = fieldsToTranslate.map(async (field) => {
     if (item[field]) {

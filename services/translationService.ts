@@ -11,14 +11,15 @@ export async function translateText(text: string, targetLanguage: string): Promi
     });
 
     if (!response.ok) {
-      console.error('Translation API error:', response.status);
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Diag: Translation service responded with error:', response.status, errorData);
       return text;
     }
 
     const data = await response.json();
     return data.translatedText || text;
   } catch (error) {
-    console.error('Translation error:', error);
+    console.error('Diag: Translation fetch failed:', error);
     return text; // Fallback to original text
   }
 }

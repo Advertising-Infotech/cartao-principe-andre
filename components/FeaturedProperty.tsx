@@ -25,8 +25,12 @@ export const FeaturedProperty: React.FC = () => {
 
   useEffect(() => {
     const loadExcelData = async () => {
+      console.log("Diag: Starting Excel fetch from /carrossel/Titulos.xls");
       try {
         const response = await fetch('/carrossel/Titulos.xls');
+        if (!response.ok) {
+          throw new Error(`HTTP fetch error: ${response.status}`);
+        }
         const arrayBuffer = await response.arrayBuffer();
         const workbook = XLSX.read(arrayBuffer, { type: 'array' });
         const firstSheetName = workbook.SheetNames[0];
@@ -34,24 +38,31 @@ export const FeaturedProperty: React.FC = () => {
         
         // Convert to JSON (array of arrays)
         const data = XLSX.utils.sheet_to_json<any[]>(worksheet, { header: 1 });
+        console.log("Diag: Raw Excel Data rows:", data.length);
+        if (data.length > 0) console.log("Diag: First row:", JSON.stringify(data[0]));
         
         // Filter and map data
-        // Assuming data starts from row 0 or 1. Let's look for valid filenames in Column A
         const items: CarouselItem[] = data
-          .filter(row => row[0] && typeof row[0] === 'string' && (row[0].includes('.') ))
-          .map(row => ({
-            file: row[0],
-            socialProof: row[1] ? String(row[1]).split(' ').join('\n') : '',
-            line1: row[2] ? String(row[2]) : '',
-            line2: row[3] ? String(row[3]) : '',
-            line3: row[4] ? String(row[4]) : '',
-            type: row[0].toLowerCase().endsWith('.mp4') ? 'video' : 'image'
-          }));
+          .filter(row => row && row[0] && typeof row[0] === 'string' && (row[0].toLowerCase().includes('.jpg') || row[0].toLowerCase().includes('.jpeg') || row[0].toLowerCase().includes('.png') || row[0].toLowerCase().includes('.mp4')))
+          .map(row => {
+            const fileName = String(row[0]).trim();
+            return {
+              file: fileName,
+              socialProof: row[1] ? String(row[1]).split(' ').join('\n') : '',
+              line1: row[2] ? String(row[2]) : '',
+              line2: row[3] ? String(row[3]) : '',
+              line3: row[4] ? String(row[4]) : '',
+              type: fileName.toLowerCase().endsWith('.mp4') ? 'video' : 'image'
+            };
+          });
 
+        console.log("Diag: Parsed valid items:", items.length);
+        if (items.length > 0) console.log("Diag: Sample item:", JSON.stringify(items[0]));
+        
         setOriginalItems(items);
         setLoading(false);
       } catch (error) {
-        console.error('Error loading Excel data:', error);
+        console.error('Diag: Error loading Excel data:', error);
         setLoading(false);
       }
     };

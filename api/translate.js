@@ -33,7 +33,7 @@ export default async function handler(req, res) {
     const response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.NVIDIA_API_KEY}`,
+        'Authorization': `Bearer ${process.env.Kimi_K2_5 || process.env.KIMI_K2_5 || process.env.Kimi_K25 || process.env.NVIDIA_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
 
     return res.status(500).json({ error: 'Unexpected API response', raw: data });
   } catch (error) {
-    console.error('Translation API error:', error);
-    return res.status(500).json({ error: 'Translation failed' });
+    console.error('Translation API full error:', error);
+    return res.status(500).json({ error: 'Translation failed', message: error.message });
   }
 }

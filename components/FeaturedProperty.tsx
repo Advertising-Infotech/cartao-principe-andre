@@ -137,7 +137,7 @@ export const FeaturedProperty: React.FC = () => {
             {currentItem.type === 'video' ? (
               <video 
                   key={currentItem.file}
-                  src={`/carrossel/${currentItem.file}`} 
+                  src={`/carrossel/${currentItem.file.trim()}`} 
                   autoPlay 
                   loop 
                   muted 
@@ -147,9 +147,10 @@ export const FeaturedProperty: React.FC = () => {
             ) : (
               <img 
                   key={currentItem.file}
-                  src={`/carrossel/${currentItem.file}`} 
+                  src={`/carrossel/${currentItem.file.trim()}`} 
                   alt={currentItem.line1 || `Honor ${currentIndex}`}
                   onError={(e) => {
+                    console.error('Image load error:', currentItem.file);
                     (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/error/800/600?blur=2';
                   }}
                   className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"

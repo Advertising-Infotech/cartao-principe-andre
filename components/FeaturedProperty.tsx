@@ -2,30 +2,21 @@ import React, { useState } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+import carouselData from '../carouselData.json';
+
 export const FeaturedProperty: React.FC = () => {
   const { t } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Carousel items configuration
-  // This can be easily extended or replaced by a dynamic source later
-  const carouselItems = [
-    { type: 'video', src: '/carrossel/homenagem_em_video.mp4' },
-    // 01 to 11 are .jpeg
-    ...Array.from({ length: 11 }, (_, i) => ({ 
-      type: 'image', 
-      src: `/carrossel/${String(i + 1).padStart(2, '0')}.jpeg` 
-    })),
-    // 12 to 50 are .jpg
-    ...Array.from({ length: 39 }, (_, i) => ({ 
-      type: 'image', 
-      src: `/carrossel/${String(i + 12).padStart(2, '0')}.jpg` 
-    })),
-    // 51 to 52 are .png
-    ...Array.from({ length: 2 }, (_, i) => ({ 
-      type: 'image', 
-      src: `/carrossel/${String(i + 51).padStart(2, '0')}.png` 
-    })),
-  ];
+  // Carousel items configuration from JSON
+  const carouselItems = carouselData.map(item => ({
+    type: item.file.endsWith('.mp4') ? 'video' : 'image',
+    src: `/carrossel/${item.file}`,
+    socialProof: item.socialProof,
+    medal: item.medal,
+    location: item.location,
+    merit: item.merit
+  }));
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % carouselItems.length);
@@ -50,11 +41,9 @@ export const FeaturedProperty: React.FC = () => {
       
       <div className="relative group overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md transition-transform hover:scale-[1.02] duration-300">
         <div className="relative h-64 w-full overflow-hidden bg-black/40">
-            {currentItem.type === 'video' && (
-              <div className="absolute top-3 right-3 z-10 text-[#D4AF37] text-[10px] font-black leading-tight text-right uppercase tracking-[0.2em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] whitespace-pre-line">
-                {t('socialProof')}
-              </div>
-            )}
+            <div className="absolute top-3 right-3 z-10 text-[#D4AF37] text-[10px] font-black leading-tight text-right uppercase tracking-[0.2em] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] whitespace-pre-line">
+              {currentItem.socialProof}
+            </div>
             
             {currentItem.type === 'video' ? (
               <video 
@@ -70,7 +59,7 @@ export const FeaturedProperty: React.FC = () => {
               <img 
                   key={currentItem.src}
                   src={currentItem.src} 
-                  alt={`Honor ${currentIndex}`}
+                  alt={currentItem.medal}
                   className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
               />
             )}
@@ -79,14 +68,14 @@ export const FeaturedProperty: React.FC = () => {
 
         <div className="p-4 relative -mt-12">
             <h4 className="text-lg font-bold text-white mb-1">
-              {currentIndex === 0 ? t('featuredTitle') : `${t('featuredTitle')} #${String(currentIndex).padStart(2, '0')}`}
+              {currentItem.medal}
             </h4>
             <p className="text-gray-300 text-sm mb-3 flex items-center">
-                {t('featuredLocation')}
+                {currentItem.location}
             </p>
             
             <div className="flex items-center justify-between mt-2">
-                <span className="text-[#D4AF37] font-bold text-lg">{t('featuredHonor')}</span>
+                <span className="text-[#D4AF37] font-bold text-lg">{currentItem.merit}</span>
                 <div className="flex items-center gap-2">
                     <button 
                       onClick={handlePrev}

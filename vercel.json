@@ -1,6 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/carrossel/(.*)", "destination": "/carrossel/$1" },
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
-}

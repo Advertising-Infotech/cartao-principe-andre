@@ -7,7 +7,7 @@ import { UserPlus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const App: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -16,31 +16,18 @@ const App: React.FC = () => {
   }, []);
 
   const handleSaveContact = () => {
-    // Monta o nome completo traduzido
-    const fullName = t('name');
-    const parts = fullName.split(' ');
-    
-    // vCard N field: Sobrenome;Nome;;;Prefixo
-    // Derivado dinamicamente do nome traduzido
-    const lastName = parts.length > 1 ? parts.slice(1).join(' ') : parts[0];
-    const firstName = parts.length > 1 ? parts[0] : '';
-
-    // Título/cargo traduzido
-    const role = t('role');
-    const bio = t('bio');
-    const saveLabel = t('saveContact');
-
+    // vCard generation with correct encoding and information
     const vCardData = [
       'BEGIN:VCARD',
       'VERSION:3.0',
-      `FN;CHARSET=UTF-8:${fullName}`,
-      `N;CHARSET=UTF-8:${lastName};${firstName};;;`,
+      `FN;CHARSET=UTF-8:${t('name')}`,
+      `N;CHARSET=UTF-8:${t('name').split(' ').reverse().join(';')};;;`,
       'ORG;CHARSET=UTF-8:Advertising Infotech',
-      `TITLE;CHARSET=UTF-8:${role}`,
+      `TITLE;CHARSET=UTF-8:${t('role')}`,
       'TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031',
       'EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com',
       'URL:https://advertisinginfotech.com.br',
-      `NOTE;CHARSET=UTF-8:${bio}`,
+      `NOTE;CHARSET=UTF-8:${t('bio')}`,
       'END:VCARD'
     ].join('\n');
 

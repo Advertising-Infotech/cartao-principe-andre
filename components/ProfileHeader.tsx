@@ -80,13 +80,13 @@ export const ProfileHeader: React.FC = () => {
       <div className="relative mb-4 group">
         <div className="absolute inset-0 rounded-3xl bg-[#D4AF37] blur opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
         <img 
-          src="carrossel/foto_oficial.jpg" 
+          src="/carrossel/foto_oficial.jpg" 
           alt="Agent Profile" 
           className="relative w-40 h-40 rounded-3xl object-cover border-4 border-[#D4AF37] shadow-2xl"
         />
       </div>
       
-      <h1 className="text-[2.1rem] font-bold tracking-tight mb-3 drop-shadow-lg leading-none animate-blink-name">
+      <h1 className="text-[2.1rem] font-bold text-white tracking-tight mb-3 drop-shadow-lg leading-none">
         <span className="italic">{t('name').split(' ')[0]}</span> {t('name').split(' ').slice(1).join(' ')}
       </h1>
       

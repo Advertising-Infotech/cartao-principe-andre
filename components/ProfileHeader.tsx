@@ -100,10 +100,6 @@ export const ProfileHeader: React.FC = () => {
           src="/carrossel/foto_oficial.jpg" 
           alt={t('name')} 
           className="relative w-40 h-40 rounded-3xl object-cover border-4 border-[#D4AF37] shadow-2xl"
-          onError={(e) => {
-            console.error('Erro ao carregar foto de perfil');
-            (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/profile/400/400';
-          }}
         />
       </div>
       

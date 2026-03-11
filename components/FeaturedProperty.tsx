@@ -26,38 +26,37 @@ export const FeaturedProperty: React.FC = () => {
         if (!response.ok) throw new Error(`Falha ao carregar Titulos.xls: ${response.status}`);
         
         const arrayBuffer = await response.arrayBuffer();
-        const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+        const workbook = XLSX.read(arrayBuffer, { type: 'buffer' });
         
         if (!workbook.SheetNames.length) throw new Error('Arquivo Excel vazio');
         
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const jsonData = XLSX.utils.sheet_to_json<any[]>(worksheet, { header: 1 });
         
+        console.log('Excel Data:', jsonData);
+
         const items: CarouselItem[] = jsonData
           .filter(row => {
-            if (!Array.isArray(row) || row.length === 0 || !row[0]) return false;
+            if (!Array.isArray(row) || row.length === 0 || row[0] === undefined || row[0] === null) return false;
             const firstCell = String(row[0]).trim().toLowerCase();
-            if (['arquivo', 'file', 'nome', 'título', 'titulo'].includes(firstCell)) return false;
+            if (firstCell === '' || ['arquivo', 'file', 'nome', 'título', 'titulo'].includes(firstCell)) return false;
             return true;
           })
           .map(row => {
             let fileName = String(row[0]).trim();
             
+            // Se for apenas número, completa com zero à esquerda
             if (/^\d+$/.test(fileName)) {
               fileName = fileName.padStart(2, '0');
             }
 
+            // Adiciona extensão se não tiver
             if (!fileName.includes('.')) {
               const num = parseInt(fileName);
               if (num >= 1 && num <= 11) fileName += '.jpeg';
-              else if (num >= 51) fileName += '.png';
-              else fileName += '.jpg';
-            } else {
-              const parts = fileName.split('.');
-              const num = parseInt(parts[0]);
-              if (num >= 1 && num <= 11 && parts[1].toLowerCase() === 'jpg') {
-                fileName = `${parts[0]}.jpeg`;
-              }
+              else if (num >= 51 && num <= 52) fileName += '.png';
+              else if (!isNaN(num)) fileName += '.jpg';
+              else if (fileName.toLowerCase().includes('video')) fileName = 'homenagem_em_video.mp4';
             }
 
             const finalFileName = fileName.toLowerCase();
@@ -71,9 +70,30 @@ export const FeaturedProperty: React.FC = () => {
             };
           });
 
-        if (items.length === 0) throw new Error('Nenhum dado encontrado na planilha');
-
-        setCarouselItems(items);
+        if (items.length === 0) {
+          // Fallback manual se a planilha estiver vazia ou mal formatada, 
+          // mas apenas com os arquivos que SABEMOS que existem
+          const manualItems: CarouselItem[] = [
+            { file: 'homenagem_em_video.mp4', socialProof: 'Homenagem\nSolene', line1: 'Homenagem em Vídeo', line2: 'Assembleia Legislativa', line3: 'Estado de Goiás', type: 'video' }
+          ];
+          for (let i = 1; i <= 52; i++) {
+            const num = i.toString().padStart(2, '0');
+            let ext = '.jpg';
+            if (i <= 11) ext = '.jpeg';
+            else if (i >= 51) ext = '.png';
+            manualItems.push({
+              file: `${num}${ext}`,
+              socialProof: '',
+              line1: `Homenagem ${num}`,
+              line2: '',
+              line3: '',
+              type: 'image'
+            });
+          }
+          setCarouselItems(manualItems);
+        } else {
+          setCarouselItems(items);
+        }
         setLoading(false);
       } catch (err) {
         console.error('Erro no Carrossel:', err);

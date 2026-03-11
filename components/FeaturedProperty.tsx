@@ -31,18 +31,43 @@ export const FeaturedProperty: React.FC = () => {
         const data = XLSX.utils.sheet_to_json<any[]>(worksheet, { header: 1 });
         
         // Filter and map data
-        // Assuming data starts from row 0 or 1. Let's look for valid filenames in Column A
         const items: CarouselItem[] = data
-          .filter(row => row[0] && typeof row[0] === 'string' && (row[0].trim().includes('.') ))
+          .filter(row => row[0] !== undefined && row[0] !== null && row[0] !== '')
           .map(row => {
-            const fileName = String(row[0]).trim().toLowerCase();
+            let fileName = String(row[0]).trim();
+            
+            // Handle numeric filenames (e.g., 1 -> 01)
+            if (!isNaN(Number(fileName)) && !fileName.includes('.')) {
+              fileName = fileName.padStart(2, '0');
+            }
+
+            // Fix common extension mismatches based on the actual file list
+            // Files 01-11 are .jpeg, others are .jpg or .png
+            if (!fileName.includes('.')) {
+              const num = parseInt(fileName);
+              if (num >= 1 && num <= 11) {
+                fileName += '.jpeg';
+              } else if (num >= 51) {
+                fileName += '.png';
+              } else {
+                fileName += '.jpg';
+              }
+            } else {
+              // If it has an extension but it's wrong (e.g., .jpg instead of .jpeg for 01-11)
+              const num = parseInt(fileName.split('.')[0]);
+              if (num >= 1 && num <= 11 && fileName.toLowerCase().endsWith('.jpg')) {
+                fileName = fileName.replace(/\.jpg$/i, '.jpeg');
+              }
+            }
+
+            const finalFileName = fileName.toLowerCase();
             return {
-              file: fileName,
+              file: finalFileName,
               socialProof: row[1] ? String(row[1]).split(' ').join('\n') : '',
               line1: row[2] ? String(row[2]) : '',
               line2: row[3] ? String(row[3]) : '',
               line3: row[4] ? String(row[4]) : '',
-              type: fileName.endsWith('.mp4') ? 'video' : 'image'
+              type: finalFileName.endsWith('.mp4') ? 'video' : 'image'
             };
           });
 

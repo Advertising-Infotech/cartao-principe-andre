@@ -16,7 +16,7 @@ export const ActionGrid: React.FC = () => {
   const handleWhatsapp = () => window.open('https://wa.me/5562991599031', '_blank');
   const handleLinkedin = () => window.open('https://www.linkedin.com/in/advertising-propaganda-162220185/', '_blank');
   const handleEmail = () => window.location.href = 'mailto:advertisingpropaganda@gmail.com';
-  const handleSite = () => window.open('mailto:advertisingpropaganda@gmail.com', '_blank');
+  const handleSite = () => window.open('https://advertisinginfotech.com.br', '_blank');
 
   return (
     <div className="grid grid-cols-4 gap-3 w-full mb-2">

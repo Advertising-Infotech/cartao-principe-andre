@@ -100,6 +100,7 @@ export const ProfileHeader: React.FC = () => {
           src="/carrossel/foto_oficial.jpg" 
           alt="Agent Profile" 
           className="relative w-40 h-40 rounded-3xl object-cover border-4 border-[#D4AF37] shadow-2xl"
+          referrerPolicy="no-referrer"
         />
       </div>
       

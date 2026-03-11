@@ -33,15 +33,18 @@ export const FeaturedProperty: React.FC = () => {
         // Filter and map data
         // Assuming data starts from row 0 or 1. Let's look for valid filenames in Column A
         const items: CarouselItem[] = data
-          .filter(row => row[0] && typeof row[0] === 'string' && (row[0].includes('.') ))
-          .map(row => ({
-            file: row[0],
-            socialProof: row[1] ? String(row[1]).split(' ').join('\n') : '',
-            line1: row[2] ? String(row[2]) : '',
-            line2: row[3] ? String(row[3]) : '',
-            line3: row[4] ? String(row[4]) : '',
-            type: row[0].toLowerCase().endsWith('.mp4') ? 'video' : 'image'
-          }));
+          .filter(row => row[0] && typeof row[0] === 'string' && (row[0].trim().includes('.') ))
+          .map(row => {
+            const fileName = String(row[0]).trim().toLowerCase();
+            return {
+              file: fileName,
+              socialProof: row[1] ? String(row[1]).split(' ').join('\n') : '',
+              line1: row[2] ? String(row[2]) : '',
+              line2: row[3] ? String(row[3]) : '',
+              line3: row[4] ? String(row[4]) : '',
+              type: fileName.endsWith('.mp4') ? 'video' : 'image'
+            };
+          });
 
         setCarouselItems(items);
         setLoading(false);
@@ -116,6 +119,7 @@ export const FeaturedProperty: React.FC = () => {
                   key={currentItem.file}
                   src={`/carrossel/${currentItem.file}`} 
                   alt={currentItem.line1 || `Honor ${currentIndex}`}
+                  referrerPolicy="no-referrer"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/error/800/600?blur=2';
                   }}

@@ -26,7 +26,8 @@ export const FeaturedProperty: React.FC = () => {
         if (!response.ok) throw new Error(`Falha ao carregar Titulos.xls: ${response.status}`);
         
         const arrayBuffer = await response.arrayBuffer();
-        const workbook = XLSX.read(arrayBuffer, { type: 'buffer' });
+        const data = new Uint8Array(arrayBuffer);
+        const workbook = XLSX.read(data, { type: 'array' });
         
         if (!workbook.SheetNames.length) throw new Error('Arquivo Excel vazio');
         
@@ -48,6 +49,11 @@ export const FeaturedProperty: React.FC = () => {
             // Se for apenas número, completa com zero à esquerda
             if (/^\d+$/.test(fileName)) {
               fileName = fileName.padStart(2, '0');
+            }
+
+            // Caso especial para o vídeo se vier sem extensão ou com nome parcial
+            if (fileName.toLowerCase().includes('homenagem') || fileName.toLowerCase().includes('video')) {
+              if (!fileName.includes('.')) fileName = 'homenagem_em_video.mp4';
             }
 
             // Adiciona extensão se não tiver

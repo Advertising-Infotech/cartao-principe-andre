@@ -13,8 +13,8 @@ interface CarouselItem {
 
 // Mapeia idioma → arquivo JSON
 function getJsonPath(lang: string): string {
-  if (lang === 'pt') return '/carrossel/Titulos_pt.json';
-  return `/carrossel/Titulos_${lang}.json`;
+  if (lang === 'pt') return 'carrossel/Titulos_pt.json';
+  return `carrossel/Titulos_${lang}.json`;
 }
 
 export const FeaturedProperty: React.FC = () => {
@@ -123,7 +123,7 @@ export const FeaturedProperty: React.FC = () => {
             {currentItem.type === 'video' ? (
               <video 
                   key={currentItem.file}
-                  src={`/carrossel/${currentItem.file.trim()}`} 
+                  src={`carrossel/${currentItem.file.trim()}`} 
                   autoPlay 
                   loop 
                   muted 
@@ -133,7 +133,7 @@ export const FeaturedProperty: React.FC = () => {
             ) : (
               <img 
                   key={currentItem.file}
-                  src={`/carrossel/${currentItem.file.trim()}`} 
+                  src={`carrossel/${currentItem.file.trim()}`} 
                   alt={currentItem.line1 || `Honor ${currentIndex}`}
                   onError={(e) => {
                     console.error('Image load error:', currentItem.file);

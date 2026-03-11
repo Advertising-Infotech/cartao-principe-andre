@@ -8,13 +8,6 @@ export interface ActionButtonProps {
   onClick?: () => void;
 }
 
-export interface Property {
-  id: string;
-  title: string;
-  price: string;
-  imageUrl: string;
-  location: string;
-}
 
 export interface SocialLink {
   platform: string;

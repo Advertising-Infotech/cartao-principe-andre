@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import * as XLSX from 'xlsx';
-import { translateCarouselItem } from '../services/translationService';
 
 interface CarouselItem {
   file: string;
@@ -13,104 +11,81 @@ interface CarouselItem {
   type: 'video' | 'image';
 }
 
+// Mapeia idioma → arquivo JSON
+function getJsonPath(lang: string): string {
+  if (lang === 'pt') return '/carrossel/Titulos_pt.json';
+  return `/carrossel/Titulos_${lang}.json`;
+}
+
 export const FeaturedProperty: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [originalItems, setOriginalItems] = useState<CarouselItem[]>([]);
-  const [translatedItemsCache, setTranslatedItemsCache] = useState<{ [lang: string]: CarouselItem[] }>({});
+  const [items, setItems] = useState<CarouselItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [translating, setTranslating] = useState(false);
 
   const currentLanguage = i18n.language;
 
+  // Carrega o JSON do idioma atual (com fallback para pt)
   useEffect(() => {
-    const loadExcelData = async () => {
-      console.log("Diag: Starting Excel fetch from /carrossel/Titulos.xls");
+    const loadData = async () => {
+      setLoading(true);
+      let data: any[][] = [];
+
       try {
-        const response = await fetch('/carrossel/Titulos.xls');
-        if (!response.ok) {
-          throw new Error(`HTTP fetch error: ${response.status}`);
+        // Tenta carregar o JSON do idioma atual
+        const response = await fetch(getJsonPath(currentLanguage));
+        if (response.ok) {
+          data = await response.json();
+        } else {
+          throw new Error(`JSON not found for ${currentLanguage}`);
         }
-        const arrayBuffer = await response.arrayBuffer();
-        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-        const firstSheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[firstSheetName];
-        
-        // Convert to JSON (array of arrays)
-        const data = XLSX.utils.sheet_to_json<any[]>(worksheet, { header: 1 });
-        console.log("Diag: Raw Excel Data rows:", data.length);
-        if (data.length > 0) console.log("Diag: First row:", JSON.stringify(data[0]));
-        
-        // Filter and map data
-        const items: CarouselItem[] = data
-          .filter(row => row && row[0] && typeof row[0] === 'string' && (row[0].toLowerCase().includes('.jpg') || row[0].toLowerCase().includes('.jpeg') || row[0].toLowerCase().includes('.png') || row[0].toLowerCase().includes('.mp4')))
-          .map(row => {
-            const fileName = String(row[0]).trim();
-            return {
-              file: fileName,
-              socialProof: row[1] ? String(row[1]).split(' ').join('\n') : '',
-              line1: row[2] ? String(row[2]) : '',
-              line2: row[3] ? String(row[3]) : '',
-              line3: row[4] ? String(row[4]) : '',
-              type: fileName.toLowerCase().endsWith('.mp4') ? 'video' : 'image'
-            };
-          });
-
-        console.log("Diag: Parsed valid items:", items.length);
-        if (items.length > 0) console.log("Diag: Sample item:", JSON.stringify(items[0]));
-        
-        setOriginalItems(items);
-        setLoading(false);
-      } catch (error) {
-        console.error('Diag: Error loading Excel data:', error);
-        setLoading(false);
+      } catch {
+        // Fallback para português
+        try {
+          const fallback = await fetch('/carrossel/Titulos_pt.json');
+          if (fallback.ok) {
+            data = await fallback.json();
+          }
+        } catch (e) {
+          console.error('Failed to load carousel data:', e);
+        }
       }
+
+      // Mapeia os arrays para objetos CarouselItem
+      const parsed: CarouselItem[] = data
+        .filter(row => row && row[0] && typeof row[0] === 'string' &&
+          (row[0].toLowerCase().includes('.jpg') ||
+           row[0].toLowerCase().includes('.jpeg') ||
+           row[0].toLowerCase().includes('.png') ||
+           row[0].toLowerCase().includes('.mp4')))
+        .map(row => {
+          const fileName = String(row[0]).trim();
+          return {
+            file: fileName,
+            socialProof: row[1] ? String(row[1]) : '',
+            line1: row[2] ? String(row[2]) : '',
+            line2: row[3] ? String(row[3]) : '',
+            line3: row[4] ? String(row[4]) : '',
+            type: fileName.toLowerCase().endsWith('.mp4') ? 'video' : 'image'
+          };
+        });
+
+      setItems(parsed);
+      setCurrentIndex(0);
+      setLoading(false);
     };
 
-    loadExcelData();
-  }, []);
-
-  // Effect to handle translation when language changes
-  useEffect(() => {
-    const performTranslation = async () => {
-      if (currentLanguage === 'pt' || originalItems.length === 0) return;
-      
-      // If already translated for this language, skip
-      if (translatedItemsCache[currentLanguage]) return;
-
-      setTranslating(true);
-      try {
-        // Translate all items for the new language
-        const translated = await Promise.all(
-          originalItems.map(item => translateCarouselItem(item, currentLanguage))
-        );
-
-        setTranslatedItemsCache(prev => ({
-          ...prev,
-          [currentLanguage]: translated
-        }));
-      } catch (error) {
-        console.error("Translation batch error:", error);
-      } finally {
-        setTranslating(false);
-      }
-    };
-
-    performTranslation();
-  }, [currentLanguage, originalItems]);
-
-  const carouselItems = (currentLanguage !== 'pt' && translatedItemsCache[currentLanguage]) 
-    ? translatedItemsCache[currentLanguage] 
-    : originalItems;
+    loadData();
+  }, [currentLanguage]);
 
   const handleNext = () => {
-    if (carouselItems.length === 0) return;
-    setCurrentIndex((prev) => (prev + 1) % carouselItems.length);
+    if (items.length === 0) return;
+    setCurrentIndex((prev) => (prev + 1) % items.length);
   };
 
   const handlePrev = () => {
-    if (carouselItems.length === 0) return;
-    setCurrentIndex((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
+    if (items.length === 0) return;
+    setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
   };
 
   if (loading) {
@@ -120,11 +95,11 @@ export const FeaturedProperty: React.FC = () => {
     </div>;
   }
 
-  if (carouselItems.length === 0) {
+  if (items.length === 0) {
     return null;
   }
 
-  const currentItem = carouselItems[currentIndex];
+  const currentItem = items[currentIndex];
 
   return (
     <div className="w-full mt-2 mb-4">
@@ -133,7 +108,7 @@ export const FeaturedProperty: React.FC = () => {
           {t('titlesSection')}
         </h3>
         <span className="text-2xl font-bold animate-blink-yellow shrink-0 ml-4 mb-0.5">
-          {currentIndex + 1} / {carouselItems.length}
+          {currentIndex + 1} / {items.length}
         </span>
       </div>
       
@@ -183,12 +158,6 @@ export const FeaturedProperty: React.FC = () => {
                 <p className="text-gray-300 flex items-center truncate leading-tight text-[0.82rem] sm:text-[0.94rem]">
                     {currentItem.line2}
                 </p>
-                {translating && (
-                  <div className="flex items-center gap-1 text-[10px] text-[#D4AF37] animate-pulse">
-                    <Loader2 size={10} className="animate-spin" />
-                    Translating...
-                  </div>
-                )}
             </div>
             
             <div className="flex items-start justify-between gap-4">

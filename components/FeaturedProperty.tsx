@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { read, utils } from 'xlsx';
+import * as XLSX from 'xlsx';
 
 interface CarouselItem {
   file: string;
@@ -17,50 +17,42 @@ export const FeaturedProperty: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [carouselItems, setCarouselItems] = useState<CarouselItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadExcelData = async () => {
       try {
         const response = await fetch('/carrossel/Titulos.xls');
-        if (!response.ok) throw new Error('Failed to fetch Titulos.xls');
+        if (!response.ok) throw new Error(`Falha ao carregar Titulos.xls: ${response.status}`);
         
         const arrayBuffer = await response.arrayBuffer();
-        const workbook = read(arrayBuffer, { type: 'array' });
-        const firstSheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[firstSheetName];
+        const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
         
-        // Convert to JSON (array of arrays)
-        const jsonData = utils.sheet_to_json<any[]>(worksheet, { header: 1 });
+        if (!workbook.SheetNames.length) throw new Error('Arquivo Excel vazio');
         
-        if (!jsonData || jsonData.length === 0) {
-          throw new Error('Excel file is empty');
-        }
-
-        // Filter and map data
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json<any[]>(worksheet, { header: 1 });
+        
         const items: CarouselItem[] = jsonData
           .filter(row => {
-            if (!row || row[0] === undefined || row[0] === null || row[0] === '') return false;
+            if (!Array.isArray(row) || row.length === 0 || !row[0]) return false;
             const firstCell = String(row[0]).trim().toLowerCase();
-            // Skip header row if it contains "arquivo" or "file"
-            if (firstCell === 'arquivo' || firstCell === 'file' || firstCell === 'nome') return false;
+            if (['arquivo', 'file', 'nome', 'título', 'titulo'].includes(firstCell)) return false;
             return true;
           })
           .map(row => {
             let fileName = String(row[0]).trim();
             
-            // Handle numeric filenames (e.g., 1 -> 01)
-            if (!isNaN(Number(fileName)) && !fileName.includes('.')) {
+            if (/^\d+$/.test(fileName)) {
               fileName = fileName.padStart(2, '0');
             }
 
-            // Fix common extension mismatches based on the actual file list
             if (!fileName.includes('.')) {
               const num = parseInt(fileName);
               if (num >= 1 && num <= 11) fileName += '.jpeg';
               else if (num >= 51) fileName += '.png';
               else fileName += '.jpg';
             } else {
-              // Ensure correct extension for 01-11
               const parts = fileName.split('.');
               const num = parseInt(parts[0]);
               if (num >= 1 && num <= 11 && parts[1].toLowerCase() === 'jpg') {
@@ -71,7 +63,7 @@ export const FeaturedProperty: React.FC = () => {
             const finalFileName = fileName.toLowerCase();
             return {
               file: finalFileName,
-              socialProof: row[1] ? String(row[1]).split(' ').join('\n') : '',
+              socialProof: row[1] ? String(row[1]).replace(/\\n/g, '\n') : '',
               line1: row[2] ? String(row[2]) : '',
               line2: row[3] ? String(row[3]) : '',
               line3: row[4] ? String(row[4]) : '',
@@ -79,14 +71,13 @@ export const FeaturedProperty: React.FC = () => {
             };
           });
 
-        if (items.length > 0) {
-          setCarouselItems(items);
-        } else {
-          console.warn('No valid items found in Excel after filtering');
-        }
+        if (items.length === 0) throw new Error('Nenhum dado encontrado na planilha');
+
+        setCarouselItems(items);
         setLoading(false);
-      } catch (error) {
-        console.error('Error loading Excel data:', error);
+      } catch (err) {
+        console.error('Erro no Carrossel:', err);
+        setError(err instanceof Error ? err.message : 'Erro ao carregar dados');
         setLoading(false);
       }
     };
@@ -113,10 +104,11 @@ export const FeaturedProperty: React.FC = () => {
     );
   }
 
-  if (carouselItems.length === 0) {
+  if (error || carouselItems.length === 0) {
     return (
-      <div className="w-full h-64 flex items-center justify-center text-white bg-white/5 rounded-2xl border border-white/10 mb-4">
-        <p className="text-xs uppercase tracking-widest opacity-50">Nenhuma foto encontrada</p>
+      <div className="w-full p-6 text-center text-white bg-red-500/10 rounded-2xl border border-red-500/20 mb-4">
+        <p className="text-sm font-bold text-red-400 mb-1">Erro no Mural</p>
+        <p className="text-[10px] uppercase tracking-widest opacity-60">{error || 'Sem dados'}</p>
       </div>
     );
   }
@@ -158,9 +150,6 @@ export const FeaturedProperty: React.FC = () => {
                   src={`/carrossel/${currentItem.file}`} 
                   alt={currentItem.line1 || `Honor ${currentIndex}`}
                   referrerPolicy="no-referrer"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = `https://picsum.photos/seed/${currentIndex}/800/600?blur=2`;
-                  }}
                   className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
               />
             )}

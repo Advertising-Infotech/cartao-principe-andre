@@ -98,8 +98,12 @@ export const ProfileHeader: React.FC = () => {
         <div className="absolute inset-0 rounded-3xl bg-[#D4AF37] blur opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
         <img 
           src="/carrossel/foto_oficial.jpg" 
-          alt="Agent Profile" 
+          alt={t('name')} 
           className="relative w-40 h-40 rounded-3xl object-cover border-4 border-[#D4AF37] shadow-2xl"
+          onError={(e) => {
+            console.error('Erro ao carregar foto de perfil');
+            (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/profile/400/400';
+          }}
         />
       </div>
       

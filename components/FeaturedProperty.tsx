@@ -21,11 +21,8 @@ export const FeaturedProperty: React.FC = () => {
   useEffect(() => {
     const loadExcelData = async () => {
       try {
-        // Try to fetch the Excel file
-        const response = await fetch('./carrossel/Titulos.xls');
-        if (!response.ok) {
-          throw new Error(`Failed to fetch Excel: ${response.status} ${response.statusText}`);
-        }
+        const response = await fetch('/carrossel/Titulos.xls');
+        if (!response.ok) throw new Error('Failed to fetch Titulos.xls');
         
         const arrayBuffer = await response.arrayBuffer();
         const data = new Uint8Array(arrayBuffer);
@@ -33,36 +30,23 @@ export const FeaturedProperty: React.FC = () => {
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
         
-        // Convert to JSON (array of arrays)
         const jsonData = XLSX.utils.sheet_to_json<any[]>(worksheet, { header: 1 });
         
-        if (!jsonData || jsonData.length === 0) {
-          throw new Error('Excel file is empty');
-        }
-
-        // Filter and map data
         const items: CarouselItem[] = jsonData
           .filter(row => row && row[0] !== undefined && row[0] !== null && row[0] !== '')
           .map(row => {
             let fileName = String(row[0]).trim();
             
-            // Handle numeric filenames (e.g., 1 -> 01)
             if (!isNaN(Number(fileName)) && !fileName.includes('.')) {
               fileName = fileName.padStart(2, '0');
             }
 
-            // Fix common extension mismatches based on the actual file list
             if (!fileName.includes('.')) {
               const num = parseInt(fileName);
-              if (num >= 1 && num <= 11) {
-                fileName += '.jpeg';
-              } else if (num >= 51) {
-                fileName += '.png';
-              } else {
-                fileName += '.jpg';
-              }
+              if (num >= 1 && num <= 11) fileName += '.jpeg';
+              else if (num >= 51) fileName += '.png';
+              else fileName += '.jpg';
             } else {
-              // Ensure correct extension for 01-11
               const parts = fileName.split('.');
               const num = parseInt(parts[0]);
               if (num >= 1 && num <= 11 && parts[1].toLowerCase() === 'jpg') {
@@ -81,40 +65,10 @@ export const FeaturedProperty: React.FC = () => {
             };
           });
 
-        if (items.length === 0) {
-          throw new Error('No valid items found in Excel');
-        }
-
         setCarouselItems(items);
         setLoading(false);
       } catch (error) {
-        console.error('Error loading Excel data, using fallback:', error);
-        
-        // Fallback: Generate a list of items based on the known file structure
-        const fallbackItems: CarouselItem[] = Array.from({ length: 50 }, (_, i) => {
-          const num = (i + 1).toString().padStart(2, '0');
-          const ext = (i + 1) <= 11 ? '.jpeg' : '.jpg';
-          return {
-            file: `${num}${ext}`,
-            socialProof: '',
-            line1: '',
-            line2: '',
-            line3: '',
-            type: 'image'
-          };
-        });
-        
-        // Add the video if it exists
-        fallbackItems.push({
-          file: 'homenagem_em_video.mp4',
-          socialProof: 'Homenagem',
-          line1: 'Homenagem em Vídeo',
-          line2: '',
-          line3: '',
-          type: 'video'
-        });
-
-        setCarouselItems(fallbackItems);
+        console.error('Error loading Excel data:', error);
         setLoading(false);
       }
     };
@@ -164,7 +118,7 @@ export const FeaturedProperty: React.FC = () => {
             {currentItem.type === 'video' ? (
               <video 
                   key={currentItem.file}
-                  src={`./carrossel/${currentItem.file}`} 
+                  src={`/carrossel/${currentItem.file}`} 
                   autoPlay 
                   loop 
                   muted 
@@ -174,7 +128,7 @@ export const FeaturedProperty: React.FC = () => {
             ) : (
               <img 
                   key={currentItem.file}
-                  src={`./carrossel/${currentItem.file}`} 
+                  src={`/carrossel/${currentItem.file}`} 
                   alt={currentItem.line1 || `Honor ${currentIndex}`}
                   referrerPolicy="no-referrer"
                   onError={(e) => {

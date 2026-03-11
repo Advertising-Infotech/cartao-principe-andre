@@ -21,18 +21,28 @@ export const FeaturedProperty: React.FC = () => {
   useEffect(() => {
     const loadExcelData = async () => {
       try {
-        const response = await fetch('/carrossel/Titulos.xls');
+        // Try to fetch the Excel file
+        const response = await fetch('./carrossel/Titulos.xls');
+        if (!response.ok) {
+          throw new Error(`Failed to fetch Excel: ${response.status} ${response.statusText}`);
+        }
+        
         const arrayBuffer = await response.arrayBuffer();
-        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+        const data = new Uint8Array(arrayBuffer);
+        const workbook = XLSX.read(data, { type: 'array' });
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
         
         // Convert to JSON (array of arrays)
-        const data = XLSX.utils.sheet_to_json<any[]>(worksheet, { header: 1 });
+        const jsonData = XLSX.utils.sheet_to_json<any[]>(worksheet, { header: 1 });
         
+        if (!jsonData || jsonData.length === 0) {
+          throw new Error('Excel file is empty');
+        }
+
         // Filter and map data
-        const items: CarouselItem[] = data
-          .filter(row => row[0] !== undefined && row[0] !== null && row[0] !== '')
+        const items: CarouselItem[] = jsonData
+          .filter(row => row && row[0] !== undefined && row[0] !== null && row[0] !== '')
           .map(row => {
             let fileName = String(row[0]).trim();
             
@@ -42,7 +52,6 @@ export const FeaturedProperty: React.FC = () => {
             }
 
             // Fix common extension mismatches based on the actual file list
-            // Files 01-11 are .jpeg, others are .jpg or .png
             if (!fileName.includes('.')) {
               const num = parseInt(fileName);
               if (num >= 1 && num <= 11) {
@@ -53,10 +62,11 @@ export const FeaturedProperty: React.FC = () => {
                 fileName += '.jpg';
               }
             } else {
-              // If it has an extension but it's wrong (e.g., .jpg instead of .jpeg for 01-11)
-              const num = parseInt(fileName.split('.')[0]);
-              if (num >= 1 && num <= 11 && fileName.toLowerCase().endsWith('.jpg')) {
-                fileName = fileName.replace(/\.jpg$/i, '.jpeg');
+              // Ensure correct extension for 01-11
+              const parts = fileName.split('.');
+              const num = parseInt(parts[0]);
+              if (num >= 1 && num <= 11 && parts[1].toLowerCase() === 'jpg') {
+                fileName = `${parts[0]}.jpeg`;
               }
             }
 
@@ -71,10 +81,40 @@ export const FeaturedProperty: React.FC = () => {
             };
           });
 
+        if (items.length === 0) {
+          throw new Error('No valid items found in Excel');
+        }
+
         setCarouselItems(items);
         setLoading(false);
       } catch (error) {
-        console.error('Error loading Excel data:', error);
+        console.error('Error loading Excel data, using fallback:', error);
+        
+        // Fallback: Generate a list of items based on the known file structure
+        const fallbackItems: CarouselItem[] = Array.from({ length: 50 }, (_, i) => {
+          const num = (i + 1).toString().padStart(2, '0');
+          const ext = (i + 1) <= 11 ? '.jpeg' : '.jpg';
+          return {
+            file: `${num}${ext}`,
+            socialProof: '',
+            line1: '',
+            line2: '',
+            line3: '',
+            type: 'image'
+          };
+        });
+        
+        // Add the video if it exists
+        fallbackItems.push({
+          file: 'homenagem_em_video.mp4',
+          socialProof: 'Homenagem',
+          line1: 'Homenagem em Vídeo',
+          line2: '',
+          line3: '',
+          type: 'video'
+        });
+
+        setCarouselItems(fallbackItems);
         setLoading(false);
       }
     };
@@ -102,14 +142,6 @@ export const FeaturedProperty: React.FC = () => {
 
   const currentItem = carouselItems[currentIndex];
 
-  // Helper to determine font size based on text length
-  const getDynamicFontSize = (text: string, baseSize: string) => {
-    if (text.length > 40) return 'text-[10px]';
-    if (text.length > 30) return 'text-xs';
-    if (text.length > 20) return 'text-sm';
-    return baseSize;
-  };
-
   return (
     <div className="w-full mt-2 mb-4">
       <div className="flex items-end justify-between mb-4 px-1">
@@ -132,7 +164,7 @@ export const FeaturedProperty: React.FC = () => {
             {currentItem.type === 'video' ? (
               <video 
                   key={currentItem.file}
-                  src={`/carrossel/${currentItem.file}`} 
+                  src={`./carrossel/${currentItem.file}`} 
                   autoPlay 
                   loop 
                   muted 
@@ -142,11 +174,11 @@ export const FeaturedProperty: React.FC = () => {
             ) : (
               <img 
                   key={currentItem.file}
-                  src={`/carrossel/${currentItem.file}`} 
+                  src={`./carrossel/${currentItem.file}`} 
                   alt={currentItem.line1 || `Honor ${currentIndex}`}
                   referrerPolicy="no-referrer"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/error/800/600?blur=2';
+                    (e.target as HTMLImageElement).src = `https://picsum.photos/seed/${currentIndex}/800/600?blur=2`;
                   }}
                   className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
               />

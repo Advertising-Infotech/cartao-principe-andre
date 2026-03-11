@@ -76,30 +76,8 @@ export const FeaturedProperty: React.FC = () => {
             };
           });
 
-        if (items.length === 0) {
-          // Fallback manual se a planilha estiver vazia ou mal formatada, 
-          // mas apenas com os arquivos que SABEMOS que existem
-          const manualItems: CarouselItem[] = [
-            { file: 'homenagem_em_video.mp4', socialProof: 'Homenagem\nSolene', line1: 'Homenagem em Vídeo', line2: 'Assembleia Legislativa', line3: 'Estado de Goiás', type: 'video' }
-          ];
-          for (let i = 1; i <= 52; i++) {
-            const num = i.toString().padStart(2, '0');
-            let ext = '.jpg';
-            if (i <= 11) ext = '.jpeg';
-            else if (i >= 51) ext = '.png';
-            manualItems.push({
-              file: `${num}${ext}`,
-              socialProof: '',
-              line1: `Homenagem ${num}`,
-              line2: '',
-              line3: '',
-              type: 'image'
-            });
-          }
-          setCarouselItems(manualItems);
-        } else {
-          setCarouselItems(items);
-        }
+        if (items.length === 0) throw new Error('Nenhum dado encontrado na planilha');
+        setCarouselItems(items);
         setLoading(false);
       } catch (err) {
         console.error('Erro no Carrossel:', err);

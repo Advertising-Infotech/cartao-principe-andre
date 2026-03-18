@@ -34,16 +34,19 @@ const App: React.FC = () => {
     const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
     
-    // To "open" instead of "save", we navigate to the URL without the download attribute.
-    // This triggers the native contact app on most mobile devices.
-    window.location.href = url;
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `contato_${t('name').replace(/\s+/g, '_')}.vcf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
     
     // Clean up the URL object after a short delay to ensure the browser has handled it
     setTimeout(() => window.URL.revokeObjectURL(url), 1000);
   };
 
   return (
-    <div className="min-h-screen w-full relative flex items-center justify-center overflow-x-hidden bg-black font-sans">
+    <div className="min-h-[100dvh] w-full relative flex items-center justify-center overflow-x-hidden bg-black font-sans">
       
       {/* Total Black Background */}
       <div className="fixed inset-0 z-0 bg-black"></div>
@@ -51,7 +54,7 @@ const App: React.FC = () => {
       {/* Main Glassmorphism Container */}
       <main 
         className={`
-          relative z-20 w-full max-w-md mx-auto min-h-screen sm:min-h-[85vh] sm:rounded-[2rem] 
+          relative z-20 w-full max-w-md mx-auto min-h-[100dvh] sm:min-h-[85dvh] sm:rounded-[2rem] 
           bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl
           flex flex-col items-center p-6 sm:p-8
           transition-all duration-1000 ease-out transform

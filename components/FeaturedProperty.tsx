@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import * as XLSX from 'xlsx';
 
 interface CarouselItem {
   file: string;
@@ -13,28 +12,24 @@ interface CarouselItem {
 }
 
 export const FeaturedProperty: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [carouselItems, setCarouselItems] = useState<CarouselItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadExcelData = async () => {
+    const loadJsonData = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const response = await fetch('/carrossel/Titulos.xls');
-        if (!response.ok) throw new Error(`Falha ao carregar Titulos.xls: ${response.status}`);
+        const lang = i18n.language || 'pt';
+        const response = await fetch(`/carrossel/Titulos_${lang}.json`);
+        if (!response.ok) throw new Error(`Falha ao carregar Titulos_${lang}.json: ${response.status}`);
         
-        const arrayBuffer = await response.arrayBuffer();
-        const data = new Uint8Array(arrayBuffer);
-        const workbook = XLSX.read(data, { type: 'array' });
+        const jsonData = await response.json();
         
-        if (!workbook.SheetNames.length) throw new Error('Arquivo Excel vazio');
-        
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const jsonData = XLSX.utils.sheet_to_json<any[]>(worksheet, { header: 1 });
-        
-        console.log('Excel Data:', jsonData);
+        if (!Array.isArray(jsonData)) throw new Error('Formato JSON inválido - Esperado Array');
 
         const items: CarouselItem[] = jsonData
           .filter(row => {
@@ -76,18 +71,21 @@ export const FeaturedProperty: React.FC = () => {
             };
           });
 
-        if (items.length === 0) throw new Error('Nenhum dado encontrado na planilha');
+        if (items.length === 0) throw new Error('Nenhum dado encontrado no JSON');
+        
+        // Retorna o índice ao primeiro item para evitar slides vazios em arrays de tamanhos diferentes
+        setCurrentIndex(0);
         setCarouselItems(items);
-        setLoading(false);
       } catch (err) {
         console.error('Erro no Carrossel:', err);
         setError(err instanceof Error ? err.message : 'Erro ao carregar dados');
+      } finally {
         setLoading(false);
       }
     };
 
-    loadExcelData();
-  }, []);
+    loadJsonData();
+  }, [i18n.language]);
 
   const handleNext = () => {
     if (carouselItems.length === 0) return;

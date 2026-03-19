@@ -136,7 +136,7 @@ export const FeaturedProperty: React.FC = () => {
             {currentItem.type === 'video' ? (
               <video 
                   key={currentItem.file}
-                  src={`carrossel/${currentItem.file}`} 
+                  src={`/public/carrossel/${currentItem.file}`} 
                   autoPlay 
                   loop 
                   muted 
@@ -146,7 +146,7 @@ export const FeaturedProperty: React.FC = () => {
             ) : (
               <img 
                   key={currentItem.file}
-                  src={`carrossel/${currentItem.file}`} 
+                  src={`/public/carrossel/${currentItem.file}`} 
                   alt={currentItem.line1 || `Honor ${currentIndex}`}
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"

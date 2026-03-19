@@ -119,11 +119,8 @@ export const FeaturedProperty: React.FC = () => {
 
   return (
     <div className="w-full mt-2 mb-4">
-      <div className="flex items-end justify-between mb-4 px-1">
-        <h3 className="text-white text-sm font-semibold uppercase tracking-wider leading-tight whitespace-pre-line">
-          {t('titlesSection')}
-        </h3>
-        <span className="text-2xl font-bold animate-blink-yellow shrink-0 ml-4 mb-0.5">
+      <div className="flex items-end justify-end mb-4 px-1">
+        <span className="text-2xl font-bold animate-blink-yellow shrink-0 mb-0.5">
           {currentIndex + 1} / {carouselItems.length}
         </span>
       </div>
@@ -139,7 +136,7 @@ export const FeaturedProperty: React.FC = () => {
             {currentItem.type === 'video' ? (
               <video 
                   key={currentItem.file}
-                  src={`/carrossel/${currentItem.file}`} 
+                  src={`carrossel/${currentItem.file}`} 
                   autoPlay 
                   loop 
                   muted 
@@ -149,7 +146,7 @@ export const FeaturedProperty: React.FC = () => {
             ) : (
               <img 
                   key={currentItem.file}
-                  src={`/carrossel/${currentItem.file}`} 
+                  src={`carrossel/${currentItem.file}`} 
                   alt={currentItem.line1 || `Honor ${currentIndex}`}
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"

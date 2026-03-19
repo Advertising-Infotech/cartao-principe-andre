@@ -7,7 +7,7 @@ export const Footer: React.FC = () => {
   return (
     <footer className="mt-auto pt-8 pb-4 flex flex-col items-center w-full border-t border-white/10">
       <p className="text-gray-500 text-[10px] tracking-widest uppercase text-center">
-        © 2026 | {t('name')} | {t('rights')}.
+        © 2026 | {t('name')} | {t('rights')} | V 3.0
       </p>
     </footer>
   );

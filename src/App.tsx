@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { UserPlus } from 'lucide-react';
 import { ProfileHeader } from './components/ProfileHeader';
 import { ActionGrid } from './components/ActionGrid';
-import { FeaturedProperty } from './components/FeaturedProperty';
+import { Carousel } from './components/Carousel';
 import { Footer } from './components/Footer';
-import { UserPlus } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 
-const App: React.FC = () => {
+export default function App() {
   const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Trigger fade-in animation on mount
     setIsVisible(true);
   }, []);
 
   const handleSaveContact = () => {
-    // vCard generation with correct encoding and information
     const vCardData = [
       'BEGIN:VCARD',
       'VERSION:3.0',
@@ -28,31 +26,27 @@ const App: React.FC = () => {
       'EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com',
       'URL:https://advertisinginfotech.com.br',
       `NOTE;CHARSET=UTF-8:${t('bio')}`,
-      'END:VCARD'
+      'END:VCARD',
     ].join('\n');
 
     const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
-    
+
     const a = document.createElement('a');
     a.href = url;
     a.download = `contato_${t('name').replace(/\s+/g, '_')}.vcf`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    
-    // Clean up the URL object after a short delay to ensure the browser has handled it
+
     setTimeout(() => window.URL.revokeObjectURL(url), 1000);
   };
 
   return (
     <div className="min-h-[100dvh] w-full relative flex items-center justify-center overflow-x-hidden bg-black font-sans">
-      
-      {/* Total Black Background */}
-      <div className="fixed inset-0 z-0 bg-black"></div>
+      <div className="fixed inset-0 z-0 bg-black" />
 
-      {/* Main Glassmorphism Container */}
-      <main 
+      <main
         className={`
           relative z-20 w-full max-w-md mx-auto min-h-[100dvh] sm:min-h-[85dvh] sm:rounded-[2rem] 
           bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl
@@ -61,29 +55,24 @@ const App: React.FC = () => {
           ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
         `}
       >
-        {/* Shine Effect Top Right */}
-        <div className="absolute -top-20 -right-20 w-64 h-64 bg-[#D4AF37] rounded-full mix-blend-overlay filter blur-[100px] opacity-20 pointer-events-none"></div>
+        <div className="absolute -top-20 -right-20 w-64 h-64 bg-[#D4AF37] rounded-full mix-blend-overlay filter blur-[100px] opacity-20 pointer-events-none" />
 
-        {/* Components */}
         <ProfileHeader />
-        
+
         <ActionGrid />
 
-        <FeaturedProperty />
+        <Carousel />
 
-        {/* Save Contact Button (Main CTA) */}
-        <button 
+        <button
           onClick={handleSaveContact}
           className="w-full bg-[#D4AF37] text-black font-bold py-4 rounded-xl shadow-lg hover:shadow-[#D4AF37]/50 hover:bg-[#b5952f] transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-3 uppercase tracking-wider text-sm mb-6"
         >
           <UserPlus size={20} />
           {t('saveContact')}
         </button>
-        
+
         <Footer />
       </main>
     </div>
   );
-};
-
-export default App;
+}

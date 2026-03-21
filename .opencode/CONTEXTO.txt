@@ -1,0 +1,58 @@
+# PROMPT DE CONTEXTO PARA NOVA SESSÃO OPENCODE
+Copie e cole no início de uma nova conversa:
+
+---
+
+## CONTEXTO DO PROJETO
+
+**Projeto:** Cartão Príncipe André Luís - Cartão de visitas digital
+**Pasta:** `C:\Users\lagar\OneDrive\Área de Trabalho 2024\BackUp\Advertising TI & CS\Projetos\cartao-principe-andre`
+**GitHub:** https://github.com/Advertising-Infotech/cartao-principe-andre
+
+### Histórico de Sessões
+Ver arquivo: `.opencode\HISTORICO.md`
+
+### Última Sessão (21/03/2026 ~01:50)
+Build Vercel started - AGUARDANDO LOGS COMPLETOS para identificar erros de compilação.
+
+### Stack Atual:
+- Next.js 15 (App Router)
+- Tailwind CSS
+- i18next + react-i18next
+- Lucide React
+- Vercel hosting
+
+### Estrutura:
+```
+src/
+├── app/           (layout.tsx, page.tsx, globals.css)
+├── components/    (ProfileHeader, ActionGrid, FeaturedProperty, Footer, Providers)
+├── i18n/          (traduções 7 idiomas)
+public/
+└── carrossel/    (52 imagens + 7 JSON de tradução)
+```
+
+---
+
+## INSTRUÇÕES PARA CONTINUAR
+
+1. Leia `.opencode\HISTORICO.md` para ver estado atual
+2. Obtenha logs completos do build Vercel (Deployment > Logs)
+3. Execute localmente: `npm run build`
+4. Identificar e corrigir erro de compilação
+5. Commit e push: `git add . && git commit -m "fix: ..." && git push`
+
+---
+
+## COMANDOS ÚTEIS
+
+```bash
+# Build local para testar
+npm run build
+
+# Servidor desenvolvimento
+npm run dev
+
+# Ver histórico
+type .opencode\HISTORICO.md
+```

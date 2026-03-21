@@ -1,0 +1,21 @@
+{
+  "_descricao": "Arquivo de Sincronização e Configuração: Antigravity <-> Google Chrome",
+  "projeto": {
+    "nome": "cartao-principe-andre",
+    "diretorio_padrao": "."
+  },
+  "servidor": {
+    "comando_start": "npm run dev -- --port 3001 --host 0.0.0.0",
+    "url_local": "http://localhost:3001",
+    "tempo_boot_segundos": 15
+  },
+  "navegador": {
+    "preferencia": "chrome",
+    "caminho_executavel_windows": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    "janela_anonima": false
+  },
+  "motor_sincronizacao": {
+    "tecnologia": "Vite HMR (Hot Module Replacement)",
+    "funcionalidade": "O Antigravity atualiza o código, o Vite detecta a modificação no sistema de arquivos local e injeta os novos componentes instantaneamente no Chrome via WebSockets, sem necessidade de commit ou recarregamento manual."
+  }
+}

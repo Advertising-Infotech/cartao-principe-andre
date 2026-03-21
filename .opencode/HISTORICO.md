@@ -129,13 +129,50 @@ Build Vercel falhou - erro não especificado (logs parciais)
 
 ---
 
-## SESSÃO 3 - 21/03/2026 - XX:XX BRT
-**Status:** 🔄 AGUARDANDO LOGS VERCEL
+## SESSÃO 3 - 21/03/2026 - ~02:15 BRT
+**Status:** ❌ DEPLOY FALHOU (2ª vez)
+**Duração:** ~15 minutos
+
+### PROBLEMA:
+Deploy Vercel apresentou VARIOS ERROS
+**Logs:** NÃO FORNECIDOS PELO USUÁRIO
+
+### CORREÇÕES PROATIVAS APLICADAS:
+
+#### 1. i18n Simplificado
+- Removido `i18next-browser-languagedetector` (causava issues SSR)
+- Removido `'use client'` desnecessário do i18n/index.ts
+- Simplificada configuração
+
+#### 2. Providers Corrigido
+- Import path corrigido: `@/i18n` → `./index`
+- Configuração mais limpa
+
+#### 3. Dependencies Minimizadas
+Removidas do package.json:
+- ❌ i18next
+- ❌ react-i18next
+- ❌ i18next-browser-languagedetector
+
+**MOTIVO:** Evitar conflitos de versão e instalação
+
+#### 4. VERSÕES FIXADAS
+```json
+{
+  "next": "14.2.0",  // Sem ^ para evitar upgrade
+  "eslint-config-next": "14.2.0",
+  "react": "^18.2.0"
+}
+```
 
 ### AÇÃO NECESSÁRIA:
-1. Verificar resultado do re-deploy
-2. Se sucesso → projeto no ar!
-3. Se erro → coletar logs e corrigir
+1. **Obter logs COMPLETOS do Vercel**
+2. Se ainda falhar → ver erros específicos
+3. Corrigir um por um
+
+### PRÓXIMO PASSO:
+- Commit das correções
+- Novo deploy automático
 
 ---
 

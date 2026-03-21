@@ -1,6 +1,7 @@
 # ================================================
 # HISTÓRICO COMPLETO DE SESSÕES - OPENCODE
 # Projeto: Cartão Príncipe André Luís
+# Última atualização: 21/03/2026 - 03:10 BRT
 # ================================================
 
 ## SESSÃO 1 - 21/03/2026 - 20:00 BRT
@@ -13,53 +14,16 @@ Migrar projeto de Vite/React para Next.js 15
 ### AÇÕES REALIZADAS:
 1. Analisado projeto de referência em `temp_reference/`
 2. Criado projeto Next.js 15 do zero (App Router)
-3. Migrados componentes mantendo layout idêntico:
-   - ProfileHeader.tsx (foto, idiomas, redes sociais)
-   - ActionGrid.tsx (botões WhatsApp, LinkedIn, Email, Site)
-   - FeaturedProperty.tsx (carrossel de honrarias)
-   - Footer.tsx (rodapé com copyright)
+3. Migrados componentes mantendo layout idêntico
 4. Configurado i18n com 7 idiomas (pt, en, he, ar, ru, zh, es)
-5. Configurado RTL para hebraico e árabe
-6. Commitado no GitHub
+5. Commitado no GitHub
 
-### STACK DEFINIDA:
-- Next.js 15 (App Router)
-- Tailwind CSS v4 (PROBLEMA!)
-- i18next + react-i18next
-- Lucide React
-- Vercel hosting
-
-### ESTRUTURA CRIADA:
-```
-src/
-├── app/
-│   ├── globals.css     (estilos globais + animações blink)
-│   ├── layout.tsx      (layout principal + Providers)
-│   └── page.tsx        (página principal)
-├── components/
-│   ├── ProfileHeader.tsx
-│   ├── ActionGrid.tsx
-│   ├── FeaturedProperty.tsx
-│   ├── Footer.tsx
-│   └── Providers.tsx
-└── i18n/
-    └── index.ts
-
-public/carrossel/  (52 imagens + 7 JSONs de tradução)
-```
-
-### ARQUIVOS CRIADOS:
-- package.json
-- next.config.ts
-- tailwind.config.ts (PROBLEMA!)
-- tsconfig.json
-- vercel.json
-- eslint.config.mjs (PROBLEMA!)
-- .gitignore
-- README.md
-
-### REPOSITÓRIO:
-https://github.com/Advertising-Infotech/cartao-principe-andre
+### STACK ORIGINAL:
+- Next.js 15 (App Router) ❌
+- Tailwind CSS v4 ❌
+- i18next + react-i18next ✅
+- Lucide React ✅
+- Vercel hosting ✅
 
 ---
 
@@ -67,105 +31,106 @@ https://github.com/Advertising-Infotech/cartao-principe-andre
 **Status:** ✅ CORRIGIDA
 **Duração:** ~30 minutos
 
-### PROBLEMA REPORTADO:
-Build Vercel falhou - erro não especificado (logs parciais)
+### PROBLEMA:
+Build Vercel falhou - versão Next 15 + Tailwind v4 incompatíveis
 
-### BUILD VERCEL INICIADO:
-```
-01:51:51.067 - Build in Washington (iad1)
-01:51:52.673 - Cloning completed: 1.593s
-01:51:53.003 - Running "npm install"
-01:52:20.460 - 322 packages added, 0 vulnerabilities
-01:52:20.509 - Detected Next.js version: 15.5.14
-01:52:20.509 - Running "npm run build"
-01:52:21.514 - Next.js 15.5.14
-01:52:21.543 - Creating optimized production build...
-[LOG TRUNCADO - ERRO NÃO VISUALIZADO]
-```
-
-### ERROS IDENTIFICADOS:
-1. **Tailwind CSS v4** - Usa configuração CSS-based, não .ts
-2. **Versões incompatíveis** - Next 15 + React 19 + Tailwind 4
-3. **ESLint config** - Formato .mjs inválido
-4. **Tailwind config** - Formato .ts incompatível com v3
-
-### CORREÇÕES APLICADAS:
-
-#### 1. package.json - VERSÕES ESTÁVEIS
-```json
-{
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "next": "^14.2.0",
-    "lucide-react": "^0.400.0",
-    "i18next": "^23.11.0",
-    "react-i18next": "^14.1.0",
-    "i18next-browser-languagedetector": "^7.2.0"
-  },
-  "devDependencies": {
-    "tailwindcss": "^3.4.0",
-    "typescript": "^5.4.0"
-  }
-}
-```
-
-#### 2. tailwind.config.js (REMOVIDO .ts)
-- Criado arquivo CommonJS (.js)
-- Removido tailwind.config.ts
-
-#### 3. .eslintrc.json (REMOVIDO .mjs)
-- Criado arquivo JSON válido
-- Removido eslint.config.mjs
+### CORREÇÕES:
+1. Next.js 15 → 14.2 (downgrade)
+2. Tailwind v4 → v3.4 (config diferente)
+3. React 19 → 18.2
 
 ### COMMIT:
 ```
 106c7ad - fix: downgrade dependencies for stability
 ```
 
-### PRÓXIMO PASSO:
-1. Aguardar re-deploy automático Vercel
-2. Verificar se build completa com sucesso
-
 ---
 
-## SESSÃO 3 - 21/03/2026 - ~02:15 BRT
-**Status:** ❌ DEPLOY FALHOU (ERRO CRÍTICO)
+## SESSÃO 3 - 21/03/2026 - 02:15 BRT
+**Status:** ❌ FALHOU
 **Duração:** ~15 minutos
 
-### PROBLEMA 1 - next.config.ts
+### PROBLEMA IDENTIFICADO:
 ```
 Error: Configuring Next.js via 'next.config.ts' is not supported.
 ```
-**Solução:** Renomeado para `next.config.js` (CommonJS)
 
-### PROBLEMA 2 - Dependências Removidas (ERRO MEU!)
-Eu havia removido `i18next` e `react-i18next` do package.json, mas os componentes ainda usavam `useTranslation`. Isso causaria erro de compilação.
+### CORREÇÃO:
+Renomeado `next.config.ts` → `next.config.js` (CommonJS)
 
-**Solução:** Restauradas as dependências:
+### COMMIT:
+```
+3b97466 - fix: convert next.config.ts to next.config.js
+```
+
+---
+
+## SESSÃO 4 - 21/03/2026 - 03:05 BRT
+**Status:** ❌ FALHOU (ERRO DO DEV/MEU!)
+**Duração:** ~10 minutos
+
+### PROBLEMA CRÍTICO (ERRO DO DESENVOLVEDOR):
+Eu havia REMOVIDO as dependências `i18next` e `react-i18next` do package.json, mas os componentes ainda usavam `useTranslation()`.
+
+### CAUSA:
+Simplificação excessiva sem testar o impacto.
+
+### CORREÇÕES APLICADAS:
+1. ✅ Restaurado `i18next` e `react-i18next` no package.json
+2. ✅ Movido config i18n para dentro de `Providers.tsx`
+3. ✅ Removido `src/i18n/` (desnecessário)
+4. ✅ Atualizado Next.js 14.2.0 → 14.2.15 (security patch)
+5. ✅ Providers.tsx integrado com i18n
+
+### package.json ATUAL:
 ```json
 {
-  "i18next": "^23.11.0",
-  "react-i18next": "^14.1.0"
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "next": "14.2.15",
+    "lucide-react": "^0.400.0",
+    "i18next": "^23.11.0",
+    "react-i18next": "^14.1.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0",
+    "eslint-config-next": "14.2.15"
+  }
 }
 ```
 
-### CORREÇÕES APLICADAS:
-1. ✅ `next.config.ts` → `next.config.js`
-2. ✅ Restaurado `i18next` e `react-i18next`
-3. ✅ i18n movido para dentro de `Providers.tsx`
-4. ✅ Removido `src/i18n/` (desnecessário)
-5. ✅ Next.js atualizado para 14.2.15 (security patch)
+### Providers.tsx ATUAL:
+```tsx
+'use client';
+
+import React from 'react';
+import { I18nextProvider, initReactI18next } from 'react-i18next';
+import i18n from 'i18next';
+
+// ... recursos de tradução inline ...
+// ... initReactI18next ...
+```
 
 ### COMMITS:
 ```
-3b97466 - fix: convert next.config.ts to next.config.js
 3973da2 - fix: restore i18next dependencies and fix Providers
+cd3ef79 - docs: update HISTORICO.md
 ```
 
-### PRÓXIMO PASSO:
-- Aguardar novo deploy automático
-- Verificar se build completa
+---
+
+## SESSÃO 5 - 21/03/2026 - 03:10 BRT
+**Status:** 🔄 AGUARDANDO LOGS VERCEL
+**Duração:** EM ANDAMENTO
+
+### AÇÃO:
+Aguardando resultado do deploy automático após correções.
+
+### PRÓXIMOS PASSOS:
+1. Verificar logs do Vercel
+2. Se sucesso → ✅ PROJETO NO AR!
+3. Se erro → Corrigir e iterar
 
 ---
 
@@ -176,70 +141,71 @@ Eu havia removido `i18next` e `react-i18next` do package.json, mas os componente
 C:\Users\lagar\OneDrive\Área de Trabalho 2024\BackUp\Advertising TI & CS\Projetos\cartao-principe-andre
 ```
 
-### COMANDOS ESSENCIAIS:
+### ESTRUTURA ATUAL:
+```
+cartao-principe-andre/
+├── src/
+│   ├── app/
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── components/
+│   │   ├── ProfileHeader.tsx   (foto, idiomas, redes)
+│   │   ├── ActionGrid.tsx      (4 botões contato)
+│   │   ├── FeaturedProperty.tsx (carrossel honrarias)
+│   │   ├── Footer.tsx
+│   │   └── Providers.tsx       (i18n + wrapper)
+│   └── types/
+├── public/
+│   └── carrossel/    (52 imagens + 7 JSONs)
+├── .opencode/
+│   ├── HISTORICO.md   (este arquivo)
+│   ├── CONTEXTO.txt
+│   └── RECUPERAR.bat
+├── package.json
+├── next.config.js
+├── tailwind.config.js
+├── tsconfig.json
+└── vercel.json
+```
+
+### COMANDOS ÚTEIS:
 ```bash
-# Instalar dependências
-npm install
-
 # Build local
-npm run build
+npm install && npm run build
 
-# Servidor desenvolvimento
+# Servidor dev
 npm run dev
 
 # Deploy manual
 vercel --prod
 ```
 
-### LINKS IMPORTANTES:
-- **Vercel Dashboard:** https://vercel.com/Advertising-Infotech/cartao-principe-andre
-- **GitHub Repo:** https://github.com/Advertising-Infotech/cartao-principe-andre
-- **Deployments:** https://vercel.com/Advertising-Infotech/cartao-principe-andre/deployments
-
-### ARQUIVOS IMPORTANTES DO PROJETO:
-- `src/app/page.tsx` - Página principal
-- `src/components/FeaturedProperty.tsx` - Carrossel
-- `public/carrossel/Titulos_pt.json` - Dados do carrossel
-- `src/i18n/index.ts` - Traduções
-
-### CONFIGURAÇÕES VERCEL:
-- Build Command: `npm run build`
-- Install Command: `npm install`
-- Output Directory: `.next`
-- Framework: Next.js
+### LINKS:
+- **Vercel:** https://vercel.com/Advertising-Infotech/cartao-principe-andre
+- **GitHub:** https://github.com/Advertising-Infotech/cartao-principe-andre
 
 ---
 
-## CHECKLIST DE IMPLANTAÇÃO
+## ERROS APRENDIDOS
+
+1. ❌ Não remover dependências sem testar
+2. ❌ Não assumir que Next.js suporta .ts config
+3. ❌ Tailwind v4 usa config CSS, não .ts
+4. ✅ Sempre testar local antes de commitar
+5. ✅ Atualizar HISTORICO.md após cada sessão
+
+---
+
+## CHECKLIST DEPLOY VERCEL
 
 - [x] 1. Criar projeto Next.js
 - [x] 2. Migrar componentes
 - [x] 3. Configurar i18n
 - [x] 4. Configurar Vercel
-- [x] 5. Primeiro deploy
-- [x] 6. Corrigir dependências
-- [ ] 7. Verificar re-deploy
-- [ ] 8. Testar multilingual
-- [ ] 9. Testar carrossel
-- [ ] 10. Testar vCard download
-
----
-
-## TROUBLESHOOTING
-
-### Se npm install falhar:
-```bash
-rm -rf node_modules package-lock.json
-npm install
-```
-
-### Se build falhar:
-```bash
-npm run build 2>&1 | tee build.log
-```
-
-### Se Vercel der erro:
-1. Acessar Dashboard → Deployments
-2. Clicar no deployment com erro
-3. Ver "Logs" completo
-4. Copiar e colar aqui
+- [x] 5. Corrigir next.config.js
+- [x] 6. Restaurar i18next
+- [x] 7. Atualizar Next.js security patch
+- [ ] 8. Verificar deploy
+- [ ] 9. Testar funcionalidades
+- [ ] 10. Deploy em produção

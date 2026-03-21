@@ -121,16 +121,43 @@ cd3ef79 - docs: update HISTORICO.md
 ---
 
 ## SESSÃO 5 - 21/03/2026 - 03:10 BRT
-**Status:** 🔄 AGUARDANDO LOGS VERCEL
-**Duração:** EM ANDAMENTO
+**Status:** ❌ FALHOU (ARQUIVOS VITE ANTIGOS)
+**Duração:** ~7 minutos
 
-### AÇÃO:
-Aguardando resultado do deploy automático após correções.
+### BUILD: SUCCESSFUL BUT...
+```
+✓ Compiled successfully
+✓ Linting...
+./vite.config.ts:1:30 - Type error: Cannot find module 'vite'
+```
 
-### PRÓXIMOS PASSOS:
-1. Verificar logs do Vercel
-2. Se sucesso → ✅ PROJETO NO AR!
-3. Se erro → Corrigir e iterar
+### PROBLEMA:
+Arquivos do projeto Vite/React antigo ainda estavam no repositório e sendo incluídos no build.
+
+### ARQUIVOS DELETADOS:
+```
+- vite.config.ts
+- index.html (raiz)
+- src/App.tsx
+- src/index.tsx
+- src/index.css
+- src/vite-env.d.ts
+- src/types.ts
+- src/i18n.ts
+- src/components/Carousel.tsx
+- src/components/LanguageSelector.tsx
+- metadata.json
+- carouselData.json
+```
+
+### COMMIT:
+```
+b8c14db - fix: remove old Vite/React files causing build errors
+```
+
+### PRÓXIMO PASSO:
+- Aguardar novo deploy automático
+- Build deve completar agora ✅
 
 ---
 

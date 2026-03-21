@@ -130,30 +130,42 @@ Build Vercel falhou - erro não especificado (logs parciais)
 ---
 
 ## SESSÃO 3 - 21/03/2026 - ~02:15 BRT
-**Status:** ❌ DEPLOY FALHOU (2ª vez)
+**Status:** ❌ DEPLOY FALHOU (ERRO CRÍTICO)
 **Duração:** ~15 minutos
 
-### PROBLEMA IDENTIFICADO:
+### PROBLEMA 1 - next.config.ts
 ```
 Error: Configuring Next.js via 'next.config.ts' is not supported.
-Please replace the file with 'next.config.js' or 'next.config.mjs'.
+```
+**Solução:** Renomeado para `next.config.js` (CommonJS)
+
+### PROBLEMA 2 - Dependências Removidas (ERRO MEU!)
+Eu havia removido `i18next` e `react-i18next` do package.json, mas os componentes ainda usavam `useTranslation`. Isso causaria erro de compilação.
+
+**Solução:** Restauradas as dependências:
+```json
+{
+  "i18next": "^23.11.0",
+  "react-i18next": "^14.1.0"
+}
 ```
 
-### CORREÇÃO APLICADA:
-1. Renomeado `next.config.ts` → `next.config.js`
-2. Convertido de TypeScript/ESM para CommonJS
-3. Removido `import type { NextConfig }`
-4. Removido `export default`
-5. Adicionado `module.exports`
+### CORREÇÕES APLICADAS:
+1. ✅ `next.config.ts` → `next.config.js`
+2. ✅ Restaurado `i18next` e `react-i18next`
+3. ✅ i18n movido para dentro de `Providers.tsx`
+4. ✅ Removido `src/i18n/` (desnecessário)
+5. ✅ Next.js atualizado para 14.2.15 (security patch)
 
-### COMMIT:
+### COMMITS:
 ```
-3b97466 - fix: convert next.config.ts to next.config.js (CommonJS)
+3b97466 - fix: convert next.config.ts to next.config.js
+3973da2 - fix: restore i18next dependencies and fix Providers
 ```
 
 ### PRÓXIMO PASSO:
-- Aguardar re-deploy automático
-- Verificar novo build
+- Aguardar novo deploy automático
+- Verificar se build completa
 
 ---
 

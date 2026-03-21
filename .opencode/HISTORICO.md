@@ -133,46 +133,27 @@ Build Vercel falhou - erro não especificado (logs parciais)
 **Status:** ❌ DEPLOY FALHOU (2ª vez)
 **Duração:** ~15 minutos
 
-### PROBLEMA:
-Deploy Vercel apresentou VARIOS ERROS
-**Logs:** NÃO FORNECIDOS PELO USUÁRIO
-
-### CORREÇÕES PROATIVAS APLICADAS:
-
-#### 1. i18n Simplificado
-- Removido `i18next-browser-languagedetector` (causava issues SSR)
-- Removido `'use client'` desnecessário do i18n/index.ts
-- Simplificada configuração
-
-#### 2. Providers Corrigido
-- Import path corrigido: `@/i18n` → `./index`
-- Configuração mais limpa
-
-#### 3. Dependencies Minimizadas
-Removidas do package.json:
-- ❌ i18next
-- ❌ react-i18next
-- ❌ i18next-browser-languagedetector
-
-**MOTIVO:** Evitar conflitos de versão e instalação
-
-#### 4. VERSÕES FIXADAS
-```json
-{
-  "next": "14.2.0",  // Sem ^ para evitar upgrade
-  "eslint-config-next": "14.2.0",
-  "react": "^18.2.0"
-}
+### PROBLEMA IDENTIFICADO:
+```
+Error: Configuring Next.js via 'next.config.ts' is not supported.
+Please replace the file with 'next.config.js' or 'next.config.mjs'.
 ```
 
-### AÇÃO NECESSÁRIA:
-1. **Obter logs COMPLETOS do Vercel**
-2. Se ainda falhar → ver erros específicos
-3. Corrigir um por um
+### CORREÇÃO APLICADA:
+1. Renomeado `next.config.ts` → `next.config.js`
+2. Convertido de TypeScript/ESM para CommonJS
+3. Removido `import type { NextConfig }`
+4. Removido `export default`
+5. Adicionado `module.exports`
+
+### COMMIT:
+```
+3b97466 - fix: convert next.config.ts to next.config.js (CommonJS)
+```
 
 ### PRÓXIMO PASSO:
-- Commit das correções
-- Novo deploy automático
+- Aguardar re-deploy automático
+- Verificar novo build
 
 ---
 

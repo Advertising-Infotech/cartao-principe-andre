@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-start-rgb));
+}
+
+@keyframes blink-name {
+  0%, 100% { color: #D4AF37; }
+  33% { color: #ffff00; }
+  66% { color: #ffffff; }
+}
+
+.animate-blink-name {
+  animation: blink-name 1.5s infinite linear;
+}
+
+@keyframes blink-yellow {
+  0%, 100% { color: #D4AF37; }
+  50% { color: #ffff00; }
+}
+
+.animate-blink-yellow {
+  animation: blink-yellow 1s infinite;
+}

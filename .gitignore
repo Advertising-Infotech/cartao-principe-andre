@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Testing
+coverage/
+
+# Next.js
+.next/
+out/
+build/
+
+# Production
+dist/
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files
+.env*.local
+.env
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Backup files
+*.zip
+BackUps/
+temp_reference/
+Thumbs.db
+desktop.ini
+Titulos.xls
+facebook_1773501497038_7438604423035344100.jpg
+carouselData.json
+metadata.json
+antigravity_chrome_config.json
+antigravity_chrome_sync.py
+Semana passada/
+2/
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+.idea

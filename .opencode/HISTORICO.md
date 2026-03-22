@@ -228,6 +228,30 @@ Carrossel não exibia imagens - dependia de `i18n.language` que podia não estar
 
 ---
 
+## SESSÃO 10 - 22/03/2026 - ~06:30 BRT
+**Status:** 🔄 CARROSSEL SIMPLIFICADO
+**Commit:** 9f5cc12
+
+### PROBLEMA:
+Fetch JSON assíncrono não funcionava - componente não aguardava dados.
+
+### SOLUÇÃO RADICAL:
+1. Removido TODO useEffect
+2. Removido TODO fetch assíncrono
+3. Dados hardcoded DIRETAMENTE no componente
+4. 5 imagens fixas garantidas
+
+### COMMIT:
+```
+9f5cc12 - fix: SIMPLIFIED carousel - no fetch, hardcoded data
+```
+
+### PRÓXIMO PASSO:
+- Deploy automático
+- Testar carousel no site
+
+---
+
 ## MEMORANDO TÉCNICO
 
 ### PASTA DO PROJETO:

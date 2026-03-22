@@ -124,40 +124,61 @@ cd3ef79 - docs: update HISTORICO.md
 **Status:** ❌ FALHOU (ARQUIVOS VITE ANTIGOS)
 **Duração:** ~7 minutos
 
-### BUILD: SUCCESSFUL BUT...
-```
-✓ Compiled successfully
-✓ Linting...
-./vite.config.ts:1:30 - Type error: Cannot find module 'vite'
-```
-
 ### PROBLEMA:
-Arquivos do projeto Vite/React antigo ainda estavam no repositório e sendo incluídos no build.
+Arquivos Vite/React antigos ainda estavam no repositório causando build failure.
 
-### ARQUIVOS DELETADOS:
+### SOLUÇÃO:
+Removidos 12 arquivos Vite/React.
+
+### COMMITS:
 ```
-- vite.config.ts
-- index.html (raiz)
-- src/App.tsx
-- src/index.tsx
-- src/index.css
-- src/vite-env.d.ts
-- src/types.ts
-- src/i18n.ts
-- src/components/Carousel.tsx
-- src/components/LanguageSelector.tsx
-- metadata.json
-- carouselData.json
+b8c14db - fix: remove old Vite/React files
+86735e1 - docs: HISTORICO - Sessao 6
 ```
 
-### COMMIT:
+---
+
+## SESSÃO 6 - 21/03/2026 - ~03:30 BRT
+**Status:** 🔄 SINCRONIZADO - AGUARDANDO DEPLOY
+**Duração:** 5 minutos
+
+### AÇÃO:
+Commit de sincronização para garantir que todas plataformas estão atualizadas.
+
+### ESTRUTURA ATUAL DO PROJETO:
 ```
-b8c14db - fix: remove old Vite/React files causing build errors
+src/
+├── app/
+│   ├── globals.css     ✅
+│   ├── layout.tsx     ✅
+│   └── page.tsx       ✅
+├── components/
+│   ├── ActionGrid.tsx     ✅
+│   ├── FeaturedProperty.tsx  ✅
+│   ├── Footer.tsx         ✅
+│   ├── ProfileHeader.tsx  ✅
+│   └── Providers.tsx      ✅
+└── i18n/ (REMOVIDO - integrado no Providers.tsx)
+
+public/carrossel/
+├── Titulos_pt.json, en.json, he.json, ar.json, ru.json, zh.json, es.json ✅
+├── foto_oficial.jpg ✅
+├── homenagem_em_video.mp4 ✅
+└── 01.jpeg ... 52.png ✅
 ```
 
-### PRÓXIMO PASSO:
-- Aguardar novo deploy automático
-- Build deve completar agora ✅
+### COMMITS ATUAIS:
+```
+86735e1 - docs: HISTORICO - Sessao 6 (sync)
+b8c14db - fix: remove old Vite/React files
+3973da2 - fix: restore i18next dependencies
+3b97466 - fix: next.config.ts → next.config.js
+```
+
+### PRÓXIMOS PASSOS:
+1. Aguardar deploy Vercel com commit `86735e1`
+2. Verificar se build completa
+3. Se sucesso → site no ar!
 
 ---
 

@@ -247,8 +247,14 @@ Carrossel não exibia imagens - dependia de `i18n.language` que podia não estar
 ### SITE:
 https://cartao-principe-andre.vercel.app
 
+### DEPLOY COMPLETO:
+```
+✓ Deployment completed
+✓ Build cache uploaded
+```
+
 ### PRÓXIMOS PASSOS:
-1. Testar carousel no site
+1. ✅ Testar carousel no site
 2. Testar troca de idiomas
 3. Testar botões de contato
 4. Testar download vCard

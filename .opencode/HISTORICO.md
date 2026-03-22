@@ -208,6 +208,26 @@ https://cartao-principe-andre.vercel.app
 
 ---
 
+## SESSÃO 9 - 22/03/2026 - ~06:20 BRT
+**Status:** 🔄 CARROSSEL CORRIGIDO
+**Commit:** 65a6260
+
+### PROBLEMA:
+Carrossel não exibia imagens - dependia de `i18n.language` que podia não estar inicializado.
+
+### SOLUÇÃO:
+1. Adicionado `DEFAULT_ITEMS` com dados hardcoded como fallback
+2. Adicionado logging no console para debug
+3. Verificação de `i18n.isInitialized`
+4. Agora funciona mesmo se JSON falhar
+
+### COMMIT:
+```
+65a6260 - fix: carousel with default fallback data
+```
+
+---
+
 ## MEMORANDO TÉCNICO
 
 ### PASTA DO PROJETO:

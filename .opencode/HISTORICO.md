@@ -187,6 +187,27 @@ Route (app)                              Size     First Load JS
 
 ---
 
+## SESSÃO 8 - 22/03/2026 - 00:12 BRT
+**Status:** ✅ DEPLOY BEM-SUCEDIDO
+**Commit:** 07f9e75
+
+### BUILD:
+```
+✓ Compiled successfully
+✓ Generating static pages (4/4)
+Build Completed in 1m
+Deployment completed
+```
+
+### WARNINGS (NÃO BLOQUEANTES):
+- `<img>` vs `next/image` (otimização futura)
+- Next.js 14.2.15 com vulnerabilidade (atualizar depois)
+
+### SITE NO AR:
+https://cartao-principe-andre.vercel.app
+
+---
+
 ## MEMORANDO TÉCNICO
 
 ### PASTA DO PROJETO:

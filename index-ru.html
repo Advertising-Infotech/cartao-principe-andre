@@ -46,7 +46,7 @@
     .carousel-card { position: relative; overflow: hidden; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.1); background: var(--white-5); backdrop-filter: blur(12px); transition: transform 0.3s; }
     .carousel-card:hover { transform: scale(1.02); }
     .carousel-image-container { position: relative; height: 16rem; width: 100%; overflow: hidden; background: rgba(0,0,0,0.4); }
-    .carousel-media { width: 100%; height: 100%; object-fit: contain; object-position: top center; }
+    .carousel-media { width: 100%; height: 100%; object-fit: contain; object-position: center; }
     .carousel-video { width: 100%; height: 100%; object-fit: cover; object-position: center 41%; }
 
     .carousel-gradient { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent 50%); }
@@ -114,6 +114,7 @@
           <video id="carousel-media" class="carousel-video" autoplay loop muted playsinline>
             <source id="media-source" src="homenagem_em_video.mp4" type="video/mp4">
           </video>
+          <img id="carousel-image" class="carousel-media" style="display:none" alt="">
           <div class="carousel-gradient"></div>
           <div class="carousel-badge" id="carousel-badge">Мировое общественное признание</div>
           <div class="carousel-title"><h4 id="carousel-title">Удостоен чести депутатами</h4></div>
@@ -191,16 +192,17 @@
       const mediaEl = document.getElementById('carousel-media');
       const sourceEl = document.getElementById('media-source');
       
+      const imgEl = document.getElementById('carousel-image');
       if (item.type === 'video') {
+        mediaEl.style.display = 'block';
+        imgEl.style.display = 'none';
         sourceEl.src = item.src;
         sourceEl.type = 'video/mp4';
-        mediaEl.removeAttribute('poster');
-        mediaEl.className = 'carousel-video';
         mediaEl.load();
       } else {
-        sourceEl.removeAttribute('src');
-        mediaEl.setAttribute('poster', item.src);
-        mediaEl.className = 'carousel-media';
+        mediaEl.style.display = 'none';
+        imgEl.style.display = 'block';
+        imgEl.src = item.src;
       }
       
       document.getElementById('carousel-badge').textContent = item.badge;

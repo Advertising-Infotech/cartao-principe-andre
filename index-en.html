@@ -66,7 +66,7 @@
   <main class="container">
     <div class="glow"></div>
     <div class="flags">
-      <a href="index-pt.html" class="flag-btn"><img src="https://flagcdn.com/w40/br.png" alt="Brasil"></a>
+      <a href="index.html" class="flag-btn"><img src="https://flagcdn.com/w40/br.png" alt="Brasil"></a>
       <a href="index-he.html" class="flag-btn"><img src="https://flagcdn.com/w40/il.png" alt="Israel"></a>
       <a href="index-en.html" class="flag-btn active"><img src="https://flagcdn.com/w40/gb.png" alt="English"></a>
       <a href="index-ar.html" class="flag-btn"><img src="https://flagcdn.com/w40/sa.png" alt="العربية"></a>
@@ -77,7 +77,7 @@
     <div class="profile">
       <div class="photo-container">
         <div class="photo-glow"></div>
-        <img src="public/carrossel/foto_oficial.jpg" alt="Prince André Luís" class="photo">
+        <img src="/carrossel/foto_oficial.jpg" alt="Prince André Luís" class="photo">
       </div>
       <h1 class="name"><span class="name-first">Prince</span><span class="name-rest"> André Luís</span></h1>
       <h2 class="role">Creator > Decision Maker > Orchestrator</h2>
@@ -103,7 +103,7 @@
       <div class="carousel-counter"><span class="counter" id="counter">1 / 47</span></div>
       <div class="carousel-card">
         <div class="carousel-image-container" id="carousel-media-container">
-          <img src="public/carrossel/01.jpeg" alt="Award" class="carousel-image" id="carousel-image">
+          <img src="/carrossel/01.jpeg" alt="Award" class="carousel-image" id="carousel-image">
           <video class="carousel-image" id="carousel-video" style="display:none;" autoplay loop muted playsinline></video>
           <div class="carousel-gradient"></div>
           <div class="carousel-badge" id="carousel-badge">Recognition</div>
@@ -181,11 +181,11 @@
       if(item.type === 'video'){
         img.style.display = 'none';
         video.style.display = 'block';
-        video.src = 'public/carrossel/' + item.src;
+        video.src = '/carrossel/' + item.src;
       }else{
         video.style.display = 'none';
         img.style.display = 'block';
-        img.src = 'public/carrossel/' + item.src;
+        img.src = '/carrossel/' + item.src;
       }
       document.getElementById('carousel-badge').textContent = item.badge; 
       document.getElementById('carousel-title').textContent = item.title; 

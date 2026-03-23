@@ -68,7 +68,7 @@
   <main class="container">
     <div class="glow"></div>
     <div class="flags">
-      <a href="index-pt.html" class="flag-btn"><img src="https://flagcdn.com/w40/br.png" alt="Brasil"></a>
+      <a href="index.html" class="flag-btn"><img src="https://flagcdn.com/w40/br.png" alt="Brasil"></a>
       <a href="index-he.html" class="flag-btn"><img src="https://flagcdn.com/w40/il.png" alt="ישראל"></a>
       <a href="index-en.html" class="flag-btn"><img src="https://flagcdn.com/w40/gb.png" alt="English"></a>
       <a href="index-ar.html" class="flag-btn"><img src="https://flagcdn.com/w40/sa.png" alt="العربية"></a>
@@ -79,7 +79,7 @@
     <div class="profile">
       <div class="photo-container">
         <div class="photo-glow"></div>
-        <img src="public/carrossel/foto_oficial.jpg" alt="Принц Андре Луис" class="photo">
+        <img src="/carrossel/foto_oficial.jpg" alt="Принц Андре Луис" class="photo">
       </div>
       <h1 class="name"><span class="name-first">Принц</span><span class="name-rest"> Андре Луис</span></h1>
       <h2 class="role">Создатель > Решатель > Дирижер</h2>
@@ -106,7 +106,7 @@
       <div class="carousel-card">
         <div class="carousel-image-container" id="media-container">
           <video id="carousel-media" class="carousel-video" controls autoplay muted>
-            <source id="media-source" src="public/carrossel/homenagem_em_video.mp4" type="video/mp4">
+            <source id="media-source" src="/carrossel/homenagem_em_video.mp4" type="video/mp4">
           </video>
           <div class="carousel-gradient"></div>
           <div class="carousel-badge" id="carousel-badge">Мировое общественное признание</div>
@@ -186,12 +186,12 @@
       const sourceEl = document.getElementById('media-source');
       
       if (item.type === 'video') {
-        sourceEl.src = 'public/carrossel/' + item.src;
+        sourceEl.src = '/carrossel/' + item.src;
         sourceEl.type = 'video/mp4';
         mediaEl.className = 'carousel-video';
         mediaEl.load();
       } else {
-        sourceEl.src = 'public/carrossel/' + item.src;
+        sourceEl.src = '/carrossel/' + item.src;
         sourceEl.type = 'image/jpeg';
         mediaEl.className = 'carousel-media';
         mediaEl.load();

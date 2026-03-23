@@ -62,15 +62,44 @@ O arquivo `Titulos.xls` é a **fonte mestra** de todo o carrossel. Ele determina
 
 **O `Titulos.xls` controla TUDO.** A ordem das linhas no Excel é a ordem de aparição no carrossel. Qualquer alteração no XLS atualiza todos os 7 idiomas.
 
+### Fontes de Dados
+
+O sistema usa **duas fontes de dados**:
+
+**1. `Titulos.xls` (sequência + textos PT)**
+- Coluna A = nome do arquivo (ordem de aparição)
+- Colunas B-E = textos em português (badge, title, description, tag)
+
+**2. `Titulos_XX.json` (textos por idioma)**
+Cada idioma tem seu próprio arquivo JSON com as traduções na mesma ordem:
+
+| Arquivo JSON | Idioma |
+|-------------|--------|
+| `Titulos_pt.json` | Português |
+| `Titulos_en.json` | Inglês |
+| `Titulos_he.json` | Hebraico |
+| `Titulos_ar.json` | Árabe |
+| `Titulos_ru.json` | Russo |
+| `Titulos_zh.json` | Chinês |
+| `Titulos_es.json` | Espanhol |
+
+Formato do JSON (cada linha = um item do carrossel):
+```json
+["nome_arquivo", "badge", "title", "description", "tag"]
+```
+
 ### Script de Atualização: `atualizar_carrossel.py`
 
-O script `atualizar_carrossel.py` lê o XLS e atualiza todos os 7 arquivos HTML automaticamente.
+O script lê **ambas** as fontes e atualiza todos os 7 HTMLs automaticamente.
 
 **Como funciona:**
-1. Lê o `Titulos.xls` (coluna A = arquivo, B-E = textos PT)
-2. Carrega as traduções existentes de cada arquivo HTML por **correspondência posicional** (item N do Excel → tradução da posição N)
-3. Gera o `carouselData` atualizado em cada idioma
-4. Atualiza o contador `1 / N` em todas as páginas
+1. Lê `Titulos.xls` → obtém a **sequência** dos arquivos e textos em PT
+2. Lê `Titulos_XX.json` → obtém as **traduções** para cada idioma
+3. Faz correspondência **posicional** (item N do XLS → tradução da posição N no JSON)
+4. Se um idioma não tiver JSON, usa PT como fallback
+5. Gera o `carouselData` atualizado em cada idioma
+6. Atualiza o contador `1 / N`
+7. **Corrige automaticamente** o bug do `imgEl` na página EN
 
 **Uso:**
 ```bash
@@ -156,7 +185,12 @@ O vídeo `homenagem_em_video.mp4` foi inserido como **primeiro item** do carouse
 O JS usava `sourceEl.src` + `.load()` num elemento `<video>` para imagens — não funciona. Corrigido com `<img id="carousel-image">` separado, usando `display: none/block`.
 
 ### 10. Script de Atualização Automática
-Criado `atualizar_carrossel.py` — lê `Titulos.xls` e atualiza todos os 7 idiomas automaticamente.
+Criado `atualizar_carrossel.py` — lia `Titulos.xls` e buscava traduções nos HTMLs por correspondência posicional.
+
+### 11. Adição dos JSONs de Tradução e Bug Fix na Página EN
+- Adicionados os arquivos `Titulos_XX.json` como fonte oficial de traduções por idioma
+- O script `atualizar_carrossel.py` foi reescrito para usar os JSONs
+- **Bug corrigido na página EN**: a função `updateCarousel()` usava `imgEl` sem defini-lo, causando erro e impedindo o carrossel de funcionar. Corrigido com `const imgEl = document.getElementById('carousel-image')`
 
 ---
 
@@ -219,7 +253,8 @@ function updateCarousel() {
 
 | Arquivo | Descrição |
 |---------|-----------|
-| `Titulos.xls` | Fonte mestra do carrossel (NUNCA editar manualmente o carouselData nos HTMLs) |
-| `atualizar_carrossel.py` | Script Python que sincroniza o XLS com os 7 HTMLs |
+| `Titulos.xls` | Sequência + textos PT (fonte mestra) |
+| `Titulos_XX.json` | Traduções por idioma (XX = pt, en, he, ar, ru, zh, es) |
+| `atualizar_carrossel.py` | Script Python que sincroniza XLS + JSONs com os 7 HTMLs |
 | `skills/modo_de_operacao.md` | Regras de operação |
 | `skills/atualizar_carrossel.md` | Documentação da skill de atualização |

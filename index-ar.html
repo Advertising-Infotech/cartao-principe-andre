@@ -77,7 +77,7 @@
     <div class="profile">
       <div class="photo-container">
         <div class="photo-glow"></div>
-        <img src="/carrossel/foto_oficial.jpg" alt="الأمير أندريه لويس" class="photo">
+        <img src="/public/carrossel/foto_oficial.jpg" alt="الأمير أندريه لويس" class="photo">
       </div>
       <h1 class="name"><span class="name-first">الأمير</span><span class="name-rest"> أندريه لويس</span></h1>
       <h2 class="role">خالق > صانع قرار > منسق</h2>
@@ -104,7 +104,7 @@
       <div class="carousel-card">
         <div class="carousel-image-container" id="media-container">
           <video id="carousel-media" class="carousel-video" controls autoplay muted>
-            <source id="media-source" src="/carrossel/homenagem_em_video.mp4" type="video/mp4">
+            <source id="media-source" src="/public/carrossel/homenagem_em_video.mp4" type="video/mp4">
           </video>
           <div class="carousel-gradient"></div>
           <div class="carousel-badge" id="carousel-badge">دليل اجتماعي عالمي</div>
@@ -184,13 +184,13 @@
       const sourceEl = document.getElementById('media-source');
       
       if (item.type === 'video') {
-        sourceEl.src = '/carrossel/' + item.src;
+        sourceEl.src = '/public/carrossel/' + item.src;
         sourceEl.type = 'video/mp4';
         mediaEl.className = 'carousel-video';
         mediaEl.style.display = 'block';
         mediaEl.load();
       } else {
-        sourceEl.src = '/carrossel/' + item.src;
+        sourceEl.src = '/public/carrossel/' + item.src;
         sourceEl.type = 'image/jpeg';
         mediaEl.className = 'carousel-media';
         mediaEl.style.display = 'block';

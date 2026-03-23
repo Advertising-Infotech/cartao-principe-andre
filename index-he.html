@@ -39,7 +39,9 @@
     .action-btn:hover { background: rgba(212,175,55,0.2); border-color: rgba(212,175,55,0.5); transform: scale(1.05); }
     .action-btn:hover svg { color: #fff; }
     .carousel { width: 100%; margin-top: 0.5rem; margin-bottom: 1rem; }
-    .carousel-counter { display: flex; justify-content: flex-end; margin-bottom: 1rem; padding: 0 0.25rem; }
+    .carousel-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 1rem; padding: 0 0.25rem; }
+    .titles-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.4; white-space: pre-line; }
+    .carousel-counter { display: flex; justify-content: flex-end; margin-bottom: 0; padding: 0; }
     .counter { font-size: 1.5rem; font-weight: 700; color: var(--gold); animation: blink-gold 1s infinite; }
     .carousel-card { position: relative; overflow: hidden; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.1); background: var(--white-5); backdrop-filter: blur(12px); transition: transform 0.3s; }
     .carousel-card:hover { transform: scale(1.02); }
@@ -101,7 +103,11 @@
       <a href="https://advertisinginfotech.com.br" class="action-btn" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></a>
     </div>
     <div class="carousel">
-      <div class="carousel-counter"><span class="counter" id="counter">1 / 47</span></div>
+      <div class="carousel-header">
+        <div class="titles-label">תארים, מחוות
+הסמכות ועיטורים</div>
+        <div class="carousel-counter"><span class="counter" id="counter">1 / 47</span></div>
+      </div>
       <div class="carousel-card">
         <div class="carousel-image-container" id="media-container">
           <video id="carousel-media" class="carousel-video" controls autoplay muted>

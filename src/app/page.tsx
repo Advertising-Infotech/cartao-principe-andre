@@ -1,6 +1,5 @@
 'use client';
 
-// Deploy test - imagens verificacao
 import React, { useState, useEffect } from 'react';
 import { ProfileHeader } from '@/components/ProfileHeader';
 import { ActionGrid } from '@/components/ActionGrid';

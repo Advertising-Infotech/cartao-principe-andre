@@ -45,6 +45,8 @@
     .counter { font-size: 1.5rem; font-weight: 700; color: var(--gold); animation: blink-gold 1s infinite; }
     .carousel-card { position: relative; overflow: hidden; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.1); background: var(--white-5); backdrop-filter: blur(12px); transition: transform 0.3s; }
     .carousel-card:hover { transform: scale(1.02); }
+    .carousel-image { width: 100%; height: 100%; object-fit: cover; object-position: center center; }
+    .carousel-video { width: 100%; height: 100%; object-fit: cover; object-position: center center; }
     .carousel-image-container { position: relative; height: 16rem; width: 100%; overflow: hidden; background: rgba(0,0,0,0.4); }
     .carousel-image { width: 100%; height: 100%; object-fit: contain; }
     .carousel-gradient { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent 50%); }
@@ -103,22 +105,23 @@
     </div>
     <div class="carousel">
       <div class="carousel-header">
-        <div class="titles-label">Titles, tributes
+        <div class="titles-label">Titles, tributes,
 certifications and honors</div>
         <div class="carousel-counter"><span class="counter" id="counter">1 / 47</span></div>
       </div>
       <div class="carousel-card">
-        <div class="carousel-image-container" id="carousel-media-container">
-          <img src="01.jpeg" alt="Award" class="carousel-image" id="carousel-image">
-          <video class="carousel-image" id="carousel-video" style="display:none;" autoplay loop muted playsinline></video>
+        <div class="carousel-image-container" id="media-container">
+          <video id="carousel-media" class="carousel-video" autoplay loop muted playsinline>
+            <source id="media-source" src="homenagem_em_video.mp4" type="video/mp4">
+          </video>
           <div class="carousel-gradient"></div>
-          <div class="carousel-badge" id="carousel-badge">Recognition</div>
-          <div class="carousel-title"><h4 id="carousel-title">International Literary Honor</h4></div>
+          <div class="carousel-badge" id="carousel-badge">World Social Proof</div>
+          <div class="carousel-title"><h4 id="carousel-title">Honored by Deputies</h4></div>
         </div>
         <div class="carousel-content">
-          <p class="carousel-description" id="carousel-description">Cultural & Peace Ambassadors</p>
+          <p class="carousel-description" id="carousel-description">Legislative Assembly of the State of Goiás</p>
           <div class="carousel-footer">
-            <span class="carousel-tag" id="carousel-tag">Tribute</span>
+            <span class="carousel-tag" id="carousel-tag">Solemn Honor</span>
             <div class="carousel-buttons">
               <button class="carousel-btn" onclick="prevSlide()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m15 18-6-6 6-6"/></svg>Previous</button>
               <button class="carousel-btn" onclick="nextSlide()">Next<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m9 18 6-6-6-6"/></svg></button>
@@ -180,24 +183,31 @@ certifications and honors</div>
       {type:'image',src:'52.png',badge:'Honorary Trophy',title:'The Best of Brazil',desc:'Trophy The Best of Brazil',tag:'Tribute'}
     ];
     let currentIndex = 0;
-    function updateCarousel() { 
-      const item = carouselData[currentIndex]; 
-      const img = document.getElementById('carousel-image');
-      const video = document.getElementById('carousel-video');
-      if(item.type === 'video'){
-        img.style.display = 'none';
-        video.style.display = 'block';
-        video.src = ' + item.src;
-      }else{
-        video.style.display = 'none';
-        img.style.display = 'block';
-        img.src = ' + item.src;
+
+    function updateCarousel() {
+      const item = carouselData[currentIndex];
+      const mediaEl = document.getElementById('carousel-media');
+      const sourceEl = document.getElementById('media-source');
+      
+      if (item.type === 'video') {
+        sourceEl.src = item.src;
+        sourceEl.type = 'video/mp4';
+        mediaEl.className = 'carousel-video';
+        mediaEl.style.display = 'block';
+        mediaEl.load();
+      } else {
+        sourceEl.src = item.src;
+        sourceEl.type = item.src.endsWith('.png') ? 'image/png' : 'image/jpeg';
+        mediaEl.className = 'carousel-media';
+        mediaEl.style.display = 'block';
+        mediaEl.load();
       }
-      document.getElementById('carousel-badge').textContent = item.badge; 
-      document.getElementById('carousel-title').textContent = item.title; 
-      document.getElementById('carousel-description').textContent = item.desc; 
-      document.getElementById('carousel-tag').textContent = item.tag; 
-      document.getElementById('counter').textContent = (currentIndex + 1) + ' / ' + carouselData.length; 
+      
+      document.getElementById('carousel-badge').textContent = item.badge;
+      document.getElementById('carousel-title').textContent = item.title;
+      document.getElementById('carousel-description').textContent = item.desc;
+      document.getElementById('carousel-tag').textContent = item.tag;
+      document.getElementById('counter').textContent = (currentIndex + 1) + ' / ' + carouselData.length;
     }
     function nextSlide() { currentIndex = (currentIndex + 1) % carouselData.length; updateCarousel(); }
     function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }

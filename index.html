@@ -78,7 +78,7 @@
     <div class="profile">
       <div class="photo-container">
         <div class="photo-glow"></div>
-        <img src="/foto_oficial.jpg" alt="Príncipe André Luís" class="photo">
+        <img src="foto_oficial.jpg" alt="Príncipe André Luís" class="photo">
       </div>
       <h1 class="name"><span class="name-first">Príncipe</span><span class="name-rest"> André Luís</span></h1>
       <h2 class="role">Criador > Decisor > Orquestrador</h2>
@@ -105,7 +105,7 @@
       <div class="carousel-card">
         <div class="carousel-image-container" id="media-container">
           <video id="carousel-media" class="carousel-video" controls autoplay muted>
-            <source id="media-source" src="/homenagem_em_video.mp4" type="video/mp4">
+            <source id="media-source" src="homenagem_em_video.mp4" type="video/mp4">
           </video>
           <div class="carousel-gradient"></div>
           <div class="carousel-badge" id="carousel-badge">Prova Social Mundial</div>
@@ -185,12 +185,12 @@
       const sourceEl = document.getElementById('media-source');
       
       if (item.type === 'video') {
-        sourceEl.src = '/' + item.src;
+        sourceEl.src = '' + item.src;
         sourceEl.type = 'video/mp4';
         mediaEl.className = 'carousel-video';
         mediaEl.load();
       } else {
-        sourceEl.src = '/' + item.src;
+        sourceEl.src = '' + item.src;
         sourceEl.type = 'image/jpeg';
         mediaEl.className = 'carousel-media';
         mediaEl.load();

@@ -77,7 +77,7 @@
     <div class="profile">
       <div class="photo-container">
         <div class="photo-glow"></div>
-        <img src="/foto_oficial.jpg" alt="Prince André Luís" class="photo">
+        <img src="foto_oficial.jpg" alt="Prince André Luís" class="photo">
       </div>
       <h1 class="name"><span class="name-first">Prince</span><span class="name-rest"> André Luís</span></h1>
       <h2 class="role">Creator > Decision Maker > Orchestrator</h2>
@@ -103,7 +103,7 @@
       <div class="carousel-counter"><span class="counter" id="counter">1 / 47</span></div>
       <div class="carousel-card">
         <div class="carousel-image-container" id="carousel-media-container">
-          <img src="/01.jpeg" alt="Award" class="carousel-image" id="carousel-image">
+          <img src="01.jpeg" alt="Award" class="carousel-image" id="carousel-image">
           <video class="carousel-image" id="carousel-video" style="display:none;" autoplay loop muted playsinline></video>
           <div class="carousel-gradient"></div>
           <div class="carousel-badge" id="carousel-badge">Recognition</div>
@@ -181,11 +181,11 @@
       if(item.type === 'video'){
         img.style.display = 'none';
         video.style.display = 'block';
-        video.src = '/' + item.src;
+        video.src = ' + item.src;
       }else{
         video.style.display = 'none';
         img.style.display = 'block';
-        img.src = '/' + item.src;
+        img.src = ' + item.src;
       }
       document.getElementById('carousel-badge').textContent = item.badge; 
       document.getElementById('carousel-title').textContent = item.title; 

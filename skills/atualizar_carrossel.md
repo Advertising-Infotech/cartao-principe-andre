@@ -1,13 +1,13 @@
-# SKILL: Atualizar Carrossel via Titulos.xls + Titulos_XX.json
+# SKILL: Atualizar Carrossel (Incremental)
 
 ## Conceito
 
-O sistema de atualização do carrossel usa **duas fontes de dados**:
+O script detecta **mudanças incrementais** no `Titulos.xls` e atualiza os JSONs e HTMLs de forma segura:
+1. Detecta **linhas novas** e **linhas alteradas** comparando XLS vs JSON
+2. **Pausa** e pede ao usuário para inserir traduções manualmente nos JSONs
+3. Depois de editar os JSONs, atualiza todos os 7 HTMLs
 
-1. **`Titulos.xls`** — controla a **sequência** dos arquivos e os **textos em português**
-2. **`Titulos_XX.json`** — controla os **textos traduzidos** para cada idioma
-
-A ordem de aparição no Excel é **sempre** a ordem de aparição no carrossel.
+Se não houver mudanças, apenas atualiza os HTMLs com os dados existentes.
 
 ---
 
@@ -26,12 +26,11 @@ A ordem de aparição no Excel é **sempre** a ordem de aparição no carrossel.
 ```json
 [
   ["01.jpeg", "Badge", "Title", "Description", "Tag"],
-  ["02.jpeg", "Badge2", "Title2", "Description2", "Tag2"],
-  ...
+  ["02.jpeg", "Badge2", "Title2", "Description2", "Tag2"]
 ]
 ```
 
-Arquivos JSON existentes:
+Arquivos JSON:
 - `Titulos_pt.json` — Português
 - `Titulos_en.json` — Inglês
 - `Titulos_he.json` — Hebraico
@@ -42,62 +41,50 @@ Arquivos JSON existentes:
 
 ---
 
-## Quando Usar
-
-Usar quando o usuário avisar que adicionou novos itens ao `Titulos.xls` ou inseriu/removeu linhas.
-
----
-
 ## Como Executar
-
-### Passo 1: Rodar o script
 
 ```bash
 python atualizar_carrossel.py
 ```
 
-O script faz **tudo** automaticamente:
-1. Lê `Titulos.xls` → sequência + textos PT
-2. Lê `Titulos_XX.json` para cada idioma
-3. Corresponde por **posição** (item N do Excel → tradução da posição N)
-4. Fallback: se JSON não existir, usa textos PT
-5. Atualiza `carouselData` em cada HTML
-6. Atualiza contador `1 / N`
-7. Corrige automaticamente o bug do `imgEl` na página EN
-
-### Passo 2: Verificar
-
-Após rodar, verificar que cada HTML tem os textos corretos para o seu idioma.
-
----
-
-## Regras Importantes
-
-1. **A ordem no Excel = a ordem no carrossel** — sempre respeitar
-2. **Sempre manter `homenagem_em_video.mp4` como primeiro item** se existir no Excel
-3. **Adicionar textos novos em TODOS os JSONs** quando o usuário adicionar novos itens
-4. **Nunca editar manualmente o `carouselData`** nos arquivos HTML
-5. **Cada JSON deve ter a mesma quantidade de itens** que o XLS e na mesma ordem
-6. **Perguntar ao usuário** se houver dúvidas sobre tradução
+### Fluxo:
+1. Script lê XLS + todos os JSONs
+2. Compara por **nome de arquivo** (coluna A do XLS)
+3. Se encontrar linhas novas no XLS:
+   - Insere **placeholders `[PT]`** nos JSONs que faltam
+   - **Pausa** e pede para o usuário editar os JSONs manualmente
+   - **Roda novamente** após editar
+4. Se encontrar linhas alteradas no XLS:
+   - Mostra quais itens mudaram
+   - Atualiza os HTMLs com os novos textos PT nos JSONs afetados
+5. Atualiza `carouselData` em todos os 7 HTMLs
+6. Corrige `imgEl` automaticamente em todas as páginas
 
 ---
 
-## Exemplo: Adicionar Novo Item
+## Regras
 
-O usuário adiciona `53.jpg` no `Titulos.xls` depois da linha 46:
+1. **Nome do arquivo (coluna A) = chave primária** — não mudar nomes no XLS
+2. **Ordem do Excel = ordem do carrossel** — não reordenar linhas no XLS
+3. **Sempre 46 itens** (1 vídeo + 45 imagens) — se mudar quantidade, avisar
+4. **Traduzir manualmente nos JSONs** — o script não faz tradução automática
+5. **Validar após rodar** — verificar textos em cada idioma
+
+---
+
+## Adicionar Novo Item (passo a passo)
 
 1. Adicionar linha em `Titulos.xls` com textos PT
-2. Adicionar linha em `Titulos_en.json` com textos EN
-3. Adicionar linha em `Titulos_he.json` com textos HE
-4. Adicionar linha em `Titulos_ar.json` com textos AR
-5. Adicionar linha em `Titulos_ru.json` com textos RU
-6. Adicionar linha em `Titulos_zh.json` com textos ZH
-7. Adicionar linha em `Titulos_es.json` com textos ES
-8. Colocar o arquivo `53.jpg` na raiz do projeto
-9. Rodar `python atualizar_carrossel.py`
+2. Rodar `python atualizar_carrossel.py`
+3. Script insere placeholders `[PT]` nos JSONs
+4. Editar cada JSON (`en`, `he`, `ar`, `ru`, `zh`, `es`) com as traduções
+5. Rodar novamente: `python atualizar_carrossel.py`
+6. Colocar o novo arquivo de mídia na raiz do projeto
+7. Commit e push
 
 ---
 
-## Bug Conhecido: Página EN
+## Bug: imgEl não definido
 
-A página em inglês tinha um bug onde `imgEl` não estava definido na função `updateCarousel()`. O script corrige isso automaticamente. Se o carrossel da página EN não funcionar, verificar se `const imgEl = document.getElementById('carousel-image')` existe no início da função `updateCarousel()`.
+O script corrige automaticamente se `const imgEl` não estiver no início de `updateCarousel()`.
+Se o carrossel de alguma página não funcionar após rodar o script, verificar manualmente.

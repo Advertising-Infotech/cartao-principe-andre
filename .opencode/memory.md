@@ -108,6 +108,14 @@ python atualizar_carrossel.py
 
 ---
 
+### Proibido: Caracteres Chineses em PT e ES
+- **NUNCA** usar caracteres chineses (Guangdong, 汉字, ou qualquer caractere CJK) nos textos em português e espanhol.
+- Os textos em PT e ES devem usar apenas letras latinas com acentos comuns.
+
+### Codificação Fixa da Palavra "homenagens"
+- A palavra **homenagens** deve ser escrita usando **apenas** os caracteres ASCII: h-o-m-e-n-a-g-e-n-s.
+- **NUNCA** usar outra codificação para essa palavra.
+
 ## Regras de Negócio
 
 ### Vídeo Inicial

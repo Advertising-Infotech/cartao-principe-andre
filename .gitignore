@@ -49,6 +49,9 @@ antigravity_chrome_sync.py
 Semana passada/
 2/
 
+# Conversion scripts
+convert.js
+
 # VS Code
 .vscode/*
 !.vscode/extensions.json

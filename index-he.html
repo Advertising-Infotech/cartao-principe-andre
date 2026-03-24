@@ -287,7 +287,7 @@
       <a href="https://advertisinginfotech.com.br" class="action-btn" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></a>
     </div>
 
-    <button id="vcardLink" class="cta-btn" onclick="saveContact(); alert('Clicked!'); return false;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>שמור לאנשי קשר</button>
+    <button id="vcardLink" class="cta-btn" onclick="var v='BEGIN:VCARD\nVERSION:3.0\nFN:Prince Andre Luis\nN:Luis;Andre;Prince;;;\nORG:Advertising Infotech\nTITLE:Creator > Decision Maker > Orchestrator\nTEL;TYPE=CELL:+5562991599031\nEMAIL:advertisingpropaganda@gmail.com\nURL:https://advertisinginfotech.com.br\nNOTE:Creating new worlds by recycling feelings.\nEND:VCARD'; var b=new Blob([v],{type:'text/vcard'}); window.location.href=URL.createObjectURL(b); setTimeout(function(){document.getElementById('downloadModal').style.display='flex'},500); return false;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>שמור לאנשי קשר</button>
     <footer class="footer"><p>© 2026 | הנסיך אנדרה לואיס | כל הזכויות שמורות | V 4.0 (HTML5)</p></footer>
   </main>
 
@@ -372,20 +372,6 @@
     function nextSlide() { currentIndex = (currentIndex + 1) % carouselData.length; updateCarousel(); }
     function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }
 
-    function saveContact() { 
-      alert('saveContact started');
-      try {
-        const vCard = 'BEGIN:VCARD\nVERSION:3.0\nFN:Prince Andre Luis\nN:Luis;Andre;Prince;;;\nORG:Advertising Infotech\nTITLE:Creator > Decision Maker > Orchestrator\nTEL;TYPE=CELL:+5562991599031\nEMAIL:advertisingpropaganda@gmail.com\nURL:https://advertisinginfotech.com.br\nNOTE:Creating new worlds by recycling feelings.\nEND:VCARD';
-        const blob = new Blob([vCard], {type: 'text/vcard'});
-        const url = URL.createObjectURL(blob);
-        alert('Blob created: ' + blob.size + ' bytes');
-        window.location.href = url;
-        setTimeout(function(){ document.getElementById('downloadModal').style.display = 'flex'; }, 500);
-      } catch(e) {
-        alert('Error: ' + e.message);
-      }
-      return false;
-    }
   </script>
   <div id="downloadModal" class="download-modal" onclick="this.style.display='none'">
     <div class="download-modal-content" onclick="event.stopPropagation()">

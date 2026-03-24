@@ -375,7 +375,7 @@
       const vCard = 'BEGIN:VCARD\nVERSION:3.0\nFN;CHARSET=UTF-8:安德烈·路易斯王子\nN;CHARSET=UTF-8:路易斯;安德烈;王子;;;\nORG;CHARSET=UTF-8:Advertising Infotech\nTITLE;CHARSET=UTF-8:创造者 > 决策者 > 指挥者\nTEL;TYPE=CELL:+5562991599031\nEMAIL:advertisingpropaganda@gmail.com\nURL:https://advertisinginfotech.com.br\nNOTE;CHARSET=UTF-8:通过回收情感创造新世界。\nEND:VCARD';
       const blob = new Blob([vCard], {type: 'text/vcard'});
       window.location.href = URL.createObjectURL(blob);
-      document.getElementById('downloadModal').style.display = 'flex';
+      setTimeout(function(){ document.getElementById('downloadModal').style.display = 'flex'; }, 500);
     }
   </script>
   <div id="downloadModal" class="download-modal" onclick="this.style.display='none'">

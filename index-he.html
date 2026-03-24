@@ -376,7 +376,7 @@
       const vCard = 'BEGIN:VCARD\nVERSION:3.0\nFN;CHARSET=UTF-8:הנסיך אנדרה לואיס\nN;CHARSET=UTF-8:לואיס;אנדרה;הנסיך;;;\nORG;CHARSET=UTF-8:Advertising Infotech\nTITLE;CHARSET=UTF-8:יוצר > מחליט > תזמורן\nTEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031\nEMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com\nURL:https://advertisinginfotech.com.br\nNOTE;CHARSET=UTF-8:יוצר עולמות חדשים על ידי מיחזור רגשות.\nEND:VCARD';
       const blob = new Blob([vCard], {type: 'text/vcard'});
       window.location.href = URL.createObjectURL(blob);
-      document.getElementById('downloadModal').style.display = 'flex';
+      setTimeout(function(){ document.getElementById('downloadModal').style.display = 'flex'; }, 500);
     }
   </script>
   <div id="downloadModal" class="download-modal" onclick="this.style.display='none'">

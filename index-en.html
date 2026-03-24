@@ -383,7 +383,7 @@ certifications and honors</div>
       const vCard = 'BEGIN:VCARD\nVERSION:3.0\nFN:Prince André Luís\nN:Luís;André;Prince;;;\nORG:Advertising Infotech\nTITLE:Creator > Decision Maker > Orchestrator\nTEL;TYPE=CELL:+5562991599031\nEMAIL:advertisingpropaganda@gmail.com\nURL:https://advertisinginfotech.com.br\nNOTE:Creating new worlds by recycling feelings.\nEND:VCARD';
       const blob = new Blob([vCard], {type: 'text/vcard'});
       window.location.href = URL.createObjectURL(blob);
-      document.getElementById('downloadModal').style.display = 'flex';
+      setTimeout(function(){ document.getElementById('downloadModal').style.display = 'flex'; }, 500);
     }
   </script>
   <div id="downloadModal" class="download-modal" onclick="this.style.display='none'">

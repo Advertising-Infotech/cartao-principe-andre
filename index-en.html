@@ -21,7 +21,7 @@
     .flag-btn img { width: 100%; height: 100%; object-fit: cover; }
     .profile { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 0.5rem; }
     .photo-container { position: relative; margin-bottom: 1rem; }
-    .photo-glow { position: absolute; inset: 0; border-radius: 1.5rem; background: var(--gold); blur: 20px; opacity: 0.4; transition: opacity 0.5s; }
+    .photo-glow { position: absolute; inset: 0; border-radius: 1.5rem; background: var(--gold); filter: blur(20px); opacity: 0.4; transition: opacity 0.5s; }
     .photo-container:hover .photo-glow { opacity: 0.6; }
     .photo { position: relative; width: 10rem; height: 10rem; border-radius: 1.5rem; object-fit: cover; border: 4px solid var(--gold); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8); }
     .name { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.025em; text-shadow: 0 4px 6px rgba(0,0,0,0.5); line-height: 1; margin-bottom: 0.75rem; }
@@ -31,6 +31,17 @@
     @keyframes blink-white { 0%, 50% { color: #ffffff; } 100% { color: #ffffff; } }
     .role { color: var(--gold); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.25rem; width: 100%; }
     .bio { color: #fff; font-size: 1.05rem; font-weight: 300; width: 100%; line-height: 1.625; letter-spacing: -0.025em; margin-bottom: 1rem; }
+    
+    @media (max-width: 400px) {
+      .role {
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+      }
+      .bio {
+        font-size: 0.95rem;
+      }
+    }
+
     .social { display: flex; gap: 1.5rem; margin-bottom: 0.5rem; }
     .social a { color: #9ca3af; transition: all 0.3s; }
     .social a:hover { color: var(--gold); transform: scale(1.1); }

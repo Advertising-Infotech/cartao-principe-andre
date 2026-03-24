@@ -251,29 +251,7 @@
     <footer class="footer"><p>© 2026 | 安德烈·路易斯王子 | 版权所有 | V 4.0 (HTML5)</p></footer>
   </main>
 
-  <!-- Contact Modal -->
-  <div id="contactModal" class="contact-modal" onclick="closeModal()">
-    <div class="contact-card" onclick="event.stopPropagation()">
-      <button class="close-modal" onclick="closeModal()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M18 6 6 18M6 6l12 12" />
-        </svg>
-      </button>
-      <img src="foto_oficial.jpg" alt="安德烈·路易斯王子" class="modal-photo">
-      <h3 class="modal-name">安德烈·路易斯王子</h3>
-      <p class="modal-role">创造者 > 决策者 > 指挥者</p>
-      <p class="modal-msg">联系人已准备好加入您的电话簿。如果您的设备没有自动打开，请点击下面的按钮。</p>
-      <a href="#" id="vcardLink" class="modal-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <line x1="19" x2="19" y1="8" y2="14" />
-          <line x1="22" x2="16" y1="11" y2="11" />
-        </svg>
-        保存联系人
-      </a>
-    </div>
-  </div>
+  <script>
   <script>
     const carouselData = [
       { type: 'video', src: 'homenagem_em_video.mp4', badge: '全球社会认可', title: '受到议员表彰', desc: '戈亚斯州立法议会', tag: '庄严的荣誉' },
@@ -355,26 +333,11 @@
     function nextSlide() { currentIndex = (currentIndex + 1) % carouselData.length; updateCarousel(); }
     function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }
 
-    function closeModal() {
-      document.getElementById('contactModal').classList.remove('active');
-    }
-
     function saveContact() { 
       const vCard = ['BEGIN:VCARD','VERSION:3.0','FN;CHARSET=UTF-8:安德烈·路易斯王子','N;CHARSET=UTF-8:路易斯;安德烈;王子;;;','ORG;CHARSET=UTF-8:Advertising Infotech','TITLE;CHARSET=UTF-8:创造者 > 决策者 > 指挥者','TEL;TYPE=CELL:+5562991599031','EMAIL:advertisingpropaganda@gmail.com','URL:https://advertisinginfotech.com.br','NOTE;CHARSET=UTF-8:通过回收情感创造新世界。','END:VCARD'].join('\n'); 
       const blob = new Blob([vCard], {type:'text/vcard;charset=utf-8'}); 
       const url = URL.createObjectURL(blob); 
-      
-      const modal = document.getElementById('contactModal');
-      const vcardLink = document.getElementById('vcardLink');
-      
-      vcardLink.href = url;
-      vcardLink.download = 'Prince_Andre_Luis.vcf';
-      
-      modal.classList.add('active');
-      
-      // Try to open natively
-      window.location.href = url;
-      
+      window.open(url, '_blank'); 
       setTimeout(() => URL.revokeObjectURL(url), 10000); 
     }
   </script>

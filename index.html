@@ -706,29 +706,7 @@
     </footer>
   </main>
 
-  <!-- Modal de Contato -->
-  <div id="contactModal" class="contact-modal" onclick="closeModal()">
-    <div class="contact-card" onclick="event.stopPropagation()">
-      <button class="close-modal" onclick="closeModal()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M18 6 6 18M6 6l12 12" />
-        </svg>
-      </button>
-      <img src="foto_oficial.jpg" alt="Príncipe André Luís" class="modal-photo">
-      <h3 class="modal-name">Príncipe André Luís</h3>
-      <p class="modal-role">Criador > Decisor > Orquestrador</p>
-      <p class="modal-msg">O contato foi preparado para sua agenda. Se o seu dispositivo não abrir automaticamente, clique no botão abaixo.</p>
-      <a href="#" id="vcardLink" class="modal-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <line x1="19" x2="19" y1="8" y2="14" />
-          <line x1="22" x2="16" y1="11" y2="11" />
-        </svg>
-        Salvar Contato
-      </a>
-    </div>
-  </div>
+  <!-- Botão Salvar Contato abre direto no app de contatos -->
   <script>
     const carouselData = [
       { type: 'video', src: 'homenagem_em_video.mp4', badge: 'Prova social mundial', title: 'Homenageado por deputados', desc: 'Assembleia Legislativa do Estado de Goiás', tag: 'Honraria Solene' },
@@ -810,26 +788,11 @@
     function nextSlide() { currentIndex = (currentIndex + 1) % carouselData.length; updateCarousel(); }
     function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }
     
-    function closeModal() {
-      document.getElementById('contactModal').classList.remove('active');
-    }
-
     function saveContact() { 
       const vCard = ['BEGIN:VCARD', 'VERSION:3.0', 'FN;CHARSET=UTF-8:Príncipe André Luís', 'N;CHARSET=UTF-8:Luís;André;Príncipe;;;', 'ORG;CHARSET=UTF-8:Advertising Infotech', 'TITLE;CHARSET=UTF-8:Criador > Decisor > Orquestrador', 'TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031', 'EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com', 'URL:https://advertisinginfotech.com.br', 'NOTE;CHARSET=UTF-8:Criando novos mundos reciclando sentimentos.', 'END:VCARD'].join('\n'); 
       const blob = new Blob([vCard], { type: 'text/vcard;charset=utf-8' }); 
       const url = URL.createObjectURL(blob); 
-      
-      const modal = document.getElementById('contactModal');
-      const vcardLink = document.getElementById('vcardLink');
-      
-      vcardLink.href = url;
-      vcardLink.download = 'contato_Príncipe_André_Luís.vcf';
-      
-      modal.classList.add('active');
-      
-      // Tenta abrir nativamente
-      window.location.href = url;
-      
+      window.open(url, '_blank'); 
       setTimeout(() => URL.revokeObjectURL(url), 10000); 
     }
   </script>

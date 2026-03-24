@@ -266,29 +266,7 @@
     <footer class="footer"><p>© 2026 | Принц Андре Луис | Все права защищены | V 4.0 (HTML5)</p></footer>
   </main>
 
-  <!-- Contact Modal -->
-  <div id="contactModal" class="contact-modal" onclick="closeModal()">
-    <div class="contact-card" onclick="event.stopPropagation()">
-      <button class="close-modal" onclick="closeModal()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M18 6 6 18M6 6l12 12" />
-        </svg>
-      </button>
-      <img src="foto_oficial.jpg" alt="Принц Андре Луис" class="modal-photo">
-      <h3 class="modal-name">Принц Андре Луис</h3>
-      <p class="modal-role">Создатель > Решатель > Дирижер</p>
-      <p class="modal-msg">Контакт готов для вашей записной книжки. Если ваше устройство не открыло его автоматически, нажмите кнопку ниже.</p>
-      <a href="#" id="vcardLink" class="modal-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <line x1="19" x2="19" y1="8" y2="14" />
-          <line x1="22" x2="16" y1="11" y2="11" />
-        </svg>
-        Сохранить контакт
-      </a>
-    </div>
-  </div>
+  <script>
   <script>
     const carouselData = [
       { type: 'video', src: 'homenagem_em_video.mp4', badge: 'Мировое общественное признание', title: 'Удостоен чести депутатами', desc: 'Законодательное собрание штата Гояс', tag: 'Торжественная награда' },
@@ -369,7 +347,7 @@
 
     function nextSlide() { currentIndex = (currentIndex + 1) % carouselData.length; updateCarousel(); }
     function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }
-    function saveContact() { const vCard = ['BEGIN:VCARD','VERSION:3.0','FN;CHARSET=UTF-8:Принц Андре Луис','N;CHARSET=UTF-8:Луис;Андре;Принц;;;','ORG;CHARSET=UTF-8:Advertising Infotech','TITLE;CHARSET=UTF-8:Принц Андре Луис - Создатель > Решатель > Дирижер','TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031','EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com','URL:https://advertisinginfotech.com.br','NOTE;CHARSET=UTF-8:Принц Андре Луис - Создаю новые миры, перерабатывая чувства.','END:VCARD'].join('\n'); const blob = new Blob([vCard], {type:'text/vcard;charset=utf-8'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'contato_Принц_Андре_Луис.vcf'; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(() => URL.revokeObjectURL(url), 1000); }
+    function saveContact() { const vCard = ['BEGIN:VCARD','VERSION:3.0','FN;CHARSET=UTF-8:Принц Андре Луис','N;CHARSET=UTF-8:Луис;Андре;Принц;;;','ORG;CHARSET=UTF-8:Advertising Infotech','TITLE;CHARSET=UTF-8:Принц Андре Луис - Создатель > Решатель > Дирижер','TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031','EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com','URL:https://advertisinginfotech.com.br','NOTE;CHARSET=UTF-8:Принц Андре Луис - Создаю новые миры, перерабатывая чувства.','END:VCARD'].join('\n'); const blob = new Blob([vCard], {type:'text/vcard;charset=utf-8'}); const url = URL.createObjectURL(blob); window.open(url, '_blank'); setTimeout(() => URL.revokeObjectURL(url), 10000); }
   </script>
 </body>
 </html>

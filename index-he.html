@@ -252,29 +252,7 @@
     <footer class="footer"><p>© 2026 | הנסיך אנדרה לואיס | כל הזכויות שמורות | V 4.0 (HTML5)</p></footer>
   </main>
 
-  <!-- Contact Modal -->
-  <div id="contactModal" class="contact-modal" onclick="closeModal()">
-    <div class="contact-card" onclick="event.stopPropagation()">
-      <button class="close-modal" onclick="closeModal()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M18 6 6 18M6 6l12 12" />
-        </svg>
-      </button>
-      <img src="foto_oficial.jpg" alt="הנסיך אנדרה לואיס" class="modal-photo">
-      <h3 class="modal-name">הנסיך אנדרה לואיס</h3>
-      <p class="modal-role">יוצר > מחליט > תזמורן</p>
-      <p class="modal-msg">איש הקשר הוכן עבור סדר היום שלך. אם המכשיר שלך לא נפתח אוטומטית, לחץ על הכפתור למטה.</p>
-      <a href="#" id="vcardLink" class="modal-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <line x1="19" x2="19" y1="8" y2="14" />
-          <line x1="22" x2="16" y1="11" y2="11" />
-        </svg>
-        שמור איש קשר
-      </a>
-    </div>
-  </div>
+  <script>
   <script>
     const carouselData = [
       { type: 'video', src: 'homenagem_em_video.mp4', badge: "הוכחה חברתית עולמית", title: 'זכה לכבוד מצד חברי פרלמנט', desc: 'האסיפה המחוקקת של מדינת גויאס', tag: "אות כבוד חגיגי" },
@@ -356,26 +334,11 @@
     function nextSlide() { currentIndex = (currentIndex + 1) % carouselData.length; updateCarousel(); }
     function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }
 
-    function closeModal() {
-      document.getElementById('contactModal').classList.remove('active');
-    }
-
     function saveContact() { 
       const vCard = ['BEGIN:VCARD','VERSION:3.0','FN;CHARSET=UTF-8:הנסיך אנדרה לואיס','N;CHARSET=UTF-8:לואיס;אנדרה;הנסיך;;;','ORG;CHARSET=UTF-8:Advertising Infotech','TITLE;CHARSET=UTF-8:יוצר > מחליט > תזמורן','TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031','EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com','URL:https://advertisinginfotech.com.br','NOTE;CHARSET=UTF-8:יוצר עולמות חדשים על ידי מיחזור רגשות.','END:VCARD'].join('\n'); 
       const blob = new Blob([vCard], {type:'text/vcard;charset=utf-8'}); 
       const url = URL.createObjectURL(blob); 
-      
-      const modal = document.getElementById('contactModal');
-      const vcardLink = document.getElementById('vcardLink');
-      
-      vcardLink.href = url;
-      vcardLink.download = 'Prince_Andre_Luis.vcf';
-      
-      modal.classList.add('active');
-      
-      // Try to open natively
-      window.location.href = url;
-      
+      window.open(url, '_blank'); 
       setTimeout(() => URL.revokeObjectURL(url), 10000); 
     }
   </script>

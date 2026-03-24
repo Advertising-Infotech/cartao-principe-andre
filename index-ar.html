@@ -252,29 +252,7 @@
     <footer class="footer"><p>© 2026 | الأمير أندريه لويس | جميع الحقوق محفوظة</p></footer>
   </main>
 
-  <!-- Contact Modal -->
-  <div id="contactModal" class="contact-modal" onclick="closeModal()">
-    <div class="contact-card" onclick="event.stopPropagation()">
-      <button class="close-modal" onclick="closeModal()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M18 6 6 18M6 6l12 12" />
-        </svg>
-      </button>
-      <img src="foto_oficial.jpg" alt="الأمير أندريه لويس" class="modal-photo">
-      <h3 class="modal-name">الأمير أندريه لويس</h3>
-      <p class="modal-role">المنشئ > صانع القرار > المنسق</p>
-      <p class="modal-msg">تم تجهيز جهة الاتصال لجدول أعمالك. إذا لم يفتح جهازك تلقائيًا ، فانقر فوق الزر أدناه.</p>
-      <a href="#" id="vcardLink" class="modal-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <line x1="19" x2="19" y1="8" y2="14" />
-          <line x1="22" x2="16" y1="11" y2="11" />
-        </svg>
-        حفظ جهة الاتصال
-      </a>
-    </div>
-  </div>
+  <script>
   <script>
     const carouselData = [
       { type: "video", src: "homenagem_em_video.mp4", badge: "دليل اجتماعي عالمي", title: 'مكرم من قبل نواب مجلس الشعب', desc: 'الجمعية التشريعية لولاية غوياس', tag: "تكريم مهيب" },
@@ -355,26 +333,11 @@
 
     function nextSlide() { currentIndex = (currentIndex + 1) % carouselData.length; updateCarousel(); }
     function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }
-    function closeModal() {
-      document.getElementById('contactModal').classList.remove('active');
-    }
-
     function saveContact() { 
       const vCard = ['BEGIN:VCARD','VERSION:3.0','FN;CHARSET=UTF-8:الأمير أندريه لويس','N;CHARSET=UTF-8:لويس;أندريه;أمير;;;','ORG;CHARSET=UTF-8:Advertising Infotech','TITLE;CHARSET=UTF-8:خالق > صانع قرار > منسק','TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031','EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com','URL:https://advertisinginfotech.com.br','NOTE;CHARSET=UTF-8:خلق عوالم جديدة عن طريق إعادة تدوير المشاعر.','END:VCARD'].join('\n'); 
       const blob = new Blob([vCard], {type:'text/vcard;charset=utf-8'}); 
       const url = URL.createObjectURL(blob); 
-      
-      const modal = document.getElementById('contactModal');
-      const vcardLink = document.getElementById('vcardLink');
-      
-      vcardLink.href = url;
-      vcardLink.download = 'Prince_Andre_Luis.vcf';
-      
-      modal.classList.add('active');
-      
-      // Try to open natively
-      window.location.href = url;
-      
+      window.open(url, '_blank'); 
       setTimeout(() => URL.revokeObjectURL(url), 10000); 
     }
   </script>

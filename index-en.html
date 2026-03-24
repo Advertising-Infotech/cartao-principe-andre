@@ -262,29 +262,6 @@ certifications and honors</div>
     <footer class="footer"><p>© 2026 | Prince André Luís | All Rights Reserved | V 4.0 (HTML5)</p></footer>
   </main>
 
-  <!-- Contact Modal -->
-  <div id="contactModal" class="contact-modal" onclick="closeModal()">
-    <div class="contact-card" onclick="event.stopPropagation()">
-      <button class="close-modal" onclick="closeModal()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M18 6 6 18M6 6l12 12" />
-        </svg>
-      </button>
-      <img src="foto_oficial.jpg" alt="Prince André Luís" class="modal-photo">
-      <h3 class="modal-name">Prince André Luís</h3>
-      <p class="modal-role">Creator > Decision Maker > Orchestrator</p>
-      <p class="modal-msg">The contact is ready for your phonebook. If your device doesn't open it automatically, click the button below.</p>
-      <a href="#" id="vcardLink" class="modal-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <line x1="19" x2="19" y1="8" y2="14" />
-          <line x1="22" x2="16" y1="11" y2="11" />
-        </svg>
-        Save Contact
-      </a>
-    </div>
-  </div>
   <script>
     const carouselData = [
       { type: 'video', src: 'homenagem_em_video.mp4', badge: 'World Social Proof', title: 'Honored by Deputies', desc: 'Legislative Assembly of the State of Goiás', tag: 'Solemn Honor' },
@@ -363,26 +340,11 @@ certifications and honors</div>
     function nextSlide() { currentIndex = (currentIndex + 1) % carouselData.length; updateCarousel(); }
     function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }
     
-    function closeModal() {
-      document.getElementById('contactModal').classList.remove('active');
-    }
-
     function saveContact() { 
       const vCard = ['BEGIN:VCARD','VERSION:3.0','FN:Prince André Luís','N:Luís;André;Prince;;;','ORG:Advertising Infotech','TITLE:Creator > Decision Maker > Orchestrator','TEL;TYPE=CELL:+5562991599031','EMAIL:advertisingpropaganda@gmail.com','URL:https://advertisinginfotech.com.br','NOTE:Creating new worlds by recycling feelings.','END:VCARD'].join('\n'); 
       const blob = new Blob([vCard], {type:'text/vcard;charset=utf-8'}); 
       const url = URL.createObjectURL(blob); 
-      
-      const modal = document.getElementById('contactModal');
-      const vcardLink = document.getElementById('vcardLink');
-      
-      vcardLink.href = url;
-      vcardLink.download = 'Prince_Andre_Luis.vcf';
-      
-      modal.classList.add('active');
-      
-      // Try to open natively
-      window.location.href = url;
-      
+      window.open(url, '_blank'); 
       setTimeout(() => URL.revokeObjectURL(url), 10000); 
     }
   </script>

@@ -717,13 +717,13 @@
         </svg></a>
     </div>
 
-    <button class="cta-btn" onclick="saveContact()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+    <a id="vcardLink" class="cta-btn" style="text-decoration: none; text-align: center;" onclick="saveContact(); return false;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2">
         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
         <line x1="19" x2="19" y1="8" y2="14" />
         <line x1="22" x2="16" y1="11" y2="11" />
-      </svg>Guardar en Contactos</button>
+      </svg>Guardar en Contactos</a>
     <footer class="footer">
       <p>© 2026 | Príncipe André Luís | Todos los derechos reservados</p>
     </footer>
@@ -812,11 +812,10 @@
     function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }
     
     function saveContact() { 
-      const vCard = ['BEGIN:VCARD', 'VERSION:3.0', 'FN;CHARSET=UTF-8:Príncipe André Luís', 'N;CHARSET=UTF-8:Luís;André;Príncipe;;;', 'ORG;CHARSET=UTF-8:Advertising Infotech', 'TITLE;CHARSET=UTF-8:Creador > Decisor > Orquestrador', 'TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031', 'EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com', 'URL:https://advertisinginfotech.com.br', 'NOTE;CHARSET=UTF-8:Creando nuevos mundos reciclando sentimientos.', 'END:VCARD'].join('\n'); 
-      const blob = new Blob([vCard], { type: 'text/vcard;charset=utf-8' }); 
-      const url = URL.createObjectURL(blob); 
-      window.open(url, '_blank'); 
-      setTimeout(() => URL.revokeObjectURL(url), 10000); 
+      const vCard = 'BEGIN:VCARD\nVERSION:3.0\nFN;CHARSET=UTF-8:Príncipe André Luís\nN;CHARSET=UTF-8:Luís;André;Príncipe;;;\nORG;CHARSET=UTF-8:Advertising Infotech\nTITLE;CHARSET=UTF-8:Creador > Decisor > Orquestrador\nTEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031\nEMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com\nURL:https://advertisinginfotech.com.br\nNOTE;CHARSET=UTF-8:Creando nuevos mundos reciclando sentimientos.\nEND:VCARD';
+      const link = document.getElementById('vcardLink');
+      link.href = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vCard);
+      link.click();
     }
   </script>
 </body>

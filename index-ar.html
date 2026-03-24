@@ -248,11 +248,10 @@
       <a href="https://advertisinginfotech.com.br" class="action-btn" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></a>
     </div>
 
-    <button class="cta-btn" onclick="saveContact()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>حفظ في جهات الاتصال</button>
+    <a id="vcardLink" class="cta-btn" style="text-decoration: none; text-align: center;" onclick="saveContact(); return false;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>حفظ في جهات الاتصال</a>
     <footer class="footer"><p>© 2026 | الأمير أندريه لويس | جميع الحقوق محفوظة</p></footer>
   </main>
 
-  <script>
   <script>
     const carouselData = [
       { type: "video", src: "homenagem_em_video.mp4", badge: "دليل اجتماعي عالمي", title: 'مكرم من قبل نواب مجلس الشعب', desc: 'الجمعية التشريعية لولاية غوياس', tag: "تكريم مهيب" },
@@ -334,11 +333,10 @@
     function nextSlide() { currentIndex = (currentIndex + 1) % carouselData.length; updateCarousel(); }
     function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }
     function saveContact() { 
-      const vCard = ['BEGIN:VCARD','VERSION:3.0','FN;CHARSET=UTF-8:الأمير أندريه لويس','N;CHARSET=UTF-8:لويس;أندريه;أمير;;;','ORG;CHARSET=UTF-8:Advertising Infotech','TITLE;CHARSET=UTF-8:خالق > صانع قرار > منسק','TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031','EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com','URL:https://advertisinginfotech.com.br','NOTE;CHARSET=UTF-8:خلق عوالم جديدة عن طريق إعادة تدوير المشاعر.','END:VCARD'].join('\n'); 
-      const blob = new Blob([vCard], {type:'text/vcard;charset=utf-8'}); 
-      const url = URL.createObjectURL(blob); 
-      window.open(url, '_blank'); 
-      setTimeout(() => URL.revokeObjectURL(url), 10000); 
+      const vCard = 'BEGIN:VCARD\nVERSION:3.0\nFN;CHARSET=UTF-8:الأمير أندريه لويس\nN;CHARSET=UTF-8:لويس;أندريه;أمير;;;\nORG;CHARSET=UTF-8:Advertising Infotech\nTITLE;CHARSET=UTF-8:خالق > صانع قرار > منسק\nTEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031\nEMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com\nURL:https://advertisinginfotech.com.br\nNOTE;CHARSET=UTF-8:خلق عوالم جديدة عن طريق إعادة تدوير المشاعر.\nEND:VCARD';
+      const link = document.getElementById('vcardLink');
+      link.href = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vCard);
+      link.click();
     }
   </script>
 </body>

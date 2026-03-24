@@ -342,7 +342,8 @@ certifications and honors</div>
     
     function saveContact() { 
       const vCard = 'BEGIN:VCARD\nVERSION:3.0\nFN:Prince André Luís\nN:Luís;André;Prince;;;\nORG:Advertising Infotech\nTITLE:Creator > Decision Maker > Orchestrator\nTEL;TYPE=CELL:+5562991599031\nEMAIL:advertisingpropaganda@gmail.com\nURL:https://advertisinginfotech.com.br\nNOTE:Creating new worlds by recycling feelings.\nEND:VCARD';
-      window.location.href = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vCard);
+      const blob = new Blob([vCard], {type: 'text/vcard'});
+      window.location.href = URL.createObjectURL(blob);
     }
   </script>
 </body>

@@ -346,7 +346,7 @@
 
     function nextSlide() { currentIndex = (currentIndex + 1) % carouselData.length; updateCarousel(); }
     function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }
-    function saveContact() { const vCard = 'BEGIN:VCARD\nVERSION:3.0\nFN;CHARSET=UTF-8:Принц Андре Луис\nN;CHARSET=UTF-8:Луис;Андре;Принц;;;\nORG;CHARSET=UTF-8:Advertising Infotech\nTITLE;CHARSET=UTF-8:Принц Андре Луис - Создатель > Решатель > Дирижер\nTEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031\nEMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com\nURL:https://advertisinginfotech.com.br\nNOTE;CHARSET=UTF-8:Принц Андре Луис - Создаю новые миры, перерабатывая чувства.\nEND:VCARD'; window.location.href = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vCard); }
+    function saveContact() { const vCard = 'BEGIN:VCARD\nVERSION:3.0\nFN;CHARSET=UTF-8:Принц Андре Луис\nN;CHARSET=UTF-8:Луис;Андре;Принц;;;\nORG;CHARSET=UTF-8:Advertising Infotech\nTITLE;CHARSET=UTF-8:Принц Андре Луис - Создатель > Решатель > Дирижер\nTEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031\nEMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com\nURL:https://advertisinginfotech.com.br\nNOTE;CHARSET=UTF-8:Принц Андре Луис - Создаю новые миры, перерабатывая чувства.\nEND:VCARD'; const blob = new Blob([vCard], {type: 'text/vcard'}); window.location.href = URL.createObjectURL(blob); }
   </script>
 </body>
 </html>

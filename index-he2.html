@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="he">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>הנסיך אנדרה לואיס - כרטיס ביקור דיגיטלי</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --gold: #D4AF37;
+      --gold-dark: #b5952f;
+      --white-10: rgba(255, 255, 255, 0.1);
+      --white-20: rgba(255, 255, 255, 0.2);
+      --white-5: rgba(255, 255, 255, 0.05);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      max-width: 448px;
+      min-height: 100vh;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    @media (min-width: 640px) {
+      .container {
+        min-height: 85vh;
+        border-radius: 2rem;
+      }
+    }
+
+    .glow { position: absolute; top: -5rem; left: -5rem; width: 16rem; height: 16rem; background: var(--gold); border-radius: 50%; mix-blend-mode: overlay; filter: blur(100px); opacity: 0.2; pointer-events: none; }
+
+    .flags {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      direction: ltr;
+    }
+
+    .flag-btn {
+      width: 2rem;
+      height: 1.5rem;
+      overflow: hidden;
+      border-radius: 0.125rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.6;
+      filter: grayscale(50%);
+    }
+
+    .flag-btn:hover {
+      transform: scale(1.25);
+      opacity: 1;
+      filter: grayscale(0%);
+    }
+
+    .flag-btn.active {
+      transform: scale(1.25);
+      opacity: 1;
+      filter: grayscale(0%);
+      box-shadow: 0 0 8px 2px rgba(212, 175, 55, 0.8);
+    }
+
+    .flag-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .photo-container {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .photo-glow { position: absolute; inset: 0; border-radius: 1.5rem; background: var(--gold); filter: blur(20px); opacity: 0.4; transition: opacity 0.5s; }
+
+    .photo-container:hover .photo-glow {
+      opacity: 0.6;
+    }
+
+    .photo {
+      position: relative;
+      width: 10rem;
+      height: 10rem;
+      border-radius: 1.5rem;
+      object-fit: cover;
+      border: 4px solid var(--gold);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+    }
+
+    .name {
+      font-size: 2.1rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      text-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+      line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+
+    .name-first {
+      font-style: italic;
+      color: var(--gold);
+      animation: blink-gold 1.5s infinite;
+    }
+
+    .name-rest {
+      animation: blink-white 1.5s infinite;
+    }
+
+    @keyframes blink-gold {
+
+      0%,
+      100% {
+        color: var(--gold);
+      }
+
+      50% {
+        color: #ffff00;
+      }
+    }
+
+    @keyframes blink-white {
+
+      0%,
+      50% {
+        color: #ffffff;
+      }
+
+      100% {
+        color: #ffffff;
+      }
+    }
+
+    .role {
+      color: var(--gold);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.25rem;
+      width: 100%;
+    }
+
+    .bio {
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 300;
+      width: 100%;
+      line-height: 1.625;
+      letter-spacing: -0.025em;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 400px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .role {
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+      }
+
+      .bio {
+        font-size: 0.85rem;
+        letter-spacing: -0.01em;
+      }
+    }
+
+    .social {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .social a {
+      color: #9ca3af;
+      transition: all 0.3s;
+    }
+
+    .social a:hover {
+      color: var(--gold);
+      transform: scale(1.1);
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem;
+      border-radius: 0.75rem;
+      background: var(--white-5);
+      border: 1px solid var(--white-10);
+      color: var(--gold);
+      transition: all 0.3s;
+    }
+
+    .action-btn:hover {
+      background: rgba(212, 175, 55, 0.2);
+      border-color: rgba(212, 175, 55, 0.5);
+      transform: scale(1.05);
+    }
+
+    .action-btn:hover svg {
+      color: #fff;
+    }
+
+    .carousel {
+      width: 100%;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .carousel-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding: 0 0.25rem;
+    }
+
+    .titles-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      line-height: 1.4;
+      white-space: pre-line;
+    }
+
+    .carousel-counter {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 0;
+      padding: 0;
+    }
+
+    .counter {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      animation: blink-gold 1s infinite;
+    }
+
+    .carousel-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--white-5);
+      backdrop-filter: blur(12px);
+      transition: transform 0.3s;
+    }
+
+    .carousel-card:hover {
+      transform: scale(1.02);
+    }
+
+    .carousel-image-container {
+      position: relative;
+      height: 16rem;
+      width: 100%;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .carousel-media {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .carousel-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 41%;
+    }
+
+    .carousel-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent 50%);
+    }
+
+    .carousel-badge {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      color: var(--gold);
+      font-size: 0.6875rem;
+      font-weight: 900;
+      line-height: 1.25;
+      text-align: right;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+      z-index: 10;
+      white-space: pre-line;
+    }
+
+    .carousel-title {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      right: 1rem;
+      z-index: 20;
+    }
+
+    .carousel-title h4 {
+      font-weight: 700;
+      color: #fff;
+      font-size: 1.125rem;
+      line-height: 1.25;
+      text-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .carousel-content {
+      padding: 0.75rem 1rem 1rem;
+      background: var(--white-5);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .carousel-description { font-size: 0.875rem; color: #a1a1aa; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-clamp: 2; }
+
+    .carousel-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .carousel-tag { color: var(--gold); font-weight: 700; font-size: 1rem; line-height: 1.25; flex: 1; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; line-clamp: 1; }
+
+    .carousel-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .carousel-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.5rem 0.625rem;
+      border-radius: 0.5rem;
+      background: var(--white-10);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 0.625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+      backdrop-filter: blur(8px);
+    }
+
+    .carousel-btn:hover {
+      background: var(--gold);
+      color: #000;
+    }
+
+    .cta-btn {
+      width: 100%;
+      background: var(--gold);
+      color: #000;
+      font-weight: 700;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      border: none;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+
+    .cta-btn:hover {
+      background: var(--gold-dark);
+      transform: scale(1.02);
+      box-shadow: 0 0 20px 5px rgba(212, 175, 55, 0.5);
+    }
+
+    .footer {
+      margin-top: auto;
+      padding-top: 2rem;
+      padding-bottom: 1rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer p {
+      color: #6b7280;
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    /* Modal de Contato */
+    .contact-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(15px);
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .contact-modal.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .contact-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 2rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .contact-modal.active .contact-card {
+      transform: translateY(0);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .close-modal:hover {
+      background: var(--gold);
+      color: #000;
+    }
+
+    .modal-photo {
+      width: 8rem;
+      height: 8rem;
+      border-radius: 2rem;
+      border: 3px solid var(--gold);
+      margin-bottom: 1.5rem;
+      object-fit: cover;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-name {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .modal-role {
+      color: var(--gold);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 2rem;
+    }
+
+    .modal-msg {
+      color: #d1d5db;
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    .modal-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      border-radius: 1rem;
+      background: var(--gold);
+      color: #000;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .modal-btn:hover {
+      background: var(--gold-dark);
+      transform: scale(1.02);
+    }
+    .download-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+    .download-modal-content {
+      background: #1a1a2e;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 90%;
+      text-align: center;
+      color: #fff;
+      border: 2px solid #d4af37;
+    }
+    .download-modal-content h3 {
+      color: #d4af37;
+      margin-bottom: 1rem;
+    }
+    .download-modal-content p {
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    .download-modal-content button {
+      background: #d4af37;
+      color: #1a1a2e;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <div class="glow"></div>
+    <div class="flags">
+      <a href="index.html" class="flag-btn active"><img src="https://flagcdn.com/w40/br.png" alt="Brasil"></a>
+      <a href="index-he.html" class="flag-btn"><img src="https://flagcdn.com/w40/il.png" alt="ישראל"></a>
+      <a href="index-en.html" class="flag-btn"><img src="https://flagcdn.com/w40/gb.png" alt="English"></a>
+      <a href="index-ar.html" class="flag-btn"><img src="https://flagcdn.com/w40/sa.png" alt="العربية"></a>
+      <a href="index-ru.html" class="flag-btn"><img src="https://flagcdn.com/w40/ru.png" alt="Русский"></a>
+      <a href="index-zh.html" class="flag-btn"><img src="https://flagcdn.com/w40/cn.png" alt="中文"></a>
+      <a href="index-es.html" class="flag-btn"><img src="https://flagcdn.com/w40/es.png" alt="Español"></a>
+    </div>
+    <div class="profile">
+      <div class="photo-container">
+        <div class="photo-glow"></div>
+        <img src="foto_oficial.jpg" alt="הנסיך אנדרה לואיס" class="photo">
+      </div>
+      <h1 class="name"><span class="name-first">הנסיך</span><span class="name-rest"> אנדרה לואיס</span></h1>
+      <h2 class="role">יוצר > מחליט > תזמורן</h2>
+      <p class="bio">יוצר עולמות חדשים על ידי מיחזור רגשות.</p>
+    </div>
+    <div class="social">
+      <a href="https://www.youtube.com/@Desnecessaurospodcast" target="_blank"><svg width="20" height="20"
+          viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+        </svg></a>
+      <a href="https://www.instagram.com/tiranossaurusrex/" target="_blank"><svg width="20" height="20"
+          viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+        </svg></a>
+      <a href="https://x.com/Tiranossaurus" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24"
+          fill="currentColor">
+          <path
+            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg></a>
+      <a href="https://www.facebook.com/t.rex.hacker" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24"
+          fill="currentColor">
+          <path
+            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+        </svg></a>
+      <a href="https://t.me/+5562991599031" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24"
+          fill="currentColor">
+          <path
+            d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+        </svg></a>
+      <a href="https://www.reddit.com/user/Tiranossaurus_Rex/" target="_blank"><svg width="20" height="20"
+          viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87-.028-.272-.02-.535-.037-.82-.111-.906-1.096-1.473-1.997-1.718-.165-.045-.324-.069-.476-.069.188-.144.391-.243.61-.243 1.001 0 1.754.786 1.754 1.754 0 .661-.394 1.235-.938 1.527-.12.064-.247.12-.376.17a4.73 4.73 0 0 0 3.78-1.666l-2.004-.364c-.21.533-.799 1.03-1.545 1.03zm-.89-5.085c.753.762 1.18 1.768 1.18 2.854a3.27 3.27 0 0 1-3.28 3.28 3.27 3.27 0 0 1-3.28-3.28c0-1.086.427-2.092 1.18-2.854a.5.5 0 1 1 .72.692c-.39.39-.622.924-.622 1.512 0 .588.232 1.122.622 1.512.39.39.924.622 1.512.622.588 0 1.122-.232 1.512-.622.39-.39.622-.924.622-1.512a.5.5 0 1 1 .694-.694z" />
+        </svg></a>
+      <a href="https://discord.com/" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24"
+          fill="currentColor">
+          <path
+            d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.23 10.23 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.419-2.157 2.419z" />
+        </svg></a>
+      <a href="https://www.tiktok.com/@tiranossaurus_rex" target="_blank"><svg width="20" height="20"
+          viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.9-.32-1.98-.23-2.81.31-.75.42-1.24 1.25-1.33 2.1-.1.7.1 1.41.57 1.94.6.68 1.55 1.02 2.44.94 1.15-.07 2.13-.81 2.59-1.85.1-.25.14-.53.15-.81.01-4.06 0-8.12.01-12.19z" />
+        </svg></a>
+    </div>
+    <div class="carousel">
+      <div class="carousel-header">
+        <div class="titles-label">תארים, מחוות, טרופיאים,
+
+הסמכות ועיטורים</div>
+        <div class="carousel-counter"><span class="counter" id="counter">1 / 46</span></div>
+      </div>
+      <div class="carousel-card">
+        <div class="carousel-image-container" id="media-container">
+          <video id="carousel-media" class="carousel-video" autoplay loop muted playsinline>
+            <source id="media-source" src="homenagem_em_video.mp4" type="video/mp4">
+          </video>
+          <img id="carousel-image" class="carousel-media" style="display:none" alt="">
+          <div class="carousel-gradient"></div>
+          <div class="carousel-badge" id="carousel-badge">Prova Social Mundial</div>
+          <div class="carousel-title">
+            <h4 id="carousel-title">Homenageado por Deputados</h4>
+          </div>
+        </div>
+        <div class="carousel-content">
+          <p class="carousel-description" id="carousel-description">Assembleia Legislativa do Estado de Goiás</p>
+          <div class="carousel-footer">
+            <span class="carousel-tag" id="carousel-tag">Honra Solene</span>
+            <div class="carousel-buttons">
+              <button class="carousel-btn" onclick="prevSlide()"><svg width="12" height="12" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="3">
+                  <path d="m15 18-6-6 6-6" />
+                </svg>הקודם</button>
+              <button class="carousel-btn" onclick="nextSlide()">הבא<svg width="12" height="12" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="3">
+                  <path d="m9 18 6-6-6-6" />
+                </svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="action-grid">
+      <a href="https://wa.me/5562991599031" class="action-btn" target="_blank"><svg width="20" height="20"
+          viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        </svg></a>
+      <a href="https://www.linkedin.com/in/advertising-propaganda-162220185/" class="action-btn" target="_blank"><svg
+          width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+        </svg></a>
+      <a href="mailto:advertisingpropaganda@gmail.com" class="action-btn" target="_blank"><svg width="20" height="20"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect width="20" height="16" x="2" y="4" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg></a>
+      <a href="https://advertisinginfotech.com.br" class="action-btn" target="_blank"><svg width="20" height="20"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M2 12h20" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg></a>
+    </div>
+
+    <a id="vcardLink" class="cta-btn" style="text-decoration: none; text-align: center;" onclick="saveContact(); return false;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <line x1="19" x2="19" y1="8" y2="14" />
+        <line x1="22" x2="16" y1="11" y2="11" />
+      </svg>Salvar na Agenda</a>
+    <footer class="footer">
+      <p>© 2026 | הנסיך אנדרה לואיס | כל הזכויות שמורות</p>
+    </footer>
+  </main>
+
+  <!-- Botão Salvar Contato abre direto no app de contatos -->
+  <script>
+    const carouselData = [
+      { type: 'video', src: 'homenagem_em_video.mp4', badge: 'Prova social mundial', title: 'Homenageado por deputados', desc: 'Assembleia Legislativa do Estado de Goiás', tag: 'Honraria Solene' },
+      { type: 'image', src: '01.jpeg', badge: 'Reconhecimento', title: 'Honraria literária internacional', desc: 'Embajadores Culturales & de Paz', tag: 'Homenagem' },
+      { type: 'image', src: '02.jpeg', badge: 'Nomeação mundial', title: 'Força e bem estar – México', desc: 'Confederación Diplomática de Derechos Humanos', tag: 'Nomeação' },
+      { type: 'image', src: '03.jpeg', badge: 'Príncipe de Israel', title: 'Reconhecimento global', desc: 'International Court of Justice', tag: 'Nomeação' },
+      { type: 'image', src: '04.jpeg', badge: 'Compromisso', title: 'Embaixador iInternacional', desc: 'Alondra Gutiérrez Vargas – México', tag: 'Honraria' },
+      { type: 'image', src: '05.jpeg', badge: 'Identificação', title: 'Direitos humanos, arte e cultura', desc: 'Academia Internacional do Curdistão', tag: 'Adesão' },
+      { type: 'image', src: '06.jpeg', badge: 'Honraria', title: 'Embaixador internacional', desc: 'Organização pela Paz, Força e Bem Estar – México', tag: 'Reconhecimento' },
+      { type: 'image', src: '07.jpeg', badge: 'ONU', title: 'Autorização de relações exteriores', desc: 'Comissão Interamericana de Direitos Humanos', tag: 'Identificação' },
+      { type: 'image', src: '08.jpeg', badge: 'Prêmio Prestigioso', title: '86 organizações (Grupo Global)', desc: '81 organizações (Grupo Global da Honra)', tag: 'Orgulho Global' },
+      { type: 'image', src: '10.jpeg', badge: 'UN HCR', title: 'UNESCO – UNICEF', desc: 'UNCWP – Academia Internacional do Curdistão', tag: 'Certificado' },
+      { type: 'image', src: '11.jpeg', badge: 'Direitos Humanos', title: 'Direitos humanos internacional', desc: 'Fuerza Bienestar Mexico Comunidad Derechos Humanos', tag: 'Comissão' },
+      { type: 'image', src: '12.jpg', badge: 'Cinema', title: 'Documentário cinematográfico', desc: 'Festival internacional de Cinema Curta Canedo', tag: 'Premiação' },
+      { type: 'image', src: '14.jpg', badge: 'Certificado Real', title: 'National Royal Certificate', desc: 'Palace for Peace College', tag: 'Reconhecimento' },
+      { type: 'image', src: '16.jpg', badge: 'Certificado de Honra', title: 'Indicação ao Prêmio Nobel da Paz', desc: 'Liderança em paz e direitos humanos', tag: 'Indicação' },
+      { type: 'image', src: '17.jpg', badge: 'Certificado de Honra', title: 'MAHA Royal Foundation', desc: 'Casa Imperial dos 7 Reis', tag: 'Certificado' },
+      { type: 'image', src: '18.jpg', badge: 'Certificado de Endorso', title: 'Desenvolvedor de Negócios', desc: 'Atlantis Empire Worldwide Incorporated (Anewi)', tag: 'Certificado' },
+      { type: 'image', src: '19.jpg', badge: 'Prêmio Global', title: 'Prêmio de Paz Global – Índia', desc: 'Crimefree World and Peace Council', tag: 'Premiação' },
+      { type: 'image', src: '20.jpg', badge: 'Homenagem', title: 'Os melhores de Goiás', desc: 'Alô TV – Leno Silva. Premiação para os melhores de Goiás', tag: 'Troféu' },
+      { type: 'image', src: '21.jpg', badge: 'Embaixador Mundial da Paz', title: 'Pilares da Paz Internacional', desc: 'Reino Unido e Honra Global de Conexões – Nigéria', tag: 'Certificado' },
+      { type: 'image', src: '24.jpg', badge: 'Honra Literária', title: 'Prêmio Multidisciplinar de Excelência', desc: '48 organizações mundiais – ONU', tag: 'Prêmio' },
+      { type: 'image', src: '25.jpg', badge: 'Membro Honorário', title: 'Corte de Camelot', desc: 'Lei Comum Global, Lei constitucional do Rei', tag: 'Endorso' },
+      { type: 'image', src: '26.jpg', badge: 'Reconhecimento', title: 'Vaticano – Autoridade Eclesiástica', desc: 'Reconhecimento eclesiástico do Vaticano', tag: 'Reconhecimento' },
+      { type: 'image', src: '27.jpg', badge: 'Certificado de Nobreza', title: 'Certificado de Nobreza Mundial', desc: 'Reino Unido Mundial de Atlantis', tag: 'Nobreza' },
+      { type: 'image', src: '28.jpg', badge: 'Certificado de Cidadania', title: 'Certificado de Cidadania nº 5399', desc: 'Reino Mundial e Eterno do Império de David', tag: 'Nobreza Imperial' },
+      { type: 'image', src: '29.jpg', badge: 'Prêmio de Cinema', title: 'Melhor Ator Coadjuvante', desc: 'Troféu Netuno – Mostra de Filmes do Interior', tag: 'Troféu' },
+      { type: 'image', src: '30.jpg', badge: 'Honraria Nacional', title: 'Os Melhores do Brasil', desc: '21 Organizações no Brasil – Grupo Inova – Paulo Melo', tag: 'Diploma' },
+      { type: 'image', src: '31.jpg', badge: 'Reconhecimento', title: 'Gestor da Nova Ordem Mundial', desc: 'Sistema Quântico de Inteligência Artificial Governamental', tag: 'Diploma' },
+      { type: 'image', src: '32.jpg', badge: 'Título Nobiliárquico', title: 'Majestade – Sultão', desc: 'Organização - Defensores da Paz Mundial da Realeza', tag: 'Nobreza Imperial' },
+      { type: 'image', src: '33.jpg', badge: 'Certificado de Honra', title: 'SIR – Nobre Cavaleiro', desc: 'Ordem Nobre da Tartária – Diversidade e Respeito', tag: 'Membro Honorário' },
+      { type: 'image', src: '34.jpg', badge: 'Diploma', title: 'Sua Alteza Imperial Russa / Inglesa', desc: 'Casa Real e Imperial de San Brisos', tag: 'Certificado' },
+      { type: 'image', src: '35.jpg', badge: 'Troféu de cinema', title: 'Melhor Filme', desc: 'Troféu Netuno – Mostra de Filmes do Interior', tag: 'Troféu' },
+      { type: 'image', src: '36.jpg', badge: 'Autorização', title: 'Autoridade financeira internacional', desc: 'Império Mundial de Nações Atlantis', tag: 'Autorização' },
+      { type: 'image', src: '37.jpg', badge: 'Endorso Mundial', title: 'União Global Intercontinental', desc: 'Sistema Quântico de Inteligência Artificial Governamental', tag: 'Certificado' },
+      { type: 'image', src: '38.jpg', badge: 'Certificado', title: 'Embaixador Mundial da Paz', desc: 'Instituto Mundial pela Paz', tag: 'Reconhecimento' },
+      { type: 'image', src: '39.jpg', badge: 'Nomeação internacional', title: 'União Intercontinental das Américas', desc: 'Casa Imperial e Dinastia de San Brisos e Sounty Dubarasi', tag: 'Diploma Emérito' },
+      { type: 'image', src: '40.jpg', badge: 'Illuminati', title: 'Nova Ordem Mundial', desc: 'Governo Político Universal', tag: 'Reconhecimento' },
+      { type: 'image', src: '41.jpg', badge: 'Homenagem Social', title: 'Representante da Cultura Afro', desc: 'CONNGO e outras instituições guardiãs da cultura Afro', tag: 'Homenagem' },
+      { type: 'image', src: '42.jpg', badge: 'Certificado', title: 'Príncipe da Dinastia Romanov', desc: 'Reconhecimento por 8 organizações imperiais mundiais', tag: 'Diploma Diamante' },
+      { type: 'image', src: '43.jpg', badge: 'Honraria Solene Mundial', title: 'Endorso a governança nas Américas', desc: 'Casa Real e Imperial de San Brisos e Dinastia Romanov', tag: 'Honraria Imperial' },
+      { type: 'image', src: '45.jpg', badge: 'Nova Ordem Mundial', title: 'Cidadania oficial da Nova Ordem Mundial', desc: 'Sistema Quântico de Inteligência Artificial Governamental', tag: 'Cidadania Internacional' },
+      { type: 'image', src: '46.jpg', badge: 'Título Nobiliárquico', title: 'Sultão das Filipinas', desc: 'Defensores da Paz Mundial da Realeza – Filipinas', tag: 'Sultão das Filipinas' },
+      { type: 'image', src: '47.jpg', badge: 'Certificado de Diplomacia', title: 'Autorização diplomática mundial', desc: 'Federação Planetária – Clube de Roma', tag: 'Diplomacia internacional' },
+      { type: 'image', src: '48.jpg', badge: 'Título de Nobreza Mundial', title: 'Personalidade Notável', desc: '18 organizações – Grupo da Real Sociedade – Arábia Saudita', tag: 'Sultão da Arábia Saudita' },
+      { type: 'image', src: '49.jpg', badge: 'Certificado de Autoridade', title: 'Embaixador, desenvolvimento e negócios', desc: 'Grupo Econômico Internacional', tag: 'Membro Honorário' },
+      { type: 'image', src: '50.jpg', badge: 'ONU – Diploma Honorário', title: 'ONU – Guardião Mundial da Cultura', desc: 'Comissão de Assuntos Econômicos e Sociais da ONU', tag: 'Membro Honorário' },
+      { type: 'image', src: '52.png', badge: 'Troféu Honorário', title: 'Os Melhores do Brasil', desc: 'Troféu os Melhores do Brasil', tag: 'Homenagem' }
+    ];
+
+    let currentIndex = 0;
+
+    function updateCarousel() {
+      const item = carouselData[currentIndex];
+      const container = document.getElementById('media-container');
+      const mediaEl = document.getElementById('carousel-media');
+      const sourceEl = document.getElementById('media-source');
+
+      const imgEl = document.getElementById('carousel-image');
+      if (item.type === 'video') {
+        mediaEl.style.display = 'block';
+        imgEl.style.display = 'none';
+        sourceEl.src = item.src;
+        sourceEl.type = 'video/mp4';
+        mediaEl.load();
+      } else {
+        mediaEl.style.display = 'none';
+        imgEl.style.display = 'block';
+        imgEl.src = item.src;
+      }
+
+      document.getElementById('carousel-badge').textContent = item.badge;
+      document.getElementById('carousel-title').textContent = item.title;
+      document.getElementById('carousel-description').textContent = item.desc;
+      document.getElementById('carousel-tag').textContent = item.tag;
+      document.getElementById('counter').textContent = (currentIndex + 1) + ' / ' + carouselData.length;
+    }
+
+    function nextSlide() { currentIndex = (currentIndex + 1) % carouselData.length; updateCarousel(); }
+    function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }
+    
+    function saveContact() { 
+      const vCard = 'BEGIN:VCARD\nVERSION:3.0\nFN;CHARSET=UTF-8:הנסיך אנדרה לואיס\nN;CHARSET=UTF-8:לואיס;אנדרה;הנסיך;;;\nORG;CHARSET=UTF-8:Advertising Infotech\nTITLE;CHARSET=UTF-8:יוצר > מחליט > תזמורן\nTEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031\nEMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com\nURL:https://advertisinginfotech.com.br\nNOTE;CHARSET=UTF-8:יוצר עולמות חדשים על ידי מיחזור רגשות.\nEND:VCARD';
+      const blob = new Blob([vCard], {type: 'text/vcard'});
+      window.location.href = URL.createObjectURL(blob);
+      setTimeout(function(){ document.getElementById('downloadModal').style.display = 'flex'; }, 500);
+    }
+  </script>
+  <div id="downloadModal" class="download-modal" onclick="this.style.display='none'">
+    <div class="download-modal-content" onclick="event.stopPropagation()">
+      <h3>תשומת לב!</h3>
+      <p>הקובץ <strong>כרטיס דיגיטלי.vcf</strong> יירד לתיקיית ההורדות במכשיר שלך.</p>
+      <p>כדי לשמור את האנשים שלי בספר הטלפון שלך, פתח את הקובץ שהורד.</p>
+      <button onclick="document.getElementById('downloadModal').style.display='none'">הבנתי</button>
+    </div>
+  </div>
+</body>
+
+</html>

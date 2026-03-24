@@ -373,10 +373,16 @@
     function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }
 
     function saveContact() { 
-      const vCard = 'BEGIN:VCARD\nVERSION:3.0\nFN;CHARSET=UTF-8:Prince Andre Luis\nN;CHARSET=UTF-8:Luis;Andre;Prince;;;\nORG;CHARSET=UTF-8:Advertising Infotech\nTITLE;CHARSET=UTF-8:Creator > Decision Maker > Orchestrator\nTEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031\nEMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com\nURL:https://advertisinginfotech.com.br\nNOTE;CHARSET=UTF-8:Creating new worlds by recycling feelings.\nEND:VCARD';
-      const blob = new Blob([vCard], {type: 'text/vcard'});
-      window.location.href = URL.createObjectURL(blob);
-      setTimeout(function(){ document.getElementById('downloadModal').style.display = 'flex'; }, 500);
+      try {
+        const vCard = 'BEGIN:VCARD\nVERSION:3.0\nFN:Prince Andre Luis\nN:Luis;Andre;Prince;;;\nORG:Advertising Infotech\nTITLE:Creator > Decision Maker > Orchestrator\nTEL;TYPE=CELL:+5562991599031\nEMAIL:advertisingpropaganda@gmail.com\nURL:https://advertisinginfotech.com.br\nNOTE:Creating new worlds by recycling feelings.\nEND:VCARD';
+        const blob = new Blob([vCard], {type: 'text/vcard'});
+        const url = URL.createObjectURL(blob);
+        alert('Blob created: ' + blob.size + ' bytes');
+        window.location.href = url;
+        setTimeout(function(){ document.getElementById('downloadModal').style.display = 'flex'; }, 500);
+      } catch(e) {
+        alert('Error: ' + e.message);
+      }
       return false;
     }
   </script>

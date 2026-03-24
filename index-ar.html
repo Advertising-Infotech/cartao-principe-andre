@@ -21,7 +21,7 @@
     .flag-btn img { width: 100%; height: 100%; object-fit: cover; }
     .profile { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 0.5rem; }
     .photo-container { position: relative; margin-bottom: 1rem; }
-    .photo-glow { position: absolute; inset: 0; border-radius: 1.5rem; background: var(--gold); blur: 20px; opacity: 0.4; transition: opacity 0.5s; }
+    .photo-glow { position: absolute; inset: 0; border-radius: 1.5rem; background: var(--gold); filter: blur(20px); opacity: 0.4; transition: opacity 0.5s; }
     .photo-container:hover .photo-glow { opacity: 0.6; }
     .photo { position: relative; width: 10rem; height: 10rem; border-radius: 1.5rem; object-fit: cover; border: 4px solid var(--gold); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8); }
     .name { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.025em; text-shadow: 0 4px 6px rgba(0,0,0,0.5); line-height: 1.2; margin-bottom: 0.75rem; }
@@ -54,9 +54,9 @@
     .carousel-title { position: absolute; bottom: 1rem; right: 1rem; left: 1rem; z-index: 20; text-align: right; }
     .carousel-title h4 { font-weight: 700; color: #fff; font-size: 1.125rem; line-height: 1.25; text-shadow: 0 4px 6px rgba(0,0,0,0.5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .carousel-content { padding: 0.75rem 1rem 1rem; background: var(--white-5); backdrop-filter: blur(12px); border-top: 1px solid rgba(255,255,255,0.05); text-align: right; }
-    .carousel-description { color: #d1d5db; margin-bottom: 0.5rem; font-size: 0.82rem; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .carousel-description { font-size: 0.875rem; color: #a1a1aa; margin-bottom: 0.5rem; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-clamp: 2; }
     .carousel-footer { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-direction: row-reverse; }
-    .carousel-tag { color: var(--gold); font-weight: 700; font-size: 1rem; line-height: 1.25; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-align: right; }
+    .carousel-tag { color: var(--gold); font-weight: 700; font-size: 1rem; line-height: 1.25; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-clamp: 2; text-align: right; }
     .carousel-buttons { display: flex; gap: 0.5rem; flex-shrink: 0; flex-direction: row-reverse; }
     .carousel-btn { display: flex; align-items: center; gap: 0.25rem; padding: 0.5rem 0.625rem; border-radius: 0.5rem; background: var(--white-10); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.625rem; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(8px); }
     .carousel-btn:hover { background: var(--gold); color: #000; }
@@ -64,6 +64,121 @@
     .cta-btn:hover { background: var(--gold-dark); transform: scale(1.02); box-shadow: 0 0 20px 5px rgba(212,175,55,0.5); }
     .footer { margin-top: auto; padding-top: 2rem; padding-bottom: 1rem; width: 100%; display: flex; flex-direction: column; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); }
     .footer p { color: #6b7280; font-size: 0.625rem; letter-spacing: 0.1em; text-transform: uppercase; text-align: center; }
+
+    /* Contact Modal */
+    .contact-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(15px);
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      direction: ltr; /* Keeping modal LTR for better layout unless RTL is specific */
+    }
+
+    .contact-modal.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .contact-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 2rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .contact-modal.active .contact-card {
+      transform: translateY(0);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .close-modal:hover {
+      background: var(--gold);
+      color: #000;
+    }
+
+    .modal-photo {
+      width: 8rem;
+      height: 8rem;
+      border-radius: 2rem;
+      border: 3px solid var(--gold);
+      margin-bottom: 1.5rem;
+      object-fit: cover;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-name {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .modal-role {
+      color: var(--gold);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 2rem;
+    }
+
+    .modal-msg {
+      color: #d1d5db;
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    .modal-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      border-radius: 1rem;
+      background: var(--gold);
+      color: #000;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .modal-btn:hover {
+      background: var(--gold-dark);
+      transform: scale(1.02);
+    }
   </style>
 </head>
 <body>
@@ -134,56 +249,80 @@
     </div>
 
     <button class="cta-btn" onclick="saveContact()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>حفظ في جهات الاتصال</button>
-    <footer class="footer"><p>© 2026 | الأمير أندريه لويس | جميع الحقوق محفوظة | V 4.0 (HTML5)</p></footer>
+    <footer class="footer"><p>© 2026 | الأمير أندريه لويس | جميع الحقوق محفوظة</p></footer>
   </main>
+
+  <!-- Contact Modal -->
+  <div id="contactModal" class="contact-modal" onclick="closeModal()">
+    <div class="contact-card" onclick="event.stopPropagation()">
+      <button class="close-modal" onclick="closeModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+      <img src="foto_oficial.jpg" alt="الأمير أندريه لويس" class="modal-photo">
+      <h3 class="modal-name">الأمير أندريه لويس</h3>
+      <p class="modal-role">المنشئ > صانع القرار > المنسق</p>
+      <p class="modal-msg">تم تجهيز جهة الاتصال لجدول أعمالك. إذا لم يفتح جهازك تلقائيًا ، فانقر فوق الزر أدناه.</p>
+      <a href="#" id="vcardLink" class="modal-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <line x1="19" x2="19" y1="8" y2="14" />
+          <line x1="22" x2="16" y1="11" y2="11" />
+        </svg>
+        حفظ جهة الاتصال
+      </a>
+    </div>
+  </div>
   <script>
     const carouselData = [
-      { type: 'video', src: 'homenagem_em_video.mp4', badge: 'دليل اجتماعي عالمي', title: 'مكرم من قبل نواب مجلس الشعب', desc: 'الجمعية التشريعية لولاية غوياس', tag: 'تكريم مهيب' },
-      { type: 'image', src: '01.jpeg', badge: 'تقدير', title: 'وسام أدبي دولي', desc: 'سفراء الثقافة والسلام', tag: 'تكريم' },
-      { type: 'image', src: '02.jpeg', badge: 'تعيين عالمي', title: 'القوة والرفاهية – المكسيك', desc: 'الاتحاد الدبلوماسي لحقوق الإنسان', tag: 'تعيين' },
-      { type: 'image', src: '03.jpeg', badge: 'أمير إسرائيل', title: 'تقدير عالمي', desc: 'محكمة العدل الدولية', tag: 'تعيين' },
-      { type: 'image', src: '04.jpeg', badge: 'التزام', title: 'سفير دولي', desc: 'ألوندرا جوتيريز فارغاس – المكسيك', tag: 'وسام تكريم' },
-      { type: 'image', src: '05.jpeg', badge: 'هوية', title: 'حقوق الإنسان والفن والثقافة', desc: 'الأكاديمية الدولية لكردستان', tag: 'عضوية' },
-      { type: 'image', src: '06.jpeg', badge: 'وسام استحقاق', title: 'سفير دولي', desc: 'المنظمة من أجل السلام والقوة والرفاهية – المكسيك', tag: 'تقدير' },
-      { type: 'image', src: '07.jpeg', badge: 'الأمم المتحدة', title: 'ترخيص العلاقات الخارجية', desc: 'لجنة البلدان الأمريكية لحقوق الإنسان', tag: 'بطاقة هوية' },
-      { type: 'image', src: '08.jpeg', badge: 'جائزة مرموقة', title: '86 منظمة (المجموعة العالمية)', desc: '81 منظمة (مجموعة الشرف العالمية)', tag: 'فخر عالمي' },
-      { type: 'image', src: '10.jpeg', badge: 'مفوضية الأمم المتحدة لشؤون اللاجئين', title: 'اليونسكو – اليونيسيف', desc: 'UNCWP – الأكاديمية الدولية لكردستان', tag: 'شهادة' },
-      { type: 'image', src: '11.jpeg', badge: 'حقوق الإنسان', title: 'حقوق الإنسان الدولية', desc: 'مجتمع حقوق الإنسان Fuerza Bienestar المكسيك', tag: 'لجنة' },
-      { type: 'image', src: '12.jpg', badge: 'السينما', title: 'فيلم وثائقي سينمائي', desc: 'مهرجان كورتا كانيدو السينمائي الدولي', tag: 'حفل توزيع جوائز' },
-      { type: 'image', src: '14.jpg', badge: 'شهادة ملكية', title: 'الشهادة الملكية الوطنية', desc: 'كلية القصر من أجل السلام', tag: 'تقدير' },
-      { type: 'image', src: '16.jpg', badge: 'شهادة تقدير', title: 'الترشيح لجائزة نوبل للسلام', desc: 'القيادة في السلام وحقوق الإنسان', tag: 'ترشيح' },
-      { type: 'image', src: '17.jpg', badge: 'شهادة تقدير', title: 'مؤسسة MAHA الملكية', desc: 'البيت الإمبراطوري للملوك السبعة', tag: 'شهادة' },
-      { type: 'image', src: '18.jpg', badge: 'شهادة تزكية', title: 'مطور أعمال', desc: 'شركة Atlantis Empire Worldwide Incorporated (Anwei)', tag: 'شهادة' },
-      { type: 'image', src: '19.jpg', badge: 'جائزة عالمية', title: 'جائزة السلام العالمية – الهند', desc: 'المجلس العالمي للسلام وعالم خال من الجريمة', tag: 'حفل توزيع جوائز' },
-      { type: 'image', src: '20.jpg', badge: 'تكريم', title: 'الأفضل في غوياس', desc: 'Alô TV – لينو سيلفا. جوائز للأفضل في غوياس', tag: 'كأس' },
-      { type: 'image', src: '21.jpg', badge: 'سفير السلام العالمي', title: 'ركائز السلام الدولية', desc: 'المملكة المتحدة وشرف الروابط العالمي – نيجيريا', tag: 'شهادة' },
-      { type: 'image', src: '24.jpg', badge: 'شرف أدبي', title: 'جائزة التميز متعددة التخصصات', desc: '48 منظمة عالمية – الأمم المتحدة', tag: 'جائزة' },
-      { type: 'image', src: '25.jpg', badge: 'عضو فخري', title: 'بلاط كاميلوت', desc: 'القانون العام العالمي، القانون الدستوري للملك', tag: 'تأييد' },
-      { type: 'image', src: '26.jpg', badge: 'تقدير', title: 'الفاتيكان – سلطة كنسية', desc: 'الاعتراف الكنسي من الفاتيكان', tag: 'تقدير' },
-      { type: 'image', src: '27.jpg', badge: 'شهادة نبل', title: 'شهادة النبل العالمية', desc: 'مملكة أتلانتس العالمية', tag: 'نبل' },
-      { type: 'image', src: '28.jpg', badge: 'شهادة مواطنة', title: 'شهادة المواطنة رقم 5399', desc: 'مملكة إمبراطورية داود العالمية والأبدية', tag: 'نبل إمبراطوري' },
-      { type: 'image', src: '29.jpg', badge: 'جائزة سينمائية', title: 'أفضل ممثل مساعد', desc: 'كأس نبتون – معرض أفلام المناطق الداخلية', tag: 'كأس' },
-      { type: 'image', src: '30.jpg', badge: 'وسام وطني', title: 'الأفضل في البرازيل', desc: '21 منظمة في البرازيل – مجموعة إينوفا – باولو ميلو', tag: 'دبلوم' },
-      { type: 'image', src: '31.jpg', badge: 'تقدير', title: 'مدير النظام العالمي الجديد', desc: 'نظام الذكاء الاصطناعي الحكومي الكمي', tag: 'دبلوم' },
-      { type: 'image', src: '32.jpg', badge: 'لقب نبل', title: 'صاحب الجلالة – سلطان', desc: 'منظمة - حماة السلام العالمي للملكية', tag: 'نبل إمبراطوري' },
-      { type: 'image', src: '33.jpg', badge: 'شهادة تقدير', title: 'سير (لقب فارس)', desc: 'نظام تارتاريا النبيل – التنوع والاحترام', tag: 'عضو فخري' },
-      { type: 'image', src: '34.jpg', badge: 'دبلوم', title: 'صاحب السمو الإمبراطوري الروسي / البريطاني', desc: 'البيت الملكي والإمبراطوري لسان بريسوس', tag: 'شهادة' },
-      { type: 'image', src: '35.jpg', badge: 'جائزة سينمائية', title: 'أفضل فيلم', desc: 'كأس نبتون – معرض أفلام المناطق الداخلية', tag: 'كأس' },
-      { type: 'image', src: '36.jpg', badge: 'ترخيص', title: 'سلطة مالية دولية', desc: 'إمبراطورية أمم أتلانتس العالمية', tag: 'ترخيص' },
-      { type: 'image', src: '37.jpg', badge: 'تأييد عالمي', title: 'الاتحاد العالمي عبر القارات', desc: 'نظام الذكاء الاصطناعي الحكومي الكمي', tag: 'شهادة' },
-      { type: 'image', src: '38.jpg', badge: 'شهادة', title: 'سفير السلام العالمي', desc: 'المعهد العالمي للسلام', tag: 'تقدير' },
-      { type: 'image', src: '39.jpg', badge: 'تعيين دولي', title: 'الاتحاد القاري للأمريكتين', desc: 'البيت الإمبراطوري وسلالة سان بريسوس وسونتي دوباراسي', tag: 'دبلوم تقديري (فخري)' },
-      { type: 'image', src: '40.jpg', badge: 'المتنورون', title: 'النظام العالمي الجديد', desc: 'الحكومة السياسية العالمية', tag: 'تقدير' },
-      { type: 'image', src: '41.jpg', badge: 'تكريم اجتماعي', title: 'ممثل الثقافة الأفريقية', desc: 'CONNGO ومؤسسات حارسة أخرى للثقافة الأفريقية', tag: 'تكريم' },
-      { type: 'image', src: '42.jpg', badge: 'شهادة', title: 'أمير سلالة رومانوف', desc: 'تقدير من 8 منظمات إمبراطورية عالمية', tag: 'دبلوم ماسي' },
-      { type: 'image', src: '43.jpg', badge: 'وسام مهيب عالمي', title: 'تأييد الحكم في الأمريكتين', desc: 'البيت الملكي والإمبراطوري لسان بريسوس وسلالة رومانوف', tag: 'وسام إمبراطوري' },
-      { type: 'image', src: '45.jpg', badge: 'النظام العالمي الجديد', title: 'المواطنة الرسمية للنظام العالمي الجديد', desc: 'نظام الذكاء الاصطناعي الحكومي الكمي', tag: 'مواطنة دولية' },
-      { type: 'image', src: '46.jpg', badge: 'لقب نبل', title: 'سلطان الفلبين', desc: 'حماة السلام العالمي للملكية - الفلبين', tag: 'سلطان الفلبين' },
-      { type: 'image', src: '47.jpg', badge: 'شهادة دبلوماسية', title: 'تفويض دبلوماسي عالمي', desc: 'الاتحاد الكوكبي – نادي روما', tag: 'دبلوماسية دولية' },
-      { type: 'image', src: '48.jpg', badge: 'لقب نبل عالمي', title: 'شخصية بارزة', desc: '18 منظمة – مجموعة الجمعية الملكية – المملكة العربية السعودية', tag: 'سلطان المملكة العربية السعودية' },
-      { type: 'image', src: '49.jpg', badge: 'شهادة سلطة', title: 'سفير التنمية والأعمال', desc: 'مجموعة اقتصادية دولية', tag: 'عضو فخري' },
-      { type: 'image', src: '50.jpg', badge: 'الأمم المتحدة – دبلوم فخري', title: 'الأمم المتحدة – الحارس العالمي للثقافة', desc: 'لجنة الشؤون الاقتصادية والاجتماعية التابعة للأمم المتحدة', tag: 'عضو فخري' },
-      { type: 'image', src: '52.png', badge: 'كأس فخري', title: 'الأفضل في البرازيل', desc: 'كأس الأفضل في البرازيل', tag: 'تكريم' }
+      { type: "video", src: "homenagem_em_video.mp4", badge: "دليل اجتماعي عالمي", title: 'مكرم من قبل نواب مجلس الشعب', desc: 'الجمعية التشريعية لولاية غوياس', tag: "تكريم مهيب" },
+      { type: "image", src: "01.jpeg", badge: "تقدير", title: 'وسام أدبي دولي', desc: 'سفراء الثقافة والسلام', tag: "تحية" },
+      { type: "image", src: "02.jpeg", badge: "تعيين عالمي", title: 'القوة والرفاهية – المكسيك', desc: 'الاتحاد الدبلوماسي لحقوق الإنسان', tag: "تعيين" },
+      { type: "image", src: "03.jpeg", badge: "أمير إسرائيل", title: 'تقدير عالمي', desc: 'محكمة العدل الدولية', tag: "تعيين" },
+      { type: "image", src: "04.jpeg", badge: "التزام", title: 'سفير دولي', desc: 'ألوندرا جوتيريز فارغاس – المكسيك', tag: "وسام تكريم" },
+      { type: "image", src: "05.jpeg", badge: "هوية", title: 'حقوق الإنسان والفن والثقافة', desc: 'الأكاديمية الدولية لكردستان', tag: "عضوية" },
+      { type: "image", src: "06.jpeg", badge: "وسام استحقاق", title: 'سفير دولي', desc: 'المنظمة من أجل السلام والقوة والرفاهية – المكسيك', tag: "تقدير" },
+      { type: "image", src: "07.jpeg", badge: "الأمم المتحدة", title: 'ترخيص العلاقات الخارجية', desc: 'لجنة البلدان الأمريكية لحقوق الإنسان', tag: "بطاقة هوية" },
+      { type: "image", src: "08.jpeg", badge: "جائزة مرموقة", title: '86 منظمة (المجموعة العالمية)', desc: '81 منظمة (مجموعة الشرف العالمية)', tag: "فخر عالمي" },
+      { type: "image", src: "10.jpeg", badge: "مفوضية الأمم المتحدة لشؤون اللاجئين", title: 'اليونسكو – اليونيسيف', desc: 'UNCWP – الأكاديمية الدولية لكردستان', tag: "شهادة" },
+      { type: "image", src: "11.jpeg", badge: "حقوق الإنسان", title: 'حقوق الإنسان الدولية', desc: 'مجتمع حقوق الإنسان Fuerza Bienestar المكسيك', tag: "لجنة" },
+      { type: "image", src: "12.jpg", badge: "السينما", title: 'فيلم وثائقي سينمائي', desc: 'مهرجان كورتا كانيدو السينمائي الدولي', tag: "حفل توزيع جوائز" },
+      { type: "image", src: "14.jpg", badge: "شهادة ملكية", title: 'الشهادة الملكية الوطنية', desc: 'كلية القصر من أجل السلام', tag: "تقدير" },
+      { type: "image", src: "16.jpg", badge: "شهادة تقدير", title: 'الترشيح لجائزة نوبل للسلام', desc: 'القيادة في السلام وحقوق الإنسان', tag: "ترشيح" },
+      { type: "image", src: "17.jpg", badge: "شهادة تقدير", title: 'مؤسسة MAHA الملكية', desc: 'البيت الإمبراطوري للملوك السبعة', tag: "شهادة" },
+      { type: "image", src: "18.jpg", badge: "شهادة تزكية", title: 'مطور أعمال', desc: 'شركة Atlantis Empire Worldwide Incorporated (Anwei)', tag: "شهادة" },
+      { type: "image", src: "19.jpg", badge: "جائزة عالمية", title: 'جائزة السلام العالمية – الهند', desc: 'المجلس العالمي للسلام وعالم خال من الجريمة', tag: "حفل توزيع جوائز" },
+      { type: "image", src: "20.jpg", badge: "تكريم", title: 'الأفضل في غوياس', desc: 'Alô TV – لينو سيلفا. جوائز للأفضل في غوياس', tag: "كأس" },
+      { type: "image", src: "21.jpg", badge: "سفير السلام العالمي", title: 'ركائز السلام الدولية', desc: 'المملكة المتحدة وشرف الروابط العالمي – نيجيريا', tag: "شهادة" },
+      { type: "image", src: "24.jpg", badge: "شرف أدبي", title: 'جائزة التميز متعددة التخصصات', desc: '48 منظمة عالمية – الأمم المتحدة', tag: "جائزة" },
+      { type: "image", src: "25.jpg", badge: "عضو فخري", title: 'بلاط كاميلوت', desc: 'القانون العام العالمي، القانون الدستوري للملك', tag: "تأييد" },
+      { type: "image", src: "26.jpg", badge: "تقدير", title: 'الفاتيكان – سلطة كنسية', desc: 'الاعتراف الكنسي من الفاتيكان', tag: "تقدير" },
+      { type: "image", src: "27.jpg", badge: "شهادة نبل", title: 'شهادة النبل العالمية', desc: 'مملكة أتلانتس العالمية', tag: "نبل" },
+      { type: "image", src: "28.jpg", badge: "شهادة مواطنة", title: 'شهادة المواطنة رقم 5399', desc: 'مملكة إمبراطورية داود العالمية والأبدية', tag: "نبل إمبراطوري" },
+      { type: "image", src: "29.jpg", badge: "جائزة سينمائية", title: 'أفضل ممثل مساعد', desc: 'كأس نبتون – معرض أفلام المناطق الداخلية', tag: "كأس" },
+      { type: "image", src: "30.jpg", badge: "وسام وطني", title: 'الأفضل في البرازيل', desc: '21 منظمة في البرازيل – مجموعة إينوفا – باولو ميلو', tag: "دبلوم" },
+      { type: "image", src: "31.jpg", badge: "تقدير", title: 'مدير النظام العالمي الجديد', desc: 'نظام الذكاء الاصطناعي الحكومي الكمي', tag: "دبلوم" },
+      { type: "image", src: "32.jpg", badge: "لقب نبل", title: 'صاحب الجلالة – سلطان', desc: 'منظمة - حماة السلام العالمي للملكية', tag: "نبل إمبراطوري" },
+      { type: "image", src: "33.jpg", badge: "شهادة تقدير", title: 'سير (لقب فارس)', desc: 'نظام تارتاريا النبيل – التنوع والاحترام', tag: "عضو فخري" },
+      { type: "image", src: "34.jpg", badge: "دبلوم", title: 'صاحب السمو الإمبراطوري الروسي / البريطاني', desc: 'البيت الملكي والإمبراطوري لسان بريسوس', tag: "شهادة" },
+      { type: "image", src: "35.jpg", badge: "كأس سينما", title: 'أفضل فيلم', desc: 'كأس نبتون – معرض أفلام المناطق الداخلية', tag: "كأس" },
+      { type: "image", src: "36.jpg", badge: "ترخيص", title: 'سلطة مالية دولية', desc: 'إمبراطورية أمم أتلانتس العالمية', tag: "ترخيص" },
+      { type: "image", src: "37.jpg", badge: "تأييد عالمي", title: 'الاتحاد العالمي عبر القارات', desc: 'نظام الذكاء الاصطناعي الحكومي الكمي', tag: "شهادة" },
+      { type: "image", src: "38.jpg", badge: "شهادة", title: 'سفير السلام العالمي', desc: 'المعهد العالمي للسلام', tag: "تقدير" },
+      { type: "image", src: "39.jpg", badge: "تعيين دولي", title: 'اتحاد أمريكا بين القارات', desc: 'البيت الإمبراطوري وسلالة سان بريسوس وسونتي دوباراسي', tag: "دبلوم تقديري (فخري)" },
+      { type: "image", src: "40.jpg", badge: "المتنورون", title: 'النظام العالمي الجديد', desc: 'الحكومة السياسية العالمية', tag: "اعتراف" },
+      { type: "image", src: "41.jpg", badge: "تكريم اجتماعي", title: 'ممثل الثقافة الأفريقية', desc: 'CONNGO ومؤسسات حارسة أخرى للثقافة الأفريقية', tag: "تكريم" },
+      { type: "image", src: "42.jpg", badge: "شهادة", title: 'أمير سلالة رومانوف', desc: 'تقدير من 8 منظمات إمبراطورية عالمية', tag: "دبلوم ماسي" },
+      { type: "image", src: "43.jpg", badge: "وسام مهيب عالمي", title: 'تأييد الحكم في الأمريكتين', desc: 'البيت الملكي والإمبراطوري لسان بريسوس وسلالة رومانوف', tag: "وسام إمبراطوري" },
+      { type: "image", src: "45.jpg", badge: "النظام العالمي الجديد", title: 'المواطنة الرسمية للنظام العالمي الجديد', desc: 'نظام الذكاء الاصطناعي الحكومي الكمي', tag: "مواطنة دولية" },
+      { type: "image", src: "46.jpg", badge: "لقب نبل", title: 'سلطان الفلبين', desc: 'حماة السلام العالمي للملكية - الفلبين', tag: "سلطان الفلبين" },
+      { type: "image", src: "47.jpg", badge: "شهادة دبلوماسية", title: 'تفويض دبلوماسي عالمي', desc: 'الاتحاد الكوكبي – نادي روما', tag: "دبلوماسية دولية" },
+      { type: "image", src: "48.jpg", badge: "لقب نبل عالمي", title: 'شخصية بارزة', desc: '18 منظمة – مجموعة الجمعية الملكية – المملكة العربية السعودية', tag: "سلطان المملكة العربية السعودية" },
+      { type: "image", src: "49.jpg", badge: "شهادة سلطة", title: 'سفير التنمية والأعمال', desc: 'مجموعة اقتصادية دولية', tag: "عضو فخري" },
+      { type: "image", src: "50.jpg", badge: "الأمم المتحدة – دبلوم فخري", title: 'الأمم المتحدة – الحارس العالمي للثقافة', desc: 'لجنة الشؤون الاقتصادية والاجتماعية التابعة للأمم المتحدة', tag: "عضو فخري" },
+      { type: "image", src: "52.png", badge: "كأس فخري", title: 'الأفضل في البرازيل', desc: 'كأس الأفضل في البرازيل', tag: "تكريم" }
     ];
 
     let currentIndex = 0;
@@ -216,7 +355,28 @@
 
     function nextSlide() { currentIndex = (currentIndex + 1) % carouselData.length; updateCarousel(); }
     function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }
-    function saveContact() { const vCard = ['BEGIN:VCARD','VERSION:3.0','FN;CHARSET=UTF-8:الأمير أندريه لويس','N;CHARSET=UTF-8:لويس;أندريه;أمير;;;','ORG;CHARSET=UTF-8:Advertising Infotech','TITLE;CHARSET=UTF-8:خالق > صانع قرار > منسق','TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031','EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com','URL:https://advertisinginfotech.com.br','NOTE;CHARSET=UTF-8:خلق عوالم جديدة عن طريق إعادة تدوير المشاعر.','END:VCARD'].join('\n'); const blob = new Blob([vCard], {type:'text/vcard;charset=utf-8'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'الأمير_أندريه_لويس.vcf'; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(() => URL.revokeObjectURL(url), 1000); }
+    function closeModal() {
+      document.getElementById('contactModal').classList.remove('active');
+    }
+
+    function saveContact() { 
+      const vCard = ['BEGIN:VCARD','VERSION:3.0','FN;CHARSET=UTF-8:الأمير أندريه لويس','N;CHARSET=UTF-8:لويس;أندريه;أمير;;;','ORG;CHARSET=UTF-8:Advertising Infotech','TITLE;CHARSET=UTF-8:خالق > صانع قرار > منسק','TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031','EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com','URL:https://advertisinginfotech.com.br','NOTE;CHARSET=UTF-8:خلق عوالم جديدة عن طريق إعادة تدوير المشاعر.','END:VCARD'].join('\n'); 
+      const blob = new Blob([vCard], {type:'text/vcard;charset=utf-8'}); 
+      const url = URL.createObjectURL(blob); 
+      
+      const modal = document.getElementById('contactModal');
+      const vcardLink = document.getElementById('vcardLink');
+      
+      vcardLink.href = url;
+      vcardLink.download = 'Prince_Andre_Luis.vcf';
+      
+      modal.classList.add('active');
+      
+      // Try to open natively
+      window.location.href = url;
+      
+      setTimeout(() => URL.revokeObjectURL(url), 10000); 
+    }
   </script>
 </body>
 </html>

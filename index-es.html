@@ -58,7 +58,7 @@
     .glow {
       position: absolute;
       top: -5rem;
-      right: -5rem;
+      left: -5rem;
       width: 16rem;
       height: 16rem;
       background: var(--gold);
@@ -120,15 +120,7 @@
       margin-bottom: 1rem;
     }
 
-    .photo-glow {
-      position: absolute;
-      inset: 0;
-      border-radius: 1.5rem;
-      background: var(--gold);
-      filter: blur(20px);
-      opacity: 0.4;
-      transition: opacity 0.5s;
-    }
+    .photo-glow { position: absolute; inset: 0; border-radius: 1.5rem; background: var(--gold); filter: blur(30px); opacity: 0.4; transition: opacity 0.5s; }
 
     .photo-container:hover .photo-glow {
       opacity: 0.6;
@@ -390,17 +382,7 @@
       border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .carousel-description {
-      color: #d1d5db;
-      margin-bottom: 0.5rem;
-      font-size: 0.82rem;
-      line-height: 1.25;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
+    .carousel-description { font-size: 0.875rem; color: #a1a1aa; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-clamp: 2; }
 
     .carousel-footer {
       display: flex;
@@ -416,9 +398,10 @@
       line-height: 1.25;
       flex: 1;
       display: -webkit-box;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      line-clamp: 1;
     }
 
     .carousel-buttons {
@@ -493,6 +476,120 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       text-align: center;
+    }
+
+    /* Modal de Contato */
+    .contact-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(15px);
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .contact-modal.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .contact-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 2rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .contact-modal.active .contact-card {
+      transform: translateY(0);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .close-modal:hover {
+      background: var(--gold);
+      color: #000;
+    }
+
+    .modal-photo {
+      width: 8rem;
+      height: 8rem;
+      border-radius: 2rem;
+      border: 3px solid var(--gold);
+      margin-bottom: 1.5rem;
+      object-fit: cover;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-name {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .modal-role {
+      color: var(--gold);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 2rem;
+    }
+
+    .modal-msg {
+      color: #d1d5db;
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    .modal-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      border-radius: 1rem;
+      background: var(--gold);
+      color: #000;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .modal-btn:hover {
+      background: var(--gold-dark);
+      transform: scale(1.02);
     }
   </style>
 </head>
@@ -631,6 +728,30 @@
       <p>© 2026 | Príncipe André Luís | Todos los derechos reservados</p>
     </footer>
   </main>
+
+  <!-- Modal de Contato -->
+  <div id="contactModal" class="contact-modal" onclick="closeModal()">
+    <div class="contact-card" onclick="event.stopPropagation()">
+      <button class="close-modal" onclick="closeModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+      <img src="foto_oficial.jpg" alt="Príncipe André Luís" class="modal-photo">
+      <h3 class="modal-name">Príncipe André Luís</h3>
+      <p class="modal-role">Creador > Decisor > Orquestrador</p>
+      <p class="modal-msg">El contacto se ha preparado para su agenda. Si su dispositivo não se abre automáticamente, clique en el botón de abajo.</p>
+      <a href="#" id="vcardLink" class="modal-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <line x1="19" x2="19" y1="8" y2="14" />
+          <line x1="22" x2="16" y1="11" y2="11" />
+        </svg>
+        Guardar Contacto
+      </a>
+    </div>
+  </div>
   <script>
     const carouselData = [
       { type: 'video', src: 'homenagem_em_video.mp4', badge: 'Prueba social mundial', title: 'Homenajeado por diputados', desc: 'Asamblea Legislativa del Estado de Goiás', tag: 'Honra Solemne' },
@@ -711,7 +832,29 @@
 
     function nextSlide() { currentIndex = (currentIndex + 1) % carouselData.length; updateCarousel(); }
     function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }
-    function saveContact() { const vCard = ['BEGIN:VCARD', 'VERSION:3.0', 'FN;CHARSET=UTF-8:Príncipe André Luís', 'N;CHARSET=UTF-8:Luís;André;Príncipe;;;', 'ORG;CHARSET=UTF-8:Advertising Infotech', 'TITLE;CHARSET=UTF-8:Creador > Decisor > Orquestrador', 'TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031', 'EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com', 'URL:https://advertisinginfotech.com.br', 'NOTE;CHARSET=UTF-8:Creando nuevos mundos reciclando sentimientos.', 'END:VCARD'].join('\n'); const blob = new Blob([vCard], { type: 'text/vcard;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'contato_Príncipe_André_Luís.vcf'; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(() => URL.revokeObjectURL(url), 1000); }
+    
+    function closeModal() {
+      document.getElementById('contactModal').classList.remove('active');
+    }
+
+    function saveContact() { 
+      const vCard = ['BEGIN:VCARD', 'VERSION:3.0', 'FN;CHARSET=UTF-8:Príncipe André Luís', 'N;CHARSET=UTF-8:Luís;André;Príncipe;;;', 'ORG;CHARSET=UTF-8:Advertising Infotech', 'TITLE;CHARSET=UTF-8:Creador > Decisor > Orquestrador', 'TEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031', 'EMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com', 'URL:https://advertisinginfotech.com.br', 'NOTE;CHARSET=UTF-8:Creando nuevos mundos reciclando sentimientos.', 'END:VCARD'].join('\n'); 
+      const blob = new Blob([vCard], { type: 'text/vcard;charset=utf-8' }); 
+      const url = URL.createObjectURL(blob); 
+      
+      const modal = document.getElementById('contactModal');
+      const vcardLink = document.getElementById('vcardLink');
+      
+      vcardLink.href = url;
+      vcardLink.download = 'Prince_Andre_Luis.vcf';
+      
+      modal.classList.add('active');
+      
+      // Tenta abrir nativamente
+      window.location.href = url;
+      
+      setTimeout(() => URL.revokeObjectURL(url), 10000); 
+    }
   </script>
 </body>
 

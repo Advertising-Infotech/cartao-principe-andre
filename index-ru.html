@@ -13,7 +13,7 @@
     body { font-family: 'Inter', sans-serif; background: #000; color: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
     .container { position: relative; width: 100%; max-width: 448px; min-height: 100vh; background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); padding: 1.5rem; display: flex; flex-direction: column; align-items: center; }
     @media (min-width: 640px) { .container { min-height: 85vh; border-radius: 2rem; } }
-    .glow { position: absolute; top: -5rem; right: -5rem; width: 16rem; height: 16rem; background: var(--gold); border-radius: 50%; mix-blend-mode: overlay; filter: blur(100px); opacity: 0.2; pointer-events: none; }
+    .glow { position: absolute; top: -5rem; left: -5rem; width: 16rem; height: 16rem; background: var(--gold); border-radius: 50%; mix-blend-mode: overlay; filter: blur(100px); opacity: 0.2; pointer-events: none; }
     .flags { display: flex; gap: 0.75rem; margin-bottom: 1rem; direction: ltr; }
     .flag-btn { width: 2rem; height: 1.5rem; overflow: hidden; border-radius: 0.125rem; border: none; cursor: pointer; transition: all 0.3s; opacity: 0.6; filter: grayscale(50%); }
     .flag-btn:hover { transform: scale(1.25); opacity: 1; filter: grayscale(0%); }
@@ -69,9 +69,9 @@
     .carousel-title { position: absolute; bottom: 1rem; left: 1rem; right: 1rem; z-index: 20; }
     .carousel-title h4 { font-weight: 700; color: #fff; font-size: 1.125rem; line-height: 1.25; text-shadow: 0 4px 6px rgba(0,0,0,0.5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .carousel-content { padding: 0.75rem 1rem 1rem; background: var(--white-5); backdrop-filter: blur(12px); border-top: 1px solid rgba(255,255,255,0.05); }
-    .carousel-description { color: #d1d5db; margin-bottom: 0.5rem; font-size: 0.82rem; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .carousel-description { font-size: 0.875rem; color: #a1a1aa; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-clamp: 2; }
     .carousel-footer { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
-    .carousel-tag { color: var(--gold); font-weight: 700; font-size: 1rem; line-height: 1.25; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .carousel-tag { color: var(--gold); font-weight: 700; font-size: 1rem; line-height: 1.25; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-clamp: 2; }
     .carousel-buttons { display: flex; gap: 0.5rem; flex-shrink: 0; }
     .carousel-btn { display: flex; align-items: center; gap: 0.25rem; padding: 0.5rem 0.625rem; border-radius: 0.5rem; background: var(--white-10); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.625rem; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(8px); }
     .carousel-btn:hover { background: var(--gold); color: #000; }
@@ -79,6 +79,120 @@
     .cta-btn:hover { background: var(--gold-dark); transform: scale(1.02); box-shadow: 0 0 20px 5px rgba(212,175,55,0.5); }
     .footer { margin-top: auto; padding-top: 2rem; padding-bottom: 1rem; width: 100%; display: flex; flex-direction: column; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); }
     .footer p { color: #6b7280; font-size: 0.625rem; letter-spacing: 0.1em; text-transform: uppercase; text-align: center; }
+
+    /* Contact Modal */
+    .contact-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(15px);
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .contact-modal.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .contact-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 2rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .contact-modal.active .contact-card {
+      transform: translateY(0);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .close-modal:hover {
+      background: var(--gold);
+      color: #000;
+    }
+
+    .modal-photo {
+      width: 8rem;
+      height: 8rem;
+      border-radius: 2rem;
+      border: 3px solid var(--gold);
+      margin-bottom: 1.5rem;
+      object-fit: cover;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-name {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .modal-role {
+      color: var(--gold);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 2rem;
+    }
+
+    .modal-msg {
+      color: #d1d5db;
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    .modal-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      border-radius: 1rem;
+      background: var(--gold);
+      color: #000;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .modal-btn:hover {
+      background: var(--gold-dark);
+      transform: scale(1.02);
+    }
   </style>
 </head>
 <body>
@@ -151,6 +265,30 @@
     <button class="cta-btn" onclick="saveContact()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>Сохранить контакт</button>
     <footer class="footer"><p>© 2026 | Принц Андре Луис | Все права защищены | V 4.0 (HTML5)</p></footer>
   </main>
+
+  <!-- Contact Modal -->
+  <div id="contactModal" class="contact-modal" onclick="closeModal()">
+    <div class="contact-card" onclick="event.stopPropagation()">
+      <button class="close-modal" onclick="closeModal()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+      <img src="foto_oficial.jpg" alt="Принц Андре Луис" class="modal-photo">
+      <h3 class="modal-name">Принц Андре Луис</h3>
+      <p class="modal-role">Создатель > Решатель > Дирижер</p>
+      <p class="modal-msg">Контакт готов для вашей записной книжки. Если ваше устройство не открыло его автоматически, нажмите кнопку ниже.</p>
+      <a href="#" id="vcardLink" class="modal-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <line x1="19" x2="19" y1="8" y2="14" />
+          <line x1="22" x2="16" y1="11" y2="11" />
+        </svg>
+        Сохранить контакт
+      </a>
+    </div>
+  </div>
   <script>
     const carouselData = [
       { type: 'video', src: 'homenagem_em_video.mp4', badge: 'Мировое общественное признание', title: 'Удостоен чести депутатами', desc: 'Законодательное собрание штата Гояс', tag: 'Торжественная награда' },

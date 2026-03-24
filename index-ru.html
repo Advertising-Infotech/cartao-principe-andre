@@ -193,6 +193,45 @@
       background: var(--gold-dark);
       transform: scale(1.02);
     }
+    .download-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+    .download-modal-content {
+      background: #1a1a2e;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 90%;
+      text-align: center;
+      color: #fff;
+      border: 2px solid #d4af37;
+    }
+    .download-modal-content h3 {
+      color: #d4af37;
+      margin-bottom: 1rem;
+    }
+    .download-modal-content p {
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    .download-modal-content button {
+      background: #d4af37;
+      color: #1a1a2e;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -346,7 +385,15 @@
 
     function nextSlide() { currentIndex = (currentIndex + 1) % carouselData.length; updateCarousel(); }
     function prevSlide() { currentIndex = (currentIndex - 1 + carouselData.length) % carouselData.length; updateCarousel(); }
-    function saveContact() { const vCard = 'BEGIN:VCARD\nVERSION:3.0\nFN;CHARSET=UTF-8:Принц Андре Луис\nN;CHARSET=UTF-8:Луис;Андре;Принц;;;\nORG;CHARSET=UTF-8:Advertising Infotech\nTITLE;CHARSET=UTF-8:Принц Андре Луис - Создатель > Решатель > Дирижер\nTEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031\nEMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com\nURL:https://advertisinginfotech.com.br\nNOTE;CHARSET=UTF-8:Принц Андре Луис - Создаю новые миры, перерабатывая чувства.\nEND:VCARD'; const blob = new Blob([vCard], {type: 'text/vcard'}); window.location.href = URL.createObjectURL(blob); }
+    function saveContact() { const vCard = 'BEGIN:VCARD\nVERSION:3.0\nFN;CHARSET=UTF-8:Принц Андре Луис\nN;CHARSET=UTF-8:Луис;Андре;Принц;;;\nORG;CHARSET=UTF-8:Advertising Infotech\nTITLE;CHARSET=UTF-8:Принц Андре Луис - Создатель > Решатель > Дирижер\nTEL;TYPE=CELL;TYPE=VOICE;TYPE=pref:+5562991599031\nEMAIL;TYPE=INTERNET;TYPE=WORK:advertisingpropaganda@gmail.com\nURL:https://advertisinginfotech.com.br\nNOTE;CHARSET=UTF-8:Принц Андре Луис - Создаю новые миры, перерабатывая чувства.\nEND:VCARD'; const blob = new Blob([vCard], {type: 'text/vcard'}); window.location.href = URL.createObjectURL(blob); document.getElementById('downloadModal').style.display = 'flex'; }
   </script>
+  <div id="downloadModal" class="download-modal" onclick="this.style.display='none'">
+    <div class="download-modal-content" onclick="event.stopPropagation()">
+      <h3>Внимание!</h3>
+      <p>Файл <strong>Цифровая карта.vcf</strong> будет загружен в папку Загрузки вашего устройства.</p>
+      <p>Чтобы сохранить мои контакты в вашей телефонной книге, откройте загруженный файл.</p>
+      <button onclick="document.getElementById('downloadModal').style.display='none'">Понятно</button>
+    </div>
+  </div>
 </body>
 </html>

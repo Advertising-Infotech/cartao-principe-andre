@@ -1,0 +1,42 @@
+# PROMPT DE CONTEXTO PARA NOVA SESSAO OPENCODE
+# Copie e cole no inicio de uma nova conversa
+
+---
+
+## CONTEXTO DO PROJETO
+
+Estou trabalhando no projeto "Cartao Principe Andre" - um cartao de visitas digital.
+
+### Pasta do Projeto
+C:\Users\lagar\OneDrive\Área de Trabalho 2024\BackUp\Advertising TI & CS\Projetos\cartao-principe-andre
+
+### Ultimo Trabalho Realizado (21/03/2026)
+Migração completa de Vite/React para Next.js 15, mantendo o layout visual idêntico.
+
+### Stack Tecnologica
+- Next.js 15 com App Router
+- Tailwind CSS
+- i18next para 7 idiomas
+- Lucide React para icones
+- Vercel para hosting
+
+### Estrutura Importante
+- src/app/ - Pages Next.js
+- src/components/ - Componentes React
+- src/i18n/ - Traduções
+- public/carrossel/ - Imagens e videos das honrarias
+
+### Repositorio GitHub
+https://github.com/Advertising-Infotech/cartao-principe-andre
+
+### Historico Completo
+Ver arquivo: .opencode\SESSAO_21_03_2026.md
+
+---
+
+## INSTRUCOES
+
+1. Leia o arquivo de contexto completo primeiro
+2. Execute `npm install` se necessario
+3. Use `npm run dev` para servidor local
+4. Deploy automatico no Vercel apos push ao GitHub

@@ -1,0 +1,214 @@
+# ================================================
+# CONTEXTO PARA NOVA SESSÃO - OPENCODE
+# ==============================================
+# COPIE TODO ESTE CONTEÚDO E COLE NO INÍCIO
+# DE UMA NOVA CONVERSA COM O OPENCODE
+# ==============================================
+
+---
+
+## 📁 INFORMAÇÕES DO PROJETO
+
+**Nome:** Cartão Príncipe André Luís
+**Tipo:** Cartão de visitas digital
+**Stack:** Next.js 14 (App Router) + Tailwind CSS + i18next
+
+**Pasta do Projeto:**
+```
+C:\Users\lagar\OneDrive\Área de Trabalho 2024\BackUp\Advertising TI & CS\Projetos\cartao-principe-andre
+```
+
+**GitHub:** https://github.com/Advertising-Infotech/cartao-principe-andre
+
+---
+
+## 📜 HISTÓRICO RESUMIDO
+
+### Sessão 1 (20:00 BRT) - ✅ COMPLETA
+Migrou projeto de Vite/React para Next.js 15.
+
+### Sessão 2 (01:50 BRT) - ✅ CORRIGIDA
+Corrigiu dependências (downgrade para versões estáveis).
+
+### Sessão 3 (XX:XX BRT) - 🔄 AGUARDANDO
+Verificando resultado do re-deploy no Vercel.
+
+---
+
+## 🔧 CONFIGURAÇÕES ATUAIS
+
+### Dependencies (package.json):
+```json
+{
+  "react": "^18.2.0",
+  "react-dom": "^18.2.0",
+  "next": "^14.2.0",
+  "lucide-react": "^0.400.0",
+  "i18next": "^23.11.0",
+  "react-i18next": "^14.1.0",
+  "i18next-browser-languagedetector": "^7.2.0"
+}
+```
+
+### DevDependencies:
+```json
+{
+  "tailwindcss": "^3.4.0",
+  "typescript": "^5.4.0",
+  "@types/node": "^20.12.0",
+  "@types/react": "^18.2.0",
+  "eslint": "^8.57.0",
+  "eslint-config-next": "^14.2.0"
+}
+```
+
+---
+
+## 📁 ESTRUTURA DO PROJETO
+
+```
+cartao-principe-andre/
+├── src/
+│   ├── app/
+│   │   ├── globals.css    (animações blink-name, blink-yellow)
+│   │   ├── layout.tsx     (Providers wrapper)
+│   │   └── page.tsx       (componentes principais)
+│   ├── components/
+│   │   ├── ProfileHeader.tsx   (foto, idiomas, redes)
+│   │   ├── ActionGrid.tsx      (4 botões contato)
+│   │   ├── FeaturedProperty.tsx (carrossel honrarias)
+│   │   ├── Footer.tsx          (copyright)
+│   │   └── Providers.tsx       (i18n wrapper)
+│   └── i18n/
+│       └── index.ts      (7 idiomas)
+├── public/
+│   └── carrossel/
+│       ├── foto_oficial.jpg
+│       ├── homenagem_em_video.mp4
+│       ├── 01.jpeg ... 52.png
+│       ├── Titulos_pt.json
+│       ├── Titulos_en.json
+│       └── ... (7 arquivos)
+├── .opencode/
+│   ├── HISTORICO.md    (este arquivo)
+│   ├── CONTEXTO.txt    (prompt de recuperação)
+│   └── RECUPERAR.bat   (script Windows)
+├── package.json
+├── next.config.ts
+├── tailwind.config.js
+├── tsconfig.json
+├── vercel.json
+└── .gitignore
+```
+
+---
+
+## 🎨 LAYOUT (MANTIDO IDENTICO)
+
+### Estilos Principais:
+- **Cor primária:** `#D4AF37` (dourado)
+- **Fundo:** `#000000` (preto)
+- **Glassmorphism:** `bg-white/10 backdrop-blur-xl`
+- **Borda:** `border-4 border-[#D4AF37]`
+- **Fonte:** system-sans
+
+### Animações CSS:
+```css
+@keyframes blink-name {
+  0%, 100% { color: #D4AF37; }
+  33% { color: #ffff00; }
+  66% { color: #ffffff; }
+}
+
+@keyframes blink-yellow {
+  0%, 100% { color: #D4AF37; }
+  50% { color: #ffff00; }
+}
+```
+
+---
+
+## 🌐 IDIOMAS SUPORTADOS
+
+1. 🇧🇷 Português (pt) - DEFAULT
+2. 🇬🇧 Inglês (en)
+3. 🇮🇱 Hebraico (he) - RTL
+4. 🇸🇦 Árabe (ar) - RTL
+5. 🇷🇺 Russo (ru)
+6. 🇨🇳 Chinês (zh)
+7. 🇪🇸 Espanhol (es)
+
+---
+
+## ⚠️ PROBLEMAS CONHECIDOS
+
+### Problema 1: Build Vercel Falhou
+- **Causa:** Tailwind v4 + Next 15 incompatível
+- **Solução:** Downgrade para Tailwind v3.4 + Next 14.2
+- **Status:** ✅ Corrigido, aguardando re-deploy
+
+---
+
+## 📋 COMANDOS ÚTEIS
+
+```bash
+# NA PASTA DO PROJETO:
+cd "C:\Users\lagar\OneDrive\Área de Trabalho 2024\BackUp\Advertising TI & CS\Projetos\cartao-principe-andre"
+
+# Instalar dependências
+npm install
+
+# Build local para testar
+npm run build
+
+# Servidor desenvolvimento
+npm run dev
+
+# Ver logs de build
+npm run build 2>&1 | findstr /i error
+
+# Deploy manual Vercel
+vercel --prod
+
+# Ver status Git
+git status
+git log --oneline -5
+```
+
+---
+
+## 🔗 LINKS IMPORTANTES
+
+- **Vercel Dashboard:** https://vercel.com/Advertising-Infotech/cartao-principe-andre
+- **GitHub:** https://github.com/Advertising-Infotech/cartao-principe-andre
+- **Deployments:** https://vercel.com/Advertising-Infotech/cartao-principe-andre/deployments
+
+---
+
+## 🚀 PRÓXIMOS PASSOS
+
+1. Aguardar re-deploy automático Vercel
+2. Verificar se build completa (2-3 min)
+3. Testar site em produção
+4. Reportar qualquer erro
+
+---
+
+## 📝 NOTAS PARA CONTINUIDADE
+
+Se o Vercel ainda der erro:
+1. Obter logs completos do Dashboard
+2. Copiar TUDO (especialmente linhas com "Error")
+3. Voltar aqui e colar os logs
+4. Aguardar correção
+
+Se sucesso:
+1. Testar todas funcionalidades
+2. Testar troca de idiomas
+3. Testar carrossel
+4. Testar download vCard
+
+---
+
+# FIM DO CONTEXTO
+# Copie tudo acima para nova sessão

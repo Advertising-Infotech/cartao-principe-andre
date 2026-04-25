@@ -35,6 +35,7 @@ yarn-error.log*
 next-env.d.ts
 
 # Backup files
+19.psd
 *.zip
 BackUps/
 temp_reference/

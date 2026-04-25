@@ -410,8 +410,9 @@
     }
 
     .carousel-btn {
-      display: flex;
+      display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 0.25rem;
       padding: 0.5rem 0.625rem;
       border-radius: 0.5rem;
@@ -425,6 +426,7 @@
       transition: all 0.3s;
       backdrop-filter: blur(8px);
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .carousel-btn:hover {

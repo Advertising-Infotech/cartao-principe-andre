@@ -47,6 +47,16 @@ JSON_FILES = {
     "zh": PROJECT_ROOT / "Titulos_zh.json",
 }
 
+HTML_FILES = {
+    "pt": PROJECT_ROOT / "index.html",
+    "en": PROJECT_ROOT / "index-en.html",
+    "es": PROJECT_ROOT / "index-es.html",
+    "he": PROJECT_ROOT / "index-he.html",
+    "ar": PROJECT_ROOT / "index-ar.html",
+    "ru": PROJECT_ROOT / "index-ru.html",
+    "zh": PROJECT_ROOT / "index-zh.html",
+}
+
 IDIOMAS = {
     "pt": "Português",
     "en": "Inglês",
@@ -134,6 +144,54 @@ def ler_json(path):
 def escrever_json(path, dados):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(dados, f, ensure_ascii=False, indent=2)
+
+
+# ==================== UPDATE HTML COUNTER ====================
+
+
+def update_html_counter(html_path, total):
+    """Atualiza o contador no HTML (ex: 1 / 46 para 1 / 47)."""
+    if not html_path.exists():
+        return False
+
+    try:
+        content = html_path.read_text(encoding="utf-8")
+
+        # Busca padrão "1 / NUMERO"
+        import re
+
+        pattern = r"1\s*/\s*\d+"
+        novo_valor = f"1 / {total}"
+
+        nova_content = re.sub(pattern, novo_valor, content)
+
+        if nova_content != content:
+            html_path.write_text(nova_content, encoding="utf-8")
+            log_sucesso(f"{html_path.name}: contador = {novo_valor}")
+            return True
+        else:
+            log_aviso(f"{html_path.name}: contador já está correto")
+            return False
+    except Exception as e:
+        log_erro(f"Erro ao atualizar {html_path.name}: {e}")
+        return False
+
+
+def atualizar_todos_contadores(total):
+    """Atualiza o contador em todos os HTMLs."""
+    log_titulo(f"ATUALIZANDO CONTADORES: 1 / {total}")
+
+    atualizados = 0
+    for lang, path in HTML_FILES.items():
+        if update_html_counter(path, total):
+            atualizados += 1
+
+    if atualizados > 0:
+        log_sucesso(f"{atualizados} contador(es) atualizado(s)")
+        return True
+    else:
+        log_aviso("Nenhum contador precisou ser atualizado")
+        return False
 
 
 # ==================== GIT FUNCTIONS ====================
@@ -258,13 +316,17 @@ def main():
         # === AUDITORIA ===
         registros = ler_titulos()
         if registros:
-            log_info(f"Total no XLS: {len(registros)}")
+            total = len(registros)
+            log_info(f"Total no XLS: {total}")
 
             # Verifica JSONs
             for lang, path in JSON_FILES.items():
                 if path.exists():
                     dados = ler_json(path)
                     log_info(f"{IDIOMAS[lang]}: {len(dados)} registros")
+
+            # Atualiza contadores nos HTMLs
+            atualizar_todos_contadores(total)
 
         # === VERIFICA GIT ===
         log_titulo("VERIFICAÇÃO GIT")

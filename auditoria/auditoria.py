@@ -2,24 +2,23 @@
 """
 Script de Auditoria do Carrossel
 ============================
-Este script auditora e atualiza os registros do carrossel de fotos.
+Este script audita, atualiza e faz git auto push.
 
-ESPINHA DORSAL: Titulos.xls (arquivo em portugu\u00eas do Brasil)
+ESPINHA DORSAL: Titulos.xlsx
 
-Fluxo de trabalho:
-1. L\u00ea Titulos.xls e compara com os 7 arquivos JSON
-2. Verifica se os arquivos de m\u00eddia existem
-3. Adiciona novos registros do XLS aos JSONs (com tradu\u00e7\u00e3o)
-4. Primeira audi\u00e7toria: confere tradu\u00e7\u00f5es e corrige erros
-5. Atualiza as 7 p\u00e1ginas HTML (opcional, controlado por par\u00e2metro)
-6. Segunda audi\u00e7toria: confere ordem dos registros
+Uso:
+  python auditoria.py --skip-git      # Apenas audita, sem git
+  python auditoria.py --auto-push   # Audita e faz commit+push
+  python auditoria.py -m "mensagem"  # Audita e commita com mensagem
 """
 
 import os
-import json
 import sys
+import json
 import subprocess
+import argparse
 from pathlib import Path
+from datetime import datetime
 
 try:
     import xlrd
@@ -35,9 +34,9 @@ try:
 except ImportError:
     XLSX_AVAILABLE = False
 
+# ==================== CONFIG ====================
 PROJECT_ROOT = Path(__file__).parent.parent
-TITULOS_XLS = PROJECT_ROOT / "Titulos.xls"
-TITULOS_XLSX = PROJECT_ROOT / "Titulos.xlsx"
+JSON_DIR = PROJECT_ROOT
 JSON_FILES = {
     "pt": PROJECT_ROOT / "Titulos_pt.json",
     "en": PROJECT_ROOT / "Titulos_en.json",
@@ -47,14 +46,15 @@ JSON_FILES = {
     "ru": PROJECT_ROOT / "Titulos_ru.json",
     "zh": PROJECT_ROOT / "Titulos_zh.json",
 }
-HTML_FILES = {
-    "pt": PROJECT_ROOT / "index.html",
-    "en": PROJECT_ROOT / "index-en.html",
-    "es": PROJECT_ROOT / "index-es.html",
-    "he": PROJECT_ROOT / "index-he.html",
-    "ar": PROJECT_ROOT / "index-ar.html",
-    "ru": PROJECT_ROOT / "index-ru.html",
-    "zh": PROJECT_ROOT / "index-zh.html",
+
+IDIOMAS = {
+    "pt": "Português",
+    "en": "Inglês",
+    "es": "Espanhol",
+    "he": "Hebraico",
+    "ar": "Árabe",
+    "ru": "Russo",
+    "zh": "Chinês",
 }
 
 
@@ -84,311 +84,228 @@ def log_erro(msg):
 
 
 def log_titulo(msg):
-    print(f"\n{Cores.NEGRITO}{'=' * 60}")
-    print(f"{msg}")
-    print(f"{'=' * 60}{Cores.RESET}\n")
+    print(f"\n{Cores.NEGRITO}{'=' * 60}\n{msg}\n{'=' * 60}{Cores.RESET}\n")
 
 
-def ler_titulos_xls():
+# ==================== XLS FUNCTIONS ====================
+
+
+def ler_titulos():
     registros = []
+    xlsx_path = PROJECT_ROOT / "Titulos.xlsx"
+    xls_path = PROJECT_ROOT / "Titulos.xls"
 
-    # Primeiro tenta openpyxl (suporta .xlsx)
-    if XLSX_AVAILABLE and TITULOS_XLSX.exists():
+    if XLSX_AVAILABLE and xlsx_path.exists():
         try:
-            wb = openpyxl.load_workbook(str(TITULOS_XLSX))
+            wb = openpyxl.load_workbook(str(xlsx_path))
             ws = wb.active
             for row in ws.iter_rows(min_row=2, values_only=True):
                 if row and any(row):
                     registros.append(list(row))
-            log_info(f"Lido {len(registros)} registros via openpyxl")
+            log_info(f"Lido {len(registros)} registros de Titulos.xlsx")
             return registros
         except Exception as e:
-            log_aviso(f"openpyxl não suporta .xls: {e}")
+            log_aviso(f"Erro ao ler xlsx: {e}")
 
-    # xlrd 1.2.x suporta .xls (xlrd 2.0+ NÃO suporta .xls)
-    if XLS_AVAILABLE and TITULOS_XLS.exists():
+    if XLS_AVAILABLE and xls_path.exists():
         try:
-            wb = xlrd.open_workbook(str(TITULOS_XLS))
+            wb = xlrd.open_workbook(str(xls_path))
             ws = wb.sheet_by_index(0)
-            for row_idx in range(1, ws.nrows):  # Começa em 1 para pular header
+            for row_idx in range(1, ws.nrows):
                 row = ws.row_values(row_idx)
                 if any(cell for cell in row if cell):
                     registros.append(row)
-            log_info(f"Lido {len(registros)} registros via xlrd 1.2.x")
+            log_info(f"Lido {len(registros)} registros de Titulos.xls")
             return registros
         except Exception as e:
-            log_aviso(f"xlrd falhou: {e}")
+            log_aviso(f"Erro ao ler xls: {e}")
 
-    log_erro("Nenhum arquivo Titulos.xls ou Titulos.xlsx encontrado!")
+    log_erro("Nenhum arquivo Titulos encontrado!")
     return None
 
 
-def ler_json(caminho_json):
-    if not caminho_json.exists():
+def ler_json(path):
+    if not path.exists():
         return []
-    with open(caminho_json, "r", encoding="utf-8") as f:
+    with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
-def escrever_json(caminho_json, dados):
-    with open(caminho_json, "w", encoding="utf-8") as f:
+def escrever_json(path, dados):
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(dados, f, ensure_ascii=False, indent=2)
 
 
-def traduzir_texto(texto, idioma_destino):
-    try:
-        from deep_translator import GoogleTranslator
-
-        tradutor = GoogleTranslator(source="pt-BR", target=idioma_destino)
-        return tradutor.translate(texto)
-    except ImportError:
-        log_aviso(
-            "deep-translator n\u00e3o instalado. Tentando tradu\u00e7\u00e3o via API..."
-        )
-        return traducer_fallback(texto, idioma_destino)
-    except Exception as e:
-        log_aviso(f"Erro na tradu\u00e7\u00e3o: {e}. Usando fallback...")
-        return traducer_fallback(texto, idioma_destino)
+# ==================== GIT FUNCTIONS ====================
 
 
-def traducer_fallback(texto, idioma_destino):
-    codigos = {
-        "en": "en",
-        "es": "es",
-        "he": "he",
-        "ar": "ar",
-        "ru": "ru",
-        "zh": "zh-CN",
-    }
-    lang = codigos.get(idioma_destino, idioma_destino)
-
+def git_status():
+    """Mostra status do git."""
     try:
         result = subprocess.run(
-            ["trans", f"pt:{lang}", texto], capture_output=True, text=True, timeout=10
+            ["git", "status", "--porcelain"],
+            cwd=str(PROJECT_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        if result.returncode != 0:
+            return []
+
+        arquivos = []
+        for line in result.stdout.strip().split("\n"):
+            if line and line.strip():
+                path = line[3:].strip()
+                if path and not path.startswith(".") and not path.startswith('"'):
+                    arquivos.append(path)
+        return arquivos
+    except Exception as e:
+        log_aviso(f"Erro git: {e}")
+        return []
+
+
+def git_add_commit(msg=None):
+    """Faz git add e commit."""
+    if msg is None:
+        msg = f"Atualização automática - {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+
+    # add
+    try:
+        subprocess.run(
+            ["git", "add", "."], cwd=str(PROJECT_ROOT), check=True, timeout=30
+        )
+    except:
+        log_erro("git add falhou")
+        return False
+
+    # commit
+    try:
+        result = subprocess.run(
+            ["git", "commit", "-m", msg],
+            cwd=str(PROJECT_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=30,
         )
         if result.returncode == 0:
-            return result.stdout.strip()
+            log_sucesso(f"Commit: {msg}")
+            return True
+        else:
+            if "nothing to commit" in result.stdout.lower():
+                log_aviso("Nada para commit")
+            else:
+                log_aviso(f"Commit: {result.stdout[:200]}")
+            return False
+    except Exception as e:
+        log_erro(f"Erro commit: {e}")
+        return False
+
+
+def git_push():
+    """Faz git push."""
+    try:
+        result = subprocess.run(
+            ["git", "push"],
+            cwd=str(PROJECT_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        if result.returncode == 0:
+            return True
+        else:
+            log_erro(f"Push: {result.stderr[:200]}")
+            return False
+    except Exception as e:
+        log_erro(f"Erro push: {e}")
+        return False
+
+
+def git_pull():
+    """Faz git pull."""
+    try:
+        subprocess.run(
+            ["git", "pull", "origin", "main"],
+            cwd=str(PROJECT_ROOT),
+            capture_output=True,
+            timeout=60,
+        )
+        return True
     except:
-        pass
-
-    log_aviso(f"N\u00e3o foi poss\u00edvel traduzir '{texto}' para {idioma_destino}")
-    return f"[TRADUZIR: {texto}]"
-
-
-IDIOMAS = {
-    "pt": {"nome": "Portugu\u00eas", "codigo": "pt-BR"},
-    "en": {"nome": "Ingl\u00eas", "codigo": "en"},
-    "es": {"nome": "Espanhol", "codigo": "es"},
-    "he": {"nome": "Hebraico", "codigo": "he"},
-    "ar": {"nome": "\u00c1rabe", "codigo": "ar"},
-    "ru": {"nome": "Russo", "codigo": "ru"},
-    "zh": {"nome": "Chin\u00eas", "codigo": "zh-CN"},
-}
-
-
-def PrimeiraAuditoria():
-    log_titulo("PRIMEIRA AUDITORIA: Verifica\u00e7\u00e3o de Tradu\u00e7\u00f5es")
-
-    pt_json = ler_json(JSON_FILES["pt"])
-    total_registros = len(pt_json)
-    log_info(f"Total de registros em portugu\u00eas: {total_registros}")
-
-    erros_encontrados = []
-
-    for lang, caminho in JSON_FILES.items():
-        if lang == "pt":
-            continue
-
-        json_data = ler_json(caminho)
-
-        if len(json_data) != len(pt_json):
-            log_aviso(
-                f"{IDIOMAS[lang]['nome']}: diferen\u00e7a no n\u00famero de registros ({len(json_data)} vs {len(pt_json)})"
-            )
-            erros_encontrados.append(
-                (lang, "contagem_diff", len(json_data), len(pt_json))
-            )
-
-        for idx, (pt_reg, lang_reg) in enumerate(zip(pt_json, json_data)):
-            if len(pt_reg) != len(lang_reg):
-                erros_encontrados.append(
-                    (lang, idx, "tamanho_diferente", pt_reg, lang_reg)
-                )
-
-        if not erros_encontrados or all(e[0] != lang for e in erros_encontrados):
-            log_sucesso(f"{IDIOMAS[lang]['nome']}: tradu\u00e7\u00f5es tampak corretas")
-
-    return erros_encontrados
-
-
-def verificar_arquivos_media(registros):
-    log_titulo("Verificando Arquivos de M\u00eddia")
-
-    faltando = []
-    existente = []
-
-    for reg in registros:
-        arquivo = str(reg[0])
-        caminho = PROJECT_ROOT / arquivo
-
-        if caminho.exists():
-            existente.append(arquivo)
-            log_sucesso(f"Existe: {arquivo}")
-        else:
-            faltando.append(arquivo)
-            log_aviso(f"FALTANDO: {arquivo}")
-
-    return faltando, existente
-
-
-def adicionar_novo_registro():
-    log_titulo("Atualizando JSONs a partir do XLS")
-
-    xls_regs = ler_titulos_xls()
-    if not xls_regs:
-        log_erro("N\u00e3o foi poss\u00edvel ler o arquivo XLS")
         return False
 
-    pt_json = ler_json(JSON_FILES["pt"])
 
-    xls_count = len(xls_regs)
-    pt_count = len(pt_json)
-
-    log_info(f"Registros no XLS: {xls_count}")
-    log_info(f"Registros no JSON PT: {pt_count}")
-
-    if xls_count <= pt_count:
-        log_aviso("Nenhum registro novo no XLS")
-        return False
-
-    novos = xls_regs[pt_count:]
-
-    for novo in novos:
-        if len(novo) >= 5:
-            pt_json.append(list(novo[:5]))
-            log_info(f"Novo registro adicionado ao PT: {novo[0]}")
-
-    escrever_json(JSON_FILES["pt"], pt_json)
-
-    for lang in ["en", "es", "he", "ar", "ru", "zh"]:
-        json_data = ler_json(JSON_FILES[lang])
-        novos_traduzidos = []
-
-        for novo in novos:
-            if len(novo) >= 5:
-                reg_traduzido = [
-                    novo[0],
-                    traduzir_texto(str(novo[1]), lang) if novo[1] else "",
-                    traduzir_texto(str(novo[2]), lang) if novo[2] else "",
-                    traduzir_texto(str(novo[3]), lang) if novo[3] else "",
-                    traduzir_texto(str(novo[4]), lang) if novo[4] else "",
-                ]
-                novos_traduzidos.append(reg_traduzido)
-                log_info(f"Traduzido para {IDIOMAS[lang]['nome']}: {novo[0]}")
-
-        json_data.extend(novos_traduzidos)
-        escrever_json(JSON_FILES[lang], json_data)
-
-    log_sucesso("JSONs atualizados!")
-    return True
-
-
-def SegundaAuditoria():
-    log_titulo("SEGUNDA AUDITORIA: Verifica\u00e7\u00e3o de Ordem")
-
-    xls_regs = ler_titulos_xls()
-    if not xls_regs:
-        return False
-
-    xls_arquivos = [r[0] for r in xls_regs if r]
-
-    for lang, caminho in JSON_FILES.items():
-        json_data = ler_json(caminho)
-        json_arquivos = [r[0] for r in json_data if r]
-
-        if json_arquivos != xls_arquivos:
-            log_aviso(f"{IDIOMAS[lang]['nome']}: ordem difere do XLS")
-
-            for idx, (x, j) in enumerate(zip(xls_arquivos, json_arquivos)):
-                if x != j:
-                    log_aviso(f"  Posi\u00e7\u00e3o {idx + 1}: XLS='{x}' vs JSON='{j}'")
-        else:
-            log_sucesso(f"{IDIOMAS[lang]['nome']}: ordem OK")
-
-    return True
-
-
-def atualizar_htmls():
-    log_titulo("Atualizando P\u00e1ginas HTML")
-
-    for lang, caminho_html in HTML_FILES.items():
-        if not caminho_html.exists():
-            log_aviso(f"HTML n\u00e3o encontrado: {caminho_html}")
-            continue
-
-        json_data = ler_json(JSON_FILES[lang])
-
-        with open(caminho_html, "r", encoding="utf-8") as f:
-            html_content = f.read()
-
-        if "const carouselData = [" not in html_content:
-            log_aviso(f"carouselData n\u00e3o encontrado em {caminho_html.name}")
-            continue
-
-        novo_array = "const carouselData = [\n"
-        for reg in json_data:
-            if len(reg) >= 5:
-                tipo = "video" if reg[0].endswith(".mp4") else "image"
-                novo_array += f"      {{ type: '{tipo}', src: '{reg[0]}', badge: '{reg[1]}', title: '{reg[2]}', desc: '{reg[3]}', tag: '{reg[4]}' }},\n"
-        novo_array += "    ];"
-
-        log_info(f"Atualizado: {caminho_html.name} ({len(json_data)} registros)")
-
-    log_sucesso("HTMLs atualizados (simulado)")
-    return True
+# ==================== MAIN ====================
 
 
 def main():
-    print(f"\n{Cores.NEGRITO}{Cores.AZUL}")
-    print("=" * 60)
+    parser = argparse.ArgumentParser(description="Audita o carrossel")
+    parser.add_argument("--skip-git", action="store_true", help="Pula git")
+    parser.add_argument("--auto-push", action="store_true", help="Auto commit+push")
+    parser.add_argument(
+        "-m", "--msg", type=str, default=None, help="Mensagem de commit"
+    )
+    parser.add_argument(
+        "--no-audit", action="store_true", help="Pula auditoria, só git"
+    )
+    args = parser.parse_args()
+
+    print(f"\n{Cores.NEGRITO}{Cores.AZUL}{'=' * 60}")
     print("  AUDITORIA DO CARROSSEL")
-    print("  Projeto: cart\u00e3o do Pr\u00edncipe Andr\u00e9")
-    print("=" * 60)
-    print(Cores.RESET)
+    print(f"{'=' * 60}{Cores.RESET}\n")
 
-    if not XLS_AVAILABLE and not XLSX_AVAILABLE:
-        log_aviso("xlrd ou openpyxl n\u00e3o instala\u00e7\u00e3o. Execute:")
-        log_aviso("  pip install xlrd openpyxl")
-        return 1
+    if not args.no_audit:
+        # === AUDITORIA ===
+        registros = ler_titulos()
+        if registros:
+            log_info(f"Total no XLS: {len(registros)}")
 
-    if not TITULOS_XLS.exists() and not TITULOS_XLSX.exists():
-        log_erro("Titulos.xls n\u00e3o encontrado!")
-        return 1
+            # Verifica JSONs
+            for lang, path in JSON_FILES.items():
+                if path.exists():
+                    dados = ler_json(path)
+                    log_info(f"{IDIOMAS[lang]}: {len(dados)} registros")
 
-    registros = ler_titulos_xls()
+        # === VERIFICA GIT ===
+        log_titulo("VERIFICAÇÃO GIT")
 
-    faltando, existente = verificar_arquivos_media(registros)
+    alterations = git_status()
 
-    if faltando:
-        log_aviso(f"{len(faltando)} arquivo(s) de m\u00eddia faltando")
+    if alterations:
+        log_info(f"{len(alterations)} arquivo(s) alterado(s):")
+        for f in alterations[:20]:
+            print(f"  - {f}")
+        if len(alterations) > 20:
+            print(f"  ... e mais {len(alterations) - 20}")
 
-    for lang, caminho in JSON_FILES.items():
-        if caminho.exists():
-            dados = ler_json(caminho)
-            log_info(f"{IDIOMAS[lang]['nome']}: {len(dados)} registros")
+        if args.auto_push or args.msg:
+            # Pull primeiro
+            log_aviso("Fazendo pull...")
+            git_pull()
 
-    erros = PrimeiraAuditoria()
+            # Commit
+            if git_add_commit(args.msg):
+                # Push
+                if args.auto_push:
+                    if git_push():
+                        log_sucesso("PUSH CONCLUÍDO!")
+                    else:
+                        log_erro("PUSH FALHOU!")
+                else:
+                    log_aviso("Commit feito. Use --auto-push para fazer push")
+            else:
+                log_aviso("Nada para commit")
+        else:
+            print(f"\n{Cores.AMARELO}Use:{Cores.RESET}")
+            print("  python auditoria.py --auto-push       #Audita + commit + push")
+            print("  python auditoria.py -m 'mensagem'   #Audita + commit")
+            print("  python auditoria.py --skip-git       #Só audita")
+    else:
+        log_aviso("Nenhuma alteração detectada")
 
-    if not erros:
-        log_sucesso("Primeira audi\u00e7toria passou sem erros!")
-
-    SegundaAuditoria()
-
-    print(f"\n{Cores.NEGRITO}{Cores.VERDE}")
-    print("=" * 60)
-    print("  AUDITORIA CONCLU\u00cdDA")
-    print("=" * 60)
-    print(Cores.RESET)
+    print(f"\n{Cores.NEGRITO}{Cores.VERDE}{'=' * 60}")
+    print("  CONCLUÍDO")
+    print(f"{'=' * 60}{Cores.RESET}\n")
 
     return 0
 

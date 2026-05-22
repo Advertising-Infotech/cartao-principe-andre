@@ -261,11 +261,13 @@ def main():
 
     all_new = []
     all_changed = []
+    new_indices_per_lang = {}
 
     for lang, info in LANGS.items():
         json_path = os.path.join(script_dir, info["json"])
         json_items = load_json(json_path)
         new_idx, changed_idx = detect_changes(xls_items, json_items)
+        new_indices_per_lang[lang] = new_idx
 
         if new_idx:
             print(f"  {lang}: {len(new_idx)} novo(s) -> posicoes {new_idx}")
@@ -315,13 +317,12 @@ def main():
                 f"  AVISO: {info['html']} - JSON tem {len(json_items)} itens, XLS tem {len(xls_items)}"
             )
             if len(json_items) < len(xls_items):
+                missing_indices = new_indices_per_lang.get(lang, [])
                 print(
-                    f"    -> Inserindo {len(xls_items) - len(json_items)} placeholder(s)..."
+                    f"    -> Inserindo {len(missing_indices)} placeholder(s) nas posicoes {missing_indices}..."
                 )
                 json_items = insert_into_json(
-                    json_items,
-                    xls_items,
-                    [i for i in range(len(xls_items)) if i >= len(json_items)],
+                    json_items, xls_items, missing_indices
                 )
                 save_json(json_path, json_items)
 

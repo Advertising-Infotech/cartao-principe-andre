@@ -334,5 +334,12 @@
     "title": "הכרה אקדמית",
     "desc": "מרצה לספרות עתיקה מילנרית היסטורית",
     "tag": "המכון הפדרלי של גויאס"
+  },
+  {
+    "filename": "teste_99.jpg",
+    "badge": "[PT] Teste",
+    "title": "[PT] Item Teste",
+    "desc": "[PT] Desc teste",
+    "tag": "[PT] Tag teste"
   }
 ]

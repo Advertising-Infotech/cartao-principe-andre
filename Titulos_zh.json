@@ -7,6 +7,14 @@
     "tag": "庄严的荣誉"
   },
   {
+    "filename": "55.jpg",
+    "type": "image",
+    "badge": "立法议会",
+    "title": "议员认可",
+    "desc": "戈亚斯州立法议会",
+    "tag": "功绩荣誉"
+  },
+  {
     "filename": "01.jpeg",
     "badge": "认可",
     "title": "国际文学荣誉",
@@ -334,12 +342,5 @@
     "title": "学术认可",
     "desc": "千年历史 ancestral 文学演讲者",
     "tag": "戈亚斯联邦学院"
-  },
-  {
-    "filename": "teste_99.jpg",
-    "badge": "[PT] Teste",
-    "title": "[PT] Item Teste",
-    "desc": "[PT] Desc teste",
-    "tag": "[PT] Tag teste"
   }
 ]

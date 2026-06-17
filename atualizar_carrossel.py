@@ -1,130 +1,158 @@
 """
-Atualizador Incremental de Carrossel
-Detecta linhas novas/mudadas no Titulos.xlsx, insere em cada JSON
-na posicao correta, e atualiza os 7 arquivos HTML.
+Atualizador Automático de Carrossel v2.0
+ Lê Titulos.xlsx, traduz automaticamente para 6 idiomas,
+ atualiza os 7 JSONs e os 7 HTMLs — zero trabalho manual.
 
-FONTES DE DADOS:
-- Titulos.xlsx        → sequência + textos PT (colunas A-E)
-- Titulos_XX.json      → textos traduzidos por idioma
+ FONTES DE DADOS:
+ - Titulos.xlsx        → sequência + textos PT (colunas A-E)
+ - Titulos_XX.json      → textos traduzidos (mantém traduções existentes)
 
-Uso: python atualizar_carrossel.py
+ Uso: python atualizar_carrossel.py
 """
 
 import openpyxl
 import json
 import os
 import re
+import sys
+import time
 
+sys.stdout.reconfigure(encoding="utf-8")
+
+# ── Configuração de idiomas ──────────────────────────────────────────────────
 LANGS = {
-    "pt": {"html": "index.html", "json": "Titulos_pt.json", "name": "Português"},
-    "en": {"html": "index-en.html", "json": "Titulos_en.json", "name": "English"},
-    "he": {"html": "index-he.html", "json": "Titulos_he.json", "name": "עברית"},
-    "ar": {"html": "index-ar.html", "json": "Titulos_ar.json", "name": "العربية"},
-    "ru": {"html": "index-ru.html", "json": "Titulos_ru.json", "name": "Русский"},
-    "zh": {"html": "index-zh.html", "json": "Titulos_zh.json", "name": "中文"},
-    "es": {"html": "index-es.html", "json": "Titulos_es.json", "name": "Español"},
+    "pt": {"html": "index.html",    "json": "Titulos_pt.json", "gt": "pt", "name": "Português"},
+    "en": {"html": "index-en.html", "json": "Titulos_en.json", "gt": "en", "name": "English"},
+    "he": {"html": "index-he.html", "json": "Titulos_he.json", "gt": "he", "name": "עברית"},
+    "ar": {"html": "index-ar.html", "json": "Titulos_ar.json", "gt": "ar", "name": "العربية"},
+    "ru": {"html": "index-ru.html", "json": "Titulos_ru.json", "gt": "ru", "name": "Русский"},
+    "zh": {"html": "index-zh.html", "json": "Titulos_zh.json", "gt": "zh", "name": "中文"},
+    "es": {"html": "index-es.html", "json": "Titulos_es.json", "gt": "es", "name": "Español"},
 }
 
-FLAG_ORDER = ["pt", "he", "en", "ar", "ru", "zh", "es"]
+# ── Cache de tradução para não traduzir o mesmo texto duas vezes ─────────────
+_translation_cache = {}
 
 
+def translate_text(text, target_lang, source_lang="pt"):
+    """Traduz texto usando Google Translate (deep-translator)."""
+    if not text or not text.strip():
+        return text
+
+    cache_key = f"{source_lang}:{target_lang}:{text}"
+    if cache_key in _translation_cache:
+        return _translation_cache[cache_key]
+
+    # Se o idioma alvo é PT, retorna o texto original
+    if target_lang == "pt":
+        _translation_cache[cache_key] = text
+        return text
+
+    try:
+        from deep_translator import GoogleTranslator
+        translator = GoogleTranslator(source=source_lang, target=target_lang)
+        result = translator.translate(text)
+        if result:
+            _translation_cache[cache_key] = result
+            return result
+    except Exception as e:
+        print(f"    AVISO: Falha ao traduzir '{text[:40]}...' para {target_lang}: {e}")
+
+    # Em caso de erro, retorna o texto original
+    _translation_cache[cache_key] = text
+    return text
+
+
+def translate_item(item, target_lang):
+    """Traduz todos os campos de um item para o idioma alvo."""
+    if target_lang == "pt":
+        return {
+            "badge": item["badge"],
+            "title": item["title"],
+            "desc": item["desc"],
+            "tag": item["tag"],
+        }
+
+    return {
+        "badge": translate_text(item["badge"], target_lang),
+        "title": translate_text(item["title"], target_lang),
+        "desc": translate_text(item["desc"], target_lang),
+        "tag": translate_text(item["tag"], target_lang),
+    }
+
+
+# ── Leitura do Excel ────────────────────────────────────────────────────────
 def load_xls(xls_path):
+    """Lê Titulos.xlsx e retorna lista de itens na ordem do Excel."""
     wb = openpyxl.load_workbook(xls_path)
     ws = wb.active
     items = []
     for i, row in enumerate(ws.iter_rows(values_only=True)):
-        if i == 0:
+        if i == 0:  # pular cabeçalho
             continue
         filename = str(row[0]).strip() if row[0] else ""
         if not filename:
             continue
         item_type = "video" if filename.endswith(".mp4") else "image"
-        items.append(
-            {
-                "filename": filename,
-                "type": item_type,
-                "badge": str(row[1]).strip() if row[1] else "",
-                "title": str(row[2]).strip() if row[2] else "",
-                "desc": str(row[3]).strip() if row[3] else "",
-                "tag": str(row[4]).strip() if row[4] else "",
-            }
-        )
+        items.append({
+            "filename": filename,
+            "type": item_type,
+            "badge": str(row[1]).strip() if row[1] else "",
+            "title": str(row[2]).strip() if row[2] else "",
+            "desc":  str(row[3]).strip() if row[3] else "",
+            "tag":   str(row[4]).strip() if row[4] else "",
+        })
     return items
 
 
+# ── Leitura/escrita de JSON ─────────────────────────────────────────────────
 def load_json(json_path):
+    """Lê JSON existente e retorna dict {filename: {badge, title, desc, tag}}."""
     if not os.path.exists(json_path):
-        return []
+        return {}
     with open(json_path, "r", encoding="utf-8") as f:
         data = json.load(f)
-    result = []
+    result = {}
     for row in data:
-        if isinstance(row, list) and len(row) >= 2:
-            result.append(
-                {
-                    "filename": str(row[0]).strip(),
+        if isinstance(row, dict):
+            fn = row.get("filename", "")
+            if fn:
+                result[fn] = {
+                    "badge": row.get("badge", ""),
+                    "title": row.get("title", ""),
+                    "desc":  row.get("desc", ""),
+                    "tag":   row.get("tag", ""),
+                }
+        elif isinstance(row, list) and len(row) >= 2:
+            fn = str(row[0]).strip()
+            if fn:
+                result[fn] = {
                     "badge": str(row[1]).strip() if len(row) > 1 else "",
                     "title": str(row[2]).strip() if len(row) > 2 else "",
-                    "desc": str(row[3]).strip() if len(row) > 3 else "",
-                    "tag": str(row[4]).strip() if len(row) > 4 else "",
+                    "desc":  str(row[3]).strip() if len(row) > 3 else "",
+                    "tag":   str(row[4]).strip() if len(row) > 4 else "",
                 }
-            )
-        elif isinstance(row, dict):
-            result.append(row)
     return result
 
 
-def save_json(json_path, data):
+def save_json(json_path, data_dict, order):
+    """Salva JSON mantendo a ordem do Excel."""
+    result = []
+    for fn in order:
+        if fn in data_dict:
+            entry = {"filename": fn}
+            entry.update(data_dict[fn])
+            result.append(entry)
     with open(json_path, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        json.dump(result, f, ensure_ascii=False, indent=2)
 
 
-def detect_changes(xls_items, json_items):
-    xls_filenames = [i["filename"] for i in xls_items]
-    json_filenames = [i.get("filename", "") for i in json_items]
-
-    new_indices = []
-    for idx, fn in enumerate(xls_filenames):
-        if fn not in json_filenames:
-            new_indices.append(idx)
-
-    changed_indices = []
-    for idx, fn in enumerate(xls_filenames):
-        if fn in json_filenames:
-            ji = json_filenames.index(fn)
-            if ji < len(json_items):
-                j = json_items[ji]
-                x = xls_items[idx]
-                if (
-                    j.get("badge") != x["badge"]
-                    or j.get("title") != x["title"]
-                    or j.get("desc") != x["desc"]
-                    or j.get("tag") != x["tag"]
-                ):
-                    changed_indices.append(idx)
-
-    return new_indices, changed_indices
-
-
-def insert_into_json(json_items, xls_items, new_indices):
-    for idx in new_indices:
-        pt_item = xls_items[idx]
-        placeholder = {
-            "filename": pt_item["filename"],
-            "badge": f"[PT] {pt_item['badge']}",
-            "title": f"[PT] {pt_item['title']}",
-            "desc": f"[PT] {pt_item['desc']}",
-            "tag": f"[PT] {pt_item['tag']}",
-        }
-        json_items.insert(idx, placeholder)
-    return json_items
-
-
+# ── Atualização de HTML ─────────────────────────────────────────────────────
 def escape_js(text):
-    return text.replace("'", "\\'")
+    return text.replace("\\", "\\\\").replace("'", "\\'")
 
 
-def generate_carousel_item(item, lang="pt"):
+def generate_carousel_item(item):
     return (
         "      {{ type: '{type}', src: '{src}', badge: '{badge}', "
         "title: '{title}', desc: '{desc}', tag: '{tag}' }}"
@@ -138,32 +166,24 @@ def generate_carousel_item(item, lang="pt"):
     )
 
 
-def update_html_carousel(html_path, xls_items, json_items):
-    texts_map = {}
-    for item in json_items:
-        fn = item.get("filename", "")
-        texts_map[fn] = item
-
-    items_with_texts = []
-    for i, item in enumerate(xls_items):
+def update_html(html_path, xls_items, texts_map):
+    """Substitui carouselData e counter no HTML."""
+    carousel_lines = []
+    for item in xls_items:
         fn = item["filename"]
         if fn in texts_map:
-            t = texts_map[fn]
             combined = dict(item)
-            combined["badge"] = t.get("badge", item["badge"])
-            combined["title"] = t.get("title", item["title"])
-            combined["desc"] = t.get("desc", item["desc"])
-            combined["tag"] = t.get("tag", item["tag"])
+            combined.update(texts_map[fn])
         else:
             combined = dict(item)
-        items_with_texts.append(combined)
+        carousel_lines.append(generate_carousel_item(combined))
 
-    carousel_lines = [generate_carousel_item(it) for it in items_with_texts]
     new_carousel_data = "[\n" + ",\n".join(carousel_lines) + "\n    ]"
 
     with open(html_path, "rb") as f:
         content = f.read()
 
+    # Substituir carouselData
     idx_start = content.find(b"const carouselData = [")
     if idx_start < 0:
         print(f"    ERRO: carouselData nao encontrado em {html_path}")
@@ -187,6 +207,7 @@ def update_html_carousel(html_path, xls_items, json_items):
     new_bytes = ("const carouselData = " + new_carousel_data).encode("utf-8")
     new_content = content[:idx_start] + new_bytes + content[idx_end:]
 
+    # Atualizar counter
     total = len(xls_items)
     counter_pat = re.compile(rb"\d+ / \d+")
     m = counter_pat.search(new_content)
@@ -195,54 +216,13 @@ def update_html_carousel(html_path, xls_items, json_items):
         new_counter = old_counter.split(" / ")[0] + " / " + str(total)
         new_content = new_content.replace(m.group(0), new_counter.encode("ascii"))
 
-    fix_img_el(new_content, html_path)
-
     with open(html_path, "wb") as f:
         f.write(new_content)
 
     return True
 
 
-def fix_img_el(content, html_path):
-    img_el_check = b"const imgEl = document.getElementById('carousel-image')"
-    if img_el_check in content:
-        return
-
-    old_pattern = b"const mediaEl = document.getElementById('carousel-media');\n      const sourceEl = document.getElementById('media-source');\n      \n      const imgEl = document.getElementById('carousel-image');"
-    if old_pattern in content:
-        return
-
-    new_pattern = (
-        b"const mediaEl = document.getElementById('carousel-media');\n"
-        b"      const imgEl = document.getElementById('carousel-image');\n"
-        b"      const sourceEl = document.getElementById('media-source');\n"
-        b"      \n      if (item.type === 'video') {"
-    )
-
-    old_alt = (
-        b"const mediaEl = document.getElementById('carousel-media');\n"
-        b"      const sourceEl = document.getElementById('media-source');\n"
-        b"      \n      const imgEl = document.getElementById('carousel-image');\n"
-        b"      if (item.type === 'video') {"
-    )
-
-    old_alt2 = (
-        b"const mediaEl = document.getElementById('carousel-media');\n"
-        b"      const sourceEl = document.getElementById('media-source');\n"
-        b"      \n      const imgEl = document.getElementById('carousel-image');"
-    )
-
-    if old_pattern in content:
-        content = content.replace(old_pattern, new_pattern)
-    elif old_alt in content:
-        content = content.replace(old_alt, new_pattern)
-    elif old_alt2 in content:
-        content = content.replace(old_alt2, new_pattern)
-
-    with open(html_path, "wb") as f:
-        f.write(content)
-
-
+# ── Função principal ─────────────────────────────────────────────────────────
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     xls_path = os.path.join(script_dir, "Titulos.xlsx")
@@ -252,88 +232,74 @@ def main():
         return
 
     print("=" * 60)
-    print("ATUALIZADOR INCREMENTAL DE CARROSSEL")
+    print("ATUALIZADOR AUTOMATICO DE CARROSSEL v2.0")
+    print("Traducao automatica para 6 idiomas")
     print("=" * 60)
     print()
 
+    # 1. Ler Excel
     xls_items = load_xls(xls_path)
-    print(f"XLS: {len(xls_items)} itens")
-
-    all_new = []
-    all_changed = []
-    new_indices_per_lang = {}
-
-    for lang, info in LANGS.items():
-        json_path = os.path.join(script_dir, info["json"])
-        json_items = load_json(json_path)
-        new_idx, changed_idx = detect_changes(xls_items, json_items)
-        new_indices_per_lang[lang] = new_idx
-
-        if new_idx:
-            print(f"  {lang}: {len(new_idx)} novo(s) -> posicoes {new_idx}")
-        if changed_idx:
-            print(f"  {lang}: {len(changed_idx)} alterado(s) -> posicoes {changed_idx}")
-
-        all_new.extend([(lang, i) for i in new_idx])
-        all_changed.extend([(lang, i) for i in changed_idx])
-
+    xls_order = [item["filename"] for item in xls_items]
+    print(f"Excel: {len(xls_items)} itens na ordem")
     print()
 
-    if not all_new and not all_changed:
-        print("Nenhuma mudanca detectada. Atualizando todos os HTMLs apenas.")
-    else:
-        if all_new:
-            print(
-                f"Linhas novas detectadas em {len(set(l[0] for l in all_new))} idiomas:"
-            )
-            for lang, idx in all_new:
-                item = xls_items[idx]
-                print(f"  [{lang}] posicao {idx}: {item['filename']}")
-            print()
-            print("  INSIRA as traducoes nos arquivos JSON correspondentes.")
-            print(
-                "  Apos editar os JSONs, rode novamente: python atualizar_carrossel.py"
-            )
-            print()
+    # 2. Para cada idioma: ler JSON, sincronizar com Excel, traduzir, salvar
+    for lang, info in LANGS.items():
+        print(f"[{info['name']}] {info['json']}")
+        json_path = os.path.join(script_dir, info["json"])
+        existing = load_json(json_path)
 
-        if all_changed:
-            print(f"Linhas alteradas detectadas:")
-            for lang, idx in all_changed:
-                item = xls_items[idx]
-                print(
-                    f"  [{lang}] posicao {idx}: {item['filename']} - '{item['title']}'"
-                )
+        new_data = {}
+        new_count = 0
+        kept_count = 0
 
+        for item in xls_items:
+            fn = item["filename"]
+            if fn in existing:
+                # Item já existe — manter tradução existente
+                new_data[fn] = existing[fn]
+                kept_count += 1
+            else:
+                # Item novo — traduzir do PT
+                if lang == "pt":
+                    new_data[fn] = {
+                        "badge": item["badge"],
+                        "title": item["title"],
+                        "desc":  item["desc"],
+                        "tag":   item["tag"],
+                    }
+                else:
+                    print(f"  Traduzindo {fn} → {lang}...")
+                    new_data[fn] = translate_item(item, lang)
+                    time.sleep(0.3)  # rate limit do Google Translate
+                new_count += 1
+
+        save_json(json_path, new_data, xls_order)
+        print(f"  Salvo: {kept_count} existentes + {new_count} novos = {len(xls_order)} total")
+        print()
+
+    # 3. Atualizar os 7 HTMLs
     print("-" * 60)
     print("Atualizando HTMLs...")
+    print()
+
+    # Usar PT como base dos textos para os HTMLs
+    pt_json_path = os.path.join(script_dir, LANGS["pt"]["json"])
+    pt_data = load_json(pt_json_path)
 
     for lang, info in LANGS.items():
-        html_path = os.path.join(script_dir, info["html"])
         json_path = os.path.join(script_dir, info["json"])
-        json_items = load_json(json_path)
+        lang_data = load_json(json_path)
 
-        if len(json_items) != len(xls_items):
-            print(
-                f"  AVISO: {info['html']} - JSON tem {len(json_items)} itens, XLS tem {len(xls_items)}"
-            )
-            if len(json_items) < len(xls_items):
-                missing_indices = new_indices_per_lang.get(lang, [])
-                print(
-                    f"    -> Inserindo {len(missing_indices)} placeholder(s) nas posicoes {missing_indices}..."
-                )
-                json_items = insert_into_json(
-                    json_items, xls_items, missing_indices
-                )
-                save_json(json_path, json_items)
-
-        if update_html_carousel(html_path, xls_items, json_items):
+        html_path = os.path.join(script_dir, info["html"])
+        if update_html(html_path, xls_items, lang_data):
             print(f"  OK: {info['html']} ({lang})")
         else:
             print(f"  ERRO: {info['html']}")
 
     print()
     print("=" * 60)
-    print("Concluido!")
+    print("Concluido! Todos os 7 JSONs e 7 HTMLs atualizados.")
     print("=" * 60)
 
 

@@ -21,13 +21,13 @@ sys.stdout.reconfigure(encoding="utf-8")
 
 # ── Configuração de idiomas ──────────────────────────────────────────────────
 LANGS = {
-    "pt": {"html": "index.html",    "json": "Titulos_pt.json", "gt": "pt", "name": "Português"},
-    "en": {"html": "index-en.html", "json": "Titulos_en.json", "gt": "en", "name": "English"},
-    "he": {"html": "index-he.html", "json": "Titulos_he.json", "gt": "he", "name": "עברית"},
-    "ar": {"html": "index-ar.html", "json": "Titulos_ar.json", "gt": "ar", "name": "العربية"},
-    "ru": {"html": "index-ru.html", "json": "Titulos_ru.json", "gt": "ru", "name": "Русский"},
-    "zh": {"html": "index-zh.html", "json": "Titulos_zh.json", "gt": "zh", "name": "中文"},
-    "es": {"html": "index-es.html", "json": "Titulos_es.json", "gt": "es", "name": "Español"},
+    "pt": {"html": "index.html",    "json": "Titulos_pt.json", "gt": "pt",     "name": "Português"},
+    "en": {"html": "index-en.html", "json": "Titulos_en.json", "gt": "en",     "name": "English"},
+    "he": {"html": "index-he.html", "json": "Titulos_he.json", "gt": "iw",     "name": "עברית"},
+    "ar": {"html": "index-ar.html", "json": "Titulos_ar.json", "gt": "ar",     "name": "العربية"},
+    "ru": {"html": "index-ru.html", "json": "Titulos_ru.json", "gt": "ru",     "name": "Русский"},
+    "zh": {"html": "index-zh.html", "json": "Titulos_zh.json", "gt": "zh-CN",  "name": "中文"},
+    "es": {"html": "index-es.html", "json": "Titulos_es.json", "gt": "es",     "name": "Español"},
 }
 
 # ── Cache de tradução para não traduzir o mesmo texto duas vezes ─────────────
@@ -63,9 +63,9 @@ def translate_text(text, target_lang, source_lang="pt"):
     return text
 
 
-def translate_item(item, target_lang):
-    """Traduz todos os campos de um item para o idioma alvo."""
-    if target_lang == "pt":
+def translate_item(item, gt_code):
+    """Traduz todos os campos de um item para o idioma alvo (usando código Google Translate)."""
+    if gt_code == "pt":
         return {
             "badge": item["badge"],
             "title": item["title"],
@@ -74,10 +74,10 @@ def translate_item(item, target_lang):
         }
 
     return {
-        "badge": translate_text(item["badge"], target_lang),
-        "title": translate_text(item["title"], target_lang),
-        "desc": translate_text(item["desc"], target_lang),
-        "tag": translate_text(item["tag"], target_lang),
+        "badge": translate_text(item["badge"], gt_code),
+        "title": translate_text(item["title"], gt_code),
+        "desc": translate_text(item["desc"], gt_code),
+        "tag": translate_text(item["tag"], gt_code),
     }
 
 
@@ -270,7 +270,7 @@ def main():
                     }
                 else:
                     print(f"  Traduzindo {fn} → {lang}...")
-                    new_data[fn] = translate_item(item, lang)
+                    new_data[fn] = translate_item(item, info["gt"])
                     time.sleep(0.3)  # rate limit do Google Translate
                 new_count += 1
 

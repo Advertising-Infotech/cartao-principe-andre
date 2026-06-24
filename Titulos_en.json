@@ -8,11 +8,31 @@
   },
   {
     "filename": "55.jpg",
-    "type": "image",
     "badge": "Legislative Assembly",
     "title": "Recognition by Deputies",
     "desc": "Legislative Assembly of the State of Goiás",
     "tag": "Honor of Merit"
+  },
+  {
+    "filename": "56.jpg",
+    "badge": "International honor",
+    "title": "Memorandum of mutual understanding",
+    "desc": "Great Visions and Voices Initiative",
+    "tag": "Global Ambassador"
+  },
+  {
+    "filename": "MAHA.jpg",
+    "badge": "Recognition in Vietnam",
+    "title": "Certificate of Honor",
+    "desc": "“Make Asia Healthy Again” Foundation in Hanoi, Vietnam",
+    "tag": "Honor to Merit"
+  },
+  {
+    "filename": "Juramento.jpg",
+    "badge": "Oath.jpg",
+    "title": "Solemn oath",
+    "desc": "Universal Declaration of Eternal Commitment",
+    "tag": "Open statement"
   },
   {
     "filename": "01.jpeg",

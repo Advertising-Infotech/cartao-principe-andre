@@ -8,11 +8,31 @@
   },
   {
     "filename": "55.jpg",
-    "type": "image",
     "badge": "立法议会",
     "title": "议员认可",
     "desc": "戈亚斯州立法议会",
     "tag": "功绩荣誉"
+  },
+  {
+    "filename": "56.jpg",
+    "badge": "国际荣誉",
+    "title": "相互谅解备忘录",
+    "desc": "伟大愿景和声音倡议",
+    "tag": "全球大使"
+  },
+  {
+    "filename": "MAHA.jpg",
+    "badge": "在越南的认可",
+    "title": "荣誉证书",
+    "desc": "越南河内“让亚洲再次健康”基金会",
+    "tag": "功绩荣誉"
+  },
+  {
+    "filename": "Juramento.jpg",
+    "badge": "誓言.jpg",
+    "title": "庄严宣誓",
+    "desc": "永恒承诺世界宣言",
+    "tag": "公开声明"
   },
   {
     "filename": "01.jpeg",

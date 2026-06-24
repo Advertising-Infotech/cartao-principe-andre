@@ -1,59 +1,393 @@
-# Dependencies
+# ===========================
+# DEPENDENCIES
+# ===========================
 node_modules/
 .pnp/
 .pnp.js
+bower_components/
+vendor/
+ Composer.phar
 
-# Testing
-coverage/
-
-# Next.js
-.next/
-out/
-build/
-
-# Production
+# ===========================
+# BUILD OUTPUT
+# ===========================
 dist/
-
-# Misc
-.DS_Store
-*.pem
-
-# Debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Local env files
-.env*.local
-.env
-
-# Vercel
-.vercel
-
-# TypeScript
+build/
+out/
+.next/
+.nuxt/
+.output/
+.vercel/
 *.tsbuildinfo
 next-env.d.ts
 
-# Backup files
-*.psd
-*.zip
-BackUps/
-temp_reference/
+# ===========================
+# TESTING
+# ===========================
+coverage/
+.nyc_output/
+*.lcov
+.pytest_cache/
+htmlcov/
+.tox/
+.nox/
+
+# ===========================
+# ENVIRONMENT & SECRETS
+# ===========================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+*.jks
+
+# ===========================
+# DEBUG & LOGS
+# ===========================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# ===========================
+# OS FILES
+# ===========================
+.DS_Store
 Thumbs.db
 desktop.ini
+ehthumbs.db
+Icon?
+.Spotlight-V100
+.Trashes
+._*
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDouble
+.LSOverride
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# ===========================
+# IDEs & EDITORS
+# ===========================
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# JetBrains (IntelliJ, WebStorm, PyCharm, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+tags
+Session.vim
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+.#*
+*.elc
+auto-save-list/
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# NetBeans
+nbproject/private/
+nbbuild/
+nbdist/
+nbactionscript/
+nb-configuration.xml
+
+# ===========================
+# LANGUAGES & FRAMEWORKS
+# ===========================
+
+# --- JavaScript / Node ---
+*.min.js
+*.min.js.map
+*.bundle.js
+*.chunk.js
+.pnp.*
+.yarn-integrity
+
+# --- TypeScript ---
+*.d.ts.map
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+eggs/
+sdist/
+wheels/
+*.whl
+.installed.cfg
+pip-log.txt
+pip-delete-this-directory.txt
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# --- Java ---
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*
+
+# --- C / C++ ---
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# --- Go ---
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+vendor/
+
+# --- Rust ---
+/debug/
+target/
+**/*.rs.bk
+
+# --- PHP ---
+composer.phar
+/vendor/
+composer.lock
+
+# --- Ruby ---
+*.gem
+*.rbc
+/.config
+/coverage/
+/InstalledFiles
+/pkg/
+/spec/reports/
+/spec/examples.txt
+/test/tmp/
+/test/version_tmp/
+/tmp/
+
+# --- Swift / Xcode ---
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xccheckout
+*.moved-aside
+DerivedData/
+*.hmap
+*.ipa
+*.xcuserstate
+*.xcscmblueprint
+
+# --- Kotlin ---
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+
+# --- Dart ---
+.dart_tool/
+.packages
+build/
+.pub-cache/
+.pub/
+pubspec.lock
+
+# --- R ---
+.Rhistory
+.Rdata
+.RData
+.Rproj.user/
+
+# --- Julia ---
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+
+# ===========================
+# ARCHIVES & BINARIES
+# ===========================
+*.zip
+*.tar
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.rar
+*.7z
+*.gz
+*.bz2
+*.xz
+*.Z
+*.deb
+*.rpm
+*.msi
+*.exe
+*.dmg
+*.iso
+*.img
+
+# ===========================
+# MEDIA & DESIGN FILES
+# ===========================
+*.psd
+*.ai
+*.eps
+*.indd
+*.indesign
+*.sketch
+*.fig
+*.xd
+*.proto
+*.tmp
+*.temp
+*.bak
+*.old
+*.orig
+*.save
+*.sav
+
+# ===========================
+# DATABASES
+# ===========================
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.ldf
+*.mdb
+*.accdb
+
+# ===========================
+# DOCUMENTS & OFFICE
+# ===========================
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.ppt
+*.pptx
+*.odt
+*.ods
+*.odp
+*.pdf
+
+# ===========================
+# CLOUD & DEPLOY
+# ===========================
+.vercel
+.netlify
+.firebase/
+.cache/
+*.tfstate
+*.tfstate.backup
+.terraform/
+*.tfvars
+
+# ===========================
+# MISC
+# ===========================
+*.pid
+*.seed
+*.pid.lock
+*.bak
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.cache/
+thumbs.db
+ehthumbs.db
+Desktop.ini
+Semana passada/
+2/
+
+# ===========================
+# PROJECT-SPECIFIC
+# ===========================
+BackUps/
+temp_reference/
 Titulos.xls
 facebook_1773501497038_7438604423035344100.jpg
 carouselData.json
 metadata.json
 antigravity_chrome_config.json
 antigravity_chrome_sync.py
-Semana passada/
-2/
-
-# Conversion scripts
 convert.js
-
-# VS Code
-.vscode/*
-!.vscode/extensions.json
-.idea
+57.png
+57 original.jpg
+Juramento original.jpg
+9 juramentos do Rei André.txt
+.opencode/package-lock.json
